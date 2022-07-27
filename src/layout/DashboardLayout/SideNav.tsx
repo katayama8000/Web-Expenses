@@ -13,6 +13,9 @@ import {
   Home,
   Settings,
   Notes,
+  UserPlus,
+  Edit,
+  Folders,
   ArrowLeft,
   ArrowRight,
   DeviceAnalytics,
@@ -105,6 +108,13 @@ const ITEMS = [
   { href: getPath("INDEX"), label: "ホーム", Icon: Home },
   { href: getPath("APPLICATION"), label: "申請書", Icon: Notes },
   { href: getPath("SETTINGS"), label: "設定", Icon: Settings },
+  { href: getPath("ADMIN"), label: "管理者", Icon: UserPlus },
+  { href: getPath("MEMBEREDIT"), label: "メンバー編集", Icon: Edit },
+  {
+    href: getPath("APPROVEDAPPLICATION"),
+    label: "過去の申請書",
+    Icon: Folders,
+  },
 ];
 
 export const SideNav: FC<{ className?: string }> = ({ className }) => {
