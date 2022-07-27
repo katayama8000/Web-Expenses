@@ -8,12 +8,20 @@ import {
   Divider,
   Group,
   Indicator,
-  Menu,
   Autocomplete,
   ActionIcon,
 } from "@mantine/core";
 import { Logout, Bell, Search, Settings } from "tabler-icons-react";
 import { getPath } from "src/lib/const";
+import { Menu, Button, Text } from "@mantine/core";
+import {
+  IconSettings,
+  IconSearch,
+  IconPhoto,
+  IconMessageCircle,
+  IconTrash,
+  IconArrowsLeftRight,
+} from "@tabler/icons";
 
 export const Header: FC<{ left: ReactNode }> = ({ left }) => {
   return (
@@ -57,7 +65,12 @@ const Notification: FC = () => {
   return (
     <Indicator inline size={14} offset={4} color="red" withBorder>
       <Link href={getPath("NOTIFICATION")} passHref>
-        <ActionIcon component="a" variant="hover" radius="xl" size={40}>
+        <ActionIcon
+          component="a"
+          //variant="hover"
+          radius="xl"
+          size={40}
+        >
           <Bell />
         </ActionIcon>
       </Link>
@@ -72,38 +85,38 @@ const UserMenu: FC = () => {
   };
 
   return (
-    <Menu
-      size="lg"
-      position="bottom"
-      placement="end"
-      transition="pop-top-right"
-      control={
-        <ActionIcon variant="hover" radius="xl" size={40}>
-          <Avatar
-            src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-            radius="xl"
-          />
-        </ActionIcon>
-      }
-      styles={(theme) => ({
-        label: { fontSize: theme.fontSizes.sm },
-        itemLabel: { fontSize: theme.fontSizes.md },
-      })}
-    >
-      <Menu.Label>Application</Menu.Label>
-      <Menu.Item icon={<Settings size={16} />} component={NextLink} href="#">
-        メニュー1
-      </Menu.Item>
-      <Menu.Item icon={<Settings size={16} />} component={NextLink} href="#">
-        メニュー2
-      </Menu.Item>
-      <Menu.Item icon={<Settings size={16} />} component={NextLink} href="#">
-        メニュー3
-      </Menu.Item>
-      <Divider />
-      <Menu.Item icon={<Logout size={16} />} onClick={signOut}>
-        ログアウト
-      </Menu.Item>
+    <Menu shadow="md" width={200}>
+      <Menu.Target>
+        <Avatar
+          src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
+          radius="xl"
+        />
+      </Menu.Target>
+
+      <Menu.Dropdown>
+        <Menu.Label>Application</Menu.Label>
+        <Menu.Item icon={<IconSettings size={14} />}>Settings</Menu.Item>
+        <Menu.Item icon={<IconMessageCircle size={14} />}>Messages</Menu.Item>
+        <Menu.Item icon={<IconPhoto size={14} />}>Gallery</Menu.Item>
+        <Menu.Item
+          icon={<IconSearch size={14} />}
+          rightSection={
+            <Text size="xs" color="dimmed">
+              ⌘K
+            </Text>
+          }
+        >
+          Search
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Label>Danger zone</Menu.Label>
+        <Menu.Item icon={<IconArrowsLeftRight size={14} />}>
+          Transfer my data
+        </Menu.Item>
+        <Menu.Item color="red" icon={<IconTrash size={14} />}>
+          Delete my account
+        </Menu.Item>
+      </Menu.Dropdown>
     </Menu>
   );
 };

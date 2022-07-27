@@ -50,7 +50,7 @@ export const DashboardLayout: CustomLayout = (page) => {
         left={
           <MediaQuery largerThan="sm" styles={{ display: "none" }}>
             <ActionIcon
-              variant="hover"
+              //variant="hover"
               radius="xl"
               size={40}
               onClick={handlers.open}
