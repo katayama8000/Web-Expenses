@@ -3,7 +3,7 @@ import { Box, Paper, Title } from "@mantine/core";
 
 type PageContentProps = {
   children: ReactNode;
-  title: string;
+  title?: string;
   className?: string;
   outerTitle?: boolean;
 };

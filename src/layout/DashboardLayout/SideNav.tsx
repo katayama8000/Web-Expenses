@@ -12,6 +12,7 @@ import {
 import {
   Home,
   Settings,
+  Notes,
   ArrowLeft,
   ArrowRight,
   DeviceAnalytics,
@@ -102,6 +103,7 @@ const useStyles = createStyles<string, { collapsed?: boolean }>(
 
 const ITEMS = [
   { href: getPath("INDEX"), label: "ホーム", Icon: Home },
+  { href: getPath("APPLICATION"), label: "申請書", Icon: Notes },
   { href: getPath("SETTINGS"), label: "設定", Icon: Settings },
 ];
 
@@ -116,7 +118,7 @@ export const SideNav: FC<{ className?: string }> = ({ className }) => {
           <Link href={getPath("INDEX")}>
             <a className={classes.logo}>
               <DeviceAnalytics />
-              <span className={classes.linkLabel}>Admin Dashboard</span>
+              <span className={classes.linkLabel}>Web-Expenses</span>
             </a>
           </Link>
         </Group>

@@ -33,7 +33,9 @@ export const PageContainer: FC<PageContainerProps> = ({
         </Breadcrumbs>
       ) : null}
 
-      <Title order={1}>{title}</Title>
+      <Title order={1} className="text-center">
+        {title}
+      </Title>
 
       <Space h="xl" />
 

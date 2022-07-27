@@ -1,16 +1,119 @@
-import { Button, Stack, Table } from "@mantine/core";
+import {
+  Button,
+  Stack,
+  Table,
+  TextInput,
+  Checkbox,
+  Group,
+  Box,
+  Grid,
+  NumberInput,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
 import type { CustomNextPage } from "next";
 import { DashboardLayout } from "src/layout";
 import { PageContent } from "src/component/PageContent";
 import { PageContainer } from "src/component/PageContainer";
 import { showNotification } from "@mantine/notifications";
+import { useState } from "react";
+import { DatePicker } from "@mantine/dates";
 
 const Index: CustomNextPage = () => {
+  const form = useForm({
+    initialValues: {
+      email: "",
+      termsOfService: false,
+    },
+
+    validate: {
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+    },
+  });
+
+  const [value, setValue] = useState(0);
   return (
-    <PageContainer title="ホーム" fluid>
+    <PageContainer title="経費申請">
       <Stack spacing="xl">
-        <PageContent title="テーブル">
-          <SampleTable />
+        <PageContent>
+          <div className="px-6">
+            <form onSubmit={form.onSubmit((values) => console.log(values))}>
+              <Grid>
+                <Grid.Col span={6}>
+                  <div>
+                    <TextInput
+                      required
+                      placeholder="your@email.com"
+                      {...form.getInputProps("email")}
+                      className="my-4"
+                      size="md"
+                    />
+                    <TextInput
+                      required
+                      placeholder="your@email.com"
+                      {...form.getInputProps("email")}
+                      className="my-4"
+                      size="md"
+                    />
+                    <TextInput
+                      required
+                      placeholder="your@email.com"
+                      {...form.getInputProps("email")}
+                      className="my-4"
+                      size="md"
+                    />
+                    <TextInput
+                      required
+                      placeholder="your@email.com"
+                      {...form.getInputProps("email")}
+                      className="my-4"
+                      size="md"
+                    />
+                  </div>
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  {" "}
+                  <TextInput
+                    required
+                    placeholder="your@email.com"
+                    {...form.getInputProps("email")}
+                    className="my-4"
+                    size="md"
+                  />
+                  <TextInput
+                    required
+                    placeholder="your@email.com"
+                    {...form.getInputProps("email")}
+                    className="my-4"
+                    size="md"
+                  />
+                  <TextInput
+                    required
+                    placeholder="your@email.com"
+                    {...form.getInputProps("email")}
+                    className="my-4"
+                    size="md"
+                  />
+                  <DatePicker size="md" />
+                  <NumberInput
+                    defaultValue={1000}
+                    value={value}
+                    size="md"
+                    hideControls={true}
+                    className="my-4"
+                    // parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
+                    // formatter={(value) =>
+                    //   !Number.isNaN(parseFloat(value!))
+                    //     ? `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    //     : "￥ "
+                    // }
+                  />
+                </Grid.Col>
+              </Grid>
+              <Group position="right" mt="md">
+                <Button type="submit">送信</Button>
+              </Group>
+            </form>
+          </div>
         </PageContent>
         <PageContent title="通知">
           <Button onClick={() => showNotification({ message: "成功しました" })}>
@@ -19,37 +122,6 @@ const Index: CustomNextPage = () => {
         </PageContent>
       </Stack>
     </PageContainer>
-  );
-};
-
-const SampleTable = () => {
-  return (
-    <Table>
-      <thead>
-        <tr>
-          <th>Element position</th>
-          <th>Element name</th>
-          <th>Symbol</th>
-          <th>Atomic mass</th>
-        </tr>
-      </thead>
-      <tbody>
-        {[
-          { position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
-          { position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
-          { position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
-          { position: 56, mass: 137.33, symbol: "Ba", name: "Barium" },
-          { position: 58, mass: 140.12, symbol: "Ce", name: "Cerium" },
-        ].map((element) => (
-          <tr key={element.name}>
-            <td>{element.position}</td>
-            <td>{element.name}</td>
-            <td>{element.symbol}</td>
-            <td>{element.mass}</td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
   );
 };
 
