@@ -17,16 +17,12 @@ import { PageContainer } from "src/component/PageContainer";
 import { showNotification } from "@mantine/notifications";
 import { useState } from "react";
 import { DatePicker } from "@mantine/dates";
+import { DropZone } from "src/component/dropzone/dropzone";
 
 const Index: CustomNextPage = () => {
   const form = useForm({
     initialValues: {
       email: "",
-      termsOfService: false,
-    },
-
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
     },
   });
 
@@ -71,7 +67,6 @@ const Index: CustomNextPage = () => {
                   </div>
                 </Grid.Col>
                 <Grid.Col span={6}>
-                  {" "}
                   <TextInput
                     required
                     placeholder="your@email.com"
@@ -96,23 +91,23 @@ const Index: CustomNextPage = () => {
                   <DatePicker size="md" />
                   <NumberInput
                     defaultValue={1000}
-                    value={value}
+                    parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
+                    formatter={(value) =>
+                      !Number.isNaN(parseFloat(value!))
+                        ? `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        : "$ "
+                    }
+                    className="my-4"
                     size="md"
                     hideControls={true}
-                    className="my-4"
-                    // parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
-                    // formatter={(value) =>
-                    //   !Number.isNaN(parseFloat(value!))
-                    //     ? `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    //     : "￥ "
-                    // }
                   />
                 </Grid.Col>
               </Grid>
-              <Group position="right" mt="md">
-                <Button type="submit">送信</Button>
-              </Group>
             </form>
+            <DropZone />
+            <Group position="right" mt="md">
+              <Button type="submit">送信</Button>
+            </Group>
           </div>
         </PageContent>
         <PageContent title="通知">

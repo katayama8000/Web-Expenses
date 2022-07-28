@@ -2,16 +2,24 @@ import { Group, Image, Text, useMantineTheme } from "@mantine/core";
 import { IconUpload, IconPhoto, IconX } from "@tabler/icons";
 import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { DashboardLayout } from "src/layout";
+import { useState } from "react";
 
-export function Test(props: Partial<DropzoneProps>) {
+export const DropZone = (props: Partial<DropzoneProps>) => {
   const theme = useMantineTheme();
+  const [file, setFile] = useState<string>();
+
   return (
     <Dropzone
-      onDrop={(files) => console.log("accepted files", files)}
+      onDrop={(files) => {
+        console.log("accepted files", files);
+        setFile(URL.createObjectURL(files[0]));
+      }}
       onReject={(files) => console.log("rejected files", files)}
-      maxSize={3 * 1024 ** 2}
       accept={IMAGE_MIME_TYPE}
       {...props}
+      padding={-2}
+      maxFiles={1}
+      maxSize={3 * 1024 ** 2}
     >
       <Group
         position="center"
@@ -36,7 +44,7 @@ export function Test(props: Partial<DropzoneProps>) {
             color={theme.colors.red[theme.colorScheme === "dark" ? 4 : 6]}
           />
         </Dropzone.Reject>
-        <Dropzone.Idle>
+        {/* <Dropzone.Idle>
           <IconPhoto size={50} stroke={1.5} />
         </Dropzone.Idle>
         <div>
@@ -46,21 +54,13 @@ export function Test(props: Partial<DropzoneProps>) {
           <Text size="sm" color="dimmed" inline mt={7}>
             Attach as many files as you like, each file should not exceed 5mb
           </Text>
-        </div>
+        </div> */}
         <div>
-          <Image
-            radius="md"
-            src="https://images.unsplash.com/photo-1511216335778-7cb8f49fa7a3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-            alt="Random unsplash image"
-            height={200}
-            width={600}
-          />
+          <Image radius="md" src={file} alt="Random unsplash image" />
         </div>
       </Group>
     </Dropzone>
   );
-}
+};
 
-Test.getLayout = DashboardLayout;
-
-export default Test;
+export default DropZone;
