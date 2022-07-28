@@ -46,8 +46,8 @@ export const DropZone = (props: Partial<DropzoneProps>) => {
         </Dropzone.Reject>
         {/* <Dropzone.Idle>
           <IconPhoto size={50} stroke={1.5} />
-        </Dropzone.Idle>
-        <div>
+        </Dropzone.Idle> */}
+        {/* <div>
           <Text size="xl" inline>
             Drag images here or click to select files
           </Text>
@@ -56,7 +56,12 @@ export const DropZone = (props: Partial<DropzoneProps>) => {
           </Text>
         </div> */}
         <div>
-          <Image radius="md" src={file} alt="Random unsplash image" />
+          <Image
+            radius="md"
+            src={file}
+            alt="Random unsplash image"
+            withPlaceholder
+          />
         </div>
       </Group>
     </Dropzone>
