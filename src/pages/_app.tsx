@@ -13,8 +13,8 @@ const App: CustomAppPage = ({ Component, pageProps }) => {
   return (
     <GlobalStyleProvider>
       <AppMantineProvider>
-        <NotificationsProvider>
-          {getLayout(<Component {...pageProps} />)}
+        <NotificationsProvider position="bottom-left">
+          <main role="main">{getLayout(<Component {...pageProps} />)}</main>
         </NotificationsProvider>
       </AppMantineProvider>
     </GlobalStyleProvider>

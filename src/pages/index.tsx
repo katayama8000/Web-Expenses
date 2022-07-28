@@ -34,7 +34,7 @@ const Index: CustomNextPage = () => {
   return (
     <PageContainer title="経費申請">
       <Stack spacing="xl">
-        <PageContent>
+        <PageContent className="w-[600px] m-auto">
           <div className="px-6">
             <form onSubmit={form.onSubmit((values) => console.log(values))}>
               <Grid>
@@ -42,7 +42,7 @@ const Index: CustomNextPage = () => {
                   <div>
                     <TextInput
                       required
-                      placeholder="your@email.com"
+                      placeholder="payfor"
                       {...form.getInputProps("email")}
                       className="my-4"
                       size="md"

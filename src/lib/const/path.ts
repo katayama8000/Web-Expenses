@@ -9,6 +9,7 @@ const PATH = {
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
   FORGOT_PASSWORD: "/forgot-password",
+  TEST: "/test",
 } as const;
 
 export const getPath = (pathKey: keyof typeof PATH, ...args: string[]) => {

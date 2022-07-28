@@ -16,6 +16,7 @@ import {
   UserPlus,
   Edit,
   Folders,
+  TestPipe,
   ArrowLeft,
   ArrowRight,
   DeviceAnalytics,
@@ -114,6 +115,11 @@ const ITEMS = [
     href: getPath("APPROVEDAPPLICATION"),
     label: "過去の申請書",
     Icon: Folders,
+  },
+  {
+    href: getPath("TEST"),
+    label: "テスト(開発中のみ)",
+    Icon: TestPipe,
   },
 ];
 
