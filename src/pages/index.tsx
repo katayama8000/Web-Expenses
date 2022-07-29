@@ -106,6 +106,7 @@ const Index: CustomNextPage = () => {
             </form>
             <DropZone />
             <Group position="right" mt="md">
+              <Button color="red">領収書を削除</Button>
               <Button type="submit">送信</Button>
             </Group>
           </div>
