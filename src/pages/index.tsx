@@ -8,6 +8,7 @@ import {
   Box,
   Grid,
   NumberInput,
+  Select,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import type { CustomNextPage } from "next";
@@ -23,7 +24,14 @@ import { IconX } from "@tabler/icons";
 const Index: CustomNextPage = () => {
   const form = useForm({
     initialValues: {
-      email: "",
+      payfor: "",
+      purpose: "",
+      detail: "",
+      kind: "",
+      in: "",
+      out: "",
+      date: "",
+      cost: null,
     },
   });
 
@@ -34,6 +42,7 @@ const Index: CustomNextPage = () => {
   };
 
   const handleSubmit = (value: any) => {
+    console.log(value);
     if (file === undefined) {
       showNotification({
         title: "エラー",
@@ -59,30 +68,37 @@ const Index: CustomNextPage = () => {
                   <div>
                     <TextInput
                       required
-                      placeholder="payfor"
-                      {...form.getInputProps("email")}
+                      placeholder="支払先"
+                      {...form.getInputProps("payfor")}
                       className="my-4"
                       size="md"
                     />
                     <TextInput
                       required
-                      placeholder="your@email.com"
-                      {...form.getInputProps("email")}
+                      placeholder="目的"
+                      {...form.getInputProps("purpose")}
                       className="my-4"
                       size="md"
                     />
                     <TextInput
                       required
-                      placeholder="your@email.com"
-                      {...form.getInputProps("email")}
+                      placeholder="詳細"
+                      {...form.getInputProps("detail")}
                       className="my-4"
                       size="md"
                     />
-                    <TextInput
-                      required
-                      placeholder="your@email.com"
-                      {...form.getInputProps("email")}
-                      className="my-4"
+                    <Select
+                      placeholder="Pick one"
+                      data={[
+                        { value: "厚生費", label: "厚生費" },
+                        { value: "発送費用", label: "発送費用" },
+                        { value: "svelte", label: "交際費" },
+                        { value: "vue", label: "会議費" },
+                        { value: "svelte", label: "交通費" },
+                        { value: "vue", label: "通信費" },
+                        { value: "svelte", label: "消耗品費" },
+                      ]}
+                      {...form.getInputProps("kind")}
                       size="md"
                     />
                   </div>
@@ -90,28 +106,25 @@ const Index: CustomNextPage = () => {
                 <Grid.Col span={6}>
                   <TextInput
                     required
-                    placeholder="your@email.com"
-                    {...form.getInputProps("email")}
+                    placeholder="誰(社内)"
+                    {...form.getInputProps("in")}
                     className="my-4"
                     size="md"
                   />
                   <TextInput
                     required
-                    placeholder="your@email.com"
-                    {...form.getInputProps("email")}
+                    placeholder="誰(社外)"
+                    {...form.getInputProps("out")}
                     className="my-4"
                     size="md"
                   />
-                  <TextInput
-                    required
-                    placeholder="your@email.com"
-                    {...form.getInputProps("email")}
-                    className="my-4"
+                  <DatePicker
                     size="md"
+                    placeholder="支払日"
+                    {...form.getInputProps("date")}
                   />
-                  <DatePicker size="md" />
                   <NumberInput
-                    defaultValue={1000}
+                    placeholder="支払金額"
                     parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
                     formatter={(value) =>
                       !Number.isNaN(parseFloat(value!))
@@ -121,6 +134,7 @@ const Index: CustomNextPage = () => {
                     className="my-4"
                     size="md"
                     hideControls={true}
+                    {...form.getInputProps("cost")}
                   />
                 </Grid.Col>
               </Grid>

@@ -21,7 +21,7 @@ export const PageContent: FC<PageContentProps> = ({
           {title}
         </Title>
       ) : null}
-      <Paper shadow="xs" p="md">
+      <Paper shadow="lg" p="md">
         {outerTitle ? null : (
           <Title order={2} mb="sm">
             {title}

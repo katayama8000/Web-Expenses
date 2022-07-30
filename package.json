@@ -16,6 +16,7 @@
     "@mantine/hooks": "5.0.0",
     "@mantine/next": "5.0.0",
     "@mantine/notifications": "^5.0.0",
+    "@supabase/supabase-js": "^1.35.4",
     "@tabler/icons": "^1.78.1",
     "dayjs": "^1.11.4",
     "next": "^12.1.7-canary.41",
