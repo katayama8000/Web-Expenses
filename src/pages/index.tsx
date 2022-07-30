@@ -36,8 +36,8 @@ const Index: CustomNextPage = () => {
   const handleSubmit = (value: any) => {
     if (file === undefined) {
       showNotification({
-        message: "Please upload a file",
-        title: "error",
+        title: "エラー",
+        message: "領収書をアップロードしてください",
         color: "red",
         icon: <IconX size={18} />,
       });
