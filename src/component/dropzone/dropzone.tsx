@@ -1,15 +1,15 @@
 import { Group, Image, Text, useMantineTheme } from "@mantine/core";
 import { IconUpload, IconPhoto, IconX } from "@tabler/icons";
 import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { FC, useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 
 type Props = {
-  //handleDelete: () => void;
+  file: string | undefined;
+  setFile: Dispatch<SetStateAction<string | undefined>>;
 };
 
-export const DropZone: FC<Props> = () => {
+export const DropZone: FC<Props> = ({ file, setFile }) => {
   const theme = useMantineTheme();
-  const [file, setFile] = useState<string>();
 
   return (
     <Dropzone

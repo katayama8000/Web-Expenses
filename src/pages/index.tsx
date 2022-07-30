@@ -18,6 +18,7 @@ import { showNotification } from "@mantine/notifications";
 import { useState } from "react";
 import { DatePicker } from "@mantine/dates";
 import { DropZone } from "src/component/dropzone/dropzone";
+import { IconX } from "@tabler/icons";
 
 const Index: CustomNextPage = () => {
   const form = useForm({
@@ -26,13 +27,33 @@ const Index: CustomNextPage = () => {
     },
   });
 
-  const [value, setValue] = useState(0);
+  const [file, setFile] = useState<string>();
+
+  const handleDelete = () => {
+    setFile(undefined);
+  };
+
+  const handleSubmit = (value: any) => {
+    if (file === undefined) {
+      showNotification({
+        message: "Please upload a file",
+        title: "error",
+        color: "red",
+        icon: <IconX size={18} />,
+      });
+      return;
+    }
+    showNotification({
+      title: "success",
+      message: "Form submitted",
+    });
+  };
   return (
     <PageContainer title="経費申請">
       <Stack spacing="xl">
         <PageContent className="w-[600px] m-auto">
           <div className="px-6">
-            <form onSubmit={form.onSubmit((values) => console.log(values))}>
+            <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
               <Grid>
                 <Grid.Col span={6}>
                   <div>
@@ -103,12 +124,14 @@ const Index: CustomNextPage = () => {
                   />
                 </Grid.Col>
               </Grid>
+              <DropZone file={file} setFile={setFile} />
+              <Group position="right" mt="md">
+                <Button color="red" onClick={handleDelete}>
+                  領収書を削除
+                </Button>
+                <Button type="submit">送信</Button>
+              </Group>
             </form>
-            <DropZone />
-            <Group position="right" mt="md">
-              <Button color="red">領収書を削除</Button>
-              <Button type="submit">送信</Button>
-            </Group>
           </div>
         </PageContent>
         <PageContent title="通知">
