@@ -110,7 +110,7 @@ const MemberEdit = () => {
         </div>
         <Group position={"center"}>
           <Button color={"red"}>はい</Button>
-          <Button color={"teal"}>いいいえ</Button>
+          <Button color={"teal"}>いいえ</Button>
         </Group>
       </Modal>
 
