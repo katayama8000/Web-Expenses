@@ -5,6 +5,7 @@ const MemberEdit = () => {
   return (
     <div>
       <div>memberedit</div>
+      <div>管理者だけがいじれるメンバー管理ページ</div>
     </div>
   );
 };
