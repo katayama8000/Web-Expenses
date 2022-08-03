@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { DashboardLayout } from "src/layout";
-import { Table } from "@mantine/core";
+import { Button, Group, Modal, Table } from "@mantine/core";
 import { PageContainer } from "src/component/PageContainer";
 import { PageContent } from "src/component/PageContent";
 
+type Member = {
+  name: string;
+  number: number;
+  position: string;
+  email: string;
+};
+
 const MemberEdit = () => {
-  const elements = [
+  const [isOpend, setIsOpend] = useState<boolean>(false);
+  const [user, setUser] = useState<Member>();
+  const elements: Member[] = [
     {
       position: "一般",
       number: 1000100072,
@@ -14,48 +23,64 @@ const MemberEdit = () => {
     },
     {
       position: "一般",
-      number: 1000100072,
-      name: "片山達文",
+      number: 10001023,
+      name: "片山帆乃果",
       email: "t-katayama@gmail.com",
     },
     {
-      position: "一般",
-      number: 1000100072,
-      name: "片山達文",
+      position: "リーダー",
+      number: 10001035272,
+      name: "片山兄",
       email: "t-katayama@gmail.com",
     },
     {
-      position: "一般",
-      number: 1000100072,
-      name: "片山達文",
-      email: "t-katayama@gmail.com",
-    },
-    {
-      position: "一般",
-      number: 1000100072,
-      name: "片山達文",
+      position: "役員",
+      number: 1000102357,
+      name: "片山弟",
       email: "t-katayama@gmail.com",
     },
   ];
 
   const rows = elements.map((element) => (
-    <tr key={element.name}>
+    <tr
+      key={element.name}
+      onClick={() => {
+        handleEdit(element);
+      }}
+    >
       <td>{element.name}</td>
       <td>{element.position}</td>
       <td>{element.number}</td>
       <td>{element.email}</td>
     </tr>
   ));
+
+  const handleEdit = (member: Member) => {
+    setIsOpend(true);
+    setUser(member);
+    console.log(member);
+  };
   return (
     <div>
-      <PageContainer title="memberedit">
+      <Modal
+        opened={isOpend}
+        onClose={() => setIsOpend(false)}
+        title="従業員編集"
+        centered
+      >
+        {user?.name}
+        {user?.position}
+        {user?.number}
+        {user?.email}
+      </Modal>
+
+      <PageContainer title="従業員一覧">
         <PageContent className="w-[800px] m-auto">
           <Table
             horizontalSpacing="xl"
             verticalSpacing="lg"
             fontSize="md"
             highlightOnHover
-            className="text-center"
           >
             <thead>
               <tr>

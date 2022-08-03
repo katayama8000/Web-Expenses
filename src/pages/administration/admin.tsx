@@ -1,13 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Grid,
-  Group,
-  Image,
-  Modal,
-  Text,
-} from "@mantine/core";
+import { Button, Card, Grid, Group, Modal } from "@mantine/core";
 import React, { useCallback, useState } from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { DashboardLayout } from "src/layout";
@@ -110,23 +101,3 @@ const Admin = () => {
 
 Admin.getLayout = DashboardLayout;
 export default Admin;
-
-// function Demo() {
-//   const [opened, setOpened] = useState(false);
-
-//   return (
-//     <>
-//       <Modal
-//         opened={opened}
-//         onClose={() => setOpened(false)}
-//         title="Introduce yourself!"
-//       >
-//         {/* Modal content */}
-//       </Modal>
-
-//       <Group position="center">
-//         <Button onClick={() => setOpened(true)}>Open Modal</Button>
-//       </Group>
-//     </>
-//   );
-// }
