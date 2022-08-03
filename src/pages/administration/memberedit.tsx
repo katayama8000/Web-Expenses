@@ -7,8 +7,7 @@ import { Trash, Edit } from "tabler-icons-react";
 
 type Member = {
   name: string;
-  number: number;
-  position: string;
+  position: "役員" | "一般" | "リーダー";
   email: string;
 };
 
@@ -19,25 +18,21 @@ const MemberEdit = () => {
   const elements: Member[] = [
     {
       position: "一般",
-      number: 1000100072,
       name: "片山達文",
       email: "t-katayama@gmail.com",
     },
     {
       position: "一般",
-      number: 10001023,
       name: "片山帆乃果",
       email: "t-katayama@gmail.com",
     },
     {
       position: "リーダー",
-      number: 10001035272,
       name: "片山兄",
       email: "t-katayama@gmail.com",
     },
     {
       position: "役員",
-      number: 1000102357,
       name: "片山弟",
       email: "t-katayama@gmail.com",
     },
@@ -47,7 +42,6 @@ const MemberEdit = () => {
     <tr key={element.name}>
       <td>{element.name}</td>
       <td>{element.position}</td>
-      <td>{element.number}</td>
       <td>{element.email}</td>
       <td>
         <div className="flex">
@@ -90,7 +84,6 @@ const MemberEdit = () => {
       >
         {user?.name}
         {user?.position}
-        {user?.number}
         {user?.email}
       </Modal>
 
@@ -126,7 +119,6 @@ const MemberEdit = () => {
               <tr>
                 <th>名前</th>
                 <th>役職</th>
-                <th>従業員番号</th>
                 <th>メールアドレス</th>
                 <th></th>
               </tr>
