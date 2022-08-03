@@ -59,7 +59,7 @@ const Approved = () => {
         opened={openedApplication}
         onClose={() => setOpenedApplication(false)}
         centered
-        title="あああああああ"
+        title="慎重に確認してください"
         classNames={{
           header: "text-center text-blue-400",
         }}
