@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { DashboardLayout } from "src/layout";
 import { Button, Group, Modal, Table, Tooltip } from "@mantine/core";
 import { PageContainer } from "src/component/PageContainer";
 import { PageContent } from "src/component/PageContent";
 import { Trash, Edit } from "tabler-icons-react";
+import { supabase } from "src/lib/supabase/supabase";
+import { CustomNextPage } from "next";
 
 type Member = {
   name: string;
@@ -11,38 +13,46 @@ type Member = {
   email: string;
 };
 
-const MemberEdit = () => {
-  const [isOpend, setIsOpend] = useState<boolean>(false);
-  const [deleteModal, setDeleteModal] = useState<boolean>(false);
-  const [user, setUser] = useState<Member>();
-  const elements: Member[] = [
-    {
-      position: "一般",
-      name: "片山達文",
-      email: "t-katayama@gmail.com",
-    },
-    {
-      position: "一般",
-      name: "片山帆乃果",
-      email: "t-katayama@gmail.com",
-    },
-    {
-      position: "リーダー",
-      name: "片山兄",
-      email: "t-katayama@gmail.com",
-    },
-    {
-      position: "役員",
-      name: "片山弟",
-      email: "t-katayama@gmail.com",
-    },
-  ];
+const MemberEdit: CustomNextPage = () => {
+  const [isEditModal, setIsEditModal] = useState<boolean>(false);
+  const [isDeleteModal, setIsDeleteModal] = useState<boolean>(false);
+  const [members, setMembers] = useState<Member[]>();
 
-  const rows = elements.map((element) => (
-    <tr key={element.name}>
-      <td>{element.name}</td>
-      <td>{element.position}</td>
-      <td>{element.email}</td>
+  const getMember = async () => {
+    const { data, error } = await supabase.from("member").select();
+    console.log(data, error);
+    try {
+      if (data) {
+        setMembers(data as Member[]);
+      }
+
+      if (!data || error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getMember();
+  }, []);
+
+  const handleEdit = (member: Member) => {
+    setIsEditModal(true);
+    console.log(member);
+  };
+
+  const handleDelete = (member: Member) => {
+    setIsDeleteModal(true);
+    console.log(member);
+  };
+
+  const rows = members?.map((member) => (
+    <tr key={member.name}>
+      <td>{member.name}</td>
+      <td>{member.position}</td>
+      <td>{member.email}</td>
       <td>
         <div className="flex">
           <Trash
@@ -51,8 +61,7 @@ const MemberEdit = () => {
             color={"black"}
             className="mx-[6px] hover:opacity-50"
             onClick={() => {
-              setDeleteModal(true);
-              setUser(element);
+              handleDelete(member);
             }}
           />
           <Edit
@@ -61,7 +70,7 @@ const MemberEdit = () => {
             color={"black"}
             className="mx-[6px] hover:opacity-50"
             onClick={() => {
-              handleEdit(element);
+              handleEdit(member);
             }}
           />
         </div>
@@ -69,43 +78,18 @@ const MemberEdit = () => {
     </tr>
   ));
 
-  const handleEdit = (member: Member) => {
-    setIsOpend(true);
-    setUser(member);
-    console.log(member);
-  };
   return (
     <div>
-      <Modal
-        opened={isOpend}
-        onClose={() => setIsOpend(false)}
-        title="従業員編集"
-        centered
-      >
-        {user?.name}
-        {user?.position}
-        {user?.email}
-      </Modal>
-
-      <Modal
-        opened={deleteModal}
-        onClose={() => setDeleteModal(false)}
-        title={
-          <div className="text-center font-bold text-xl">
-            <div>従業員削除</div>
-          </div>
-        }
-        centered
-      >
-        <div className="text-center my-6">
-          {user?.name}さんを削除します。 <br />
-          よろしいですか？
-        </div>
-        <Group position={"center"}>
-          <Button color={"red"}>はい</Button>
-          <Button color={"teal"}>いいえ</Button>
-        </Group>
-      </Modal>
+      <EditModal
+        member={members?.[0]!}
+        isEditModal={isEditModal}
+        setIsEditModal={setIsEditModal}
+      />
+      <DeleteModal
+        member={members?.[0]!}
+        isDeleteModal={isDeleteModal}
+        setIsDeleteModal={setIsDeleteModal}
+      />
 
       <PageContainer title="従業員一覧">
         <PageContent className="w-[800px] m-auto">
@@ -113,7 +97,7 @@ const MemberEdit = () => {
             horizontalSpacing="xl"
             verticalSpacing="lg"
             fontSize="md"
-            //highlightOnHover
+            highlightOnHover
           >
             <thead>
               <tr>
@@ -127,6 +111,52 @@ const MemberEdit = () => {
           </Table>
         </PageContent>
       </PageContainer>
+    </div>
+  );
+};
+
+type Props = {
+  member: Member;
+  isEditModal: boolean;
+  setIsEditModal: React.Dispatch<React.SetStateAction<boolean>>;
+  isDeleteModal: boolean;
+  setIsDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const EditModal: FC<Props> = ({ member, isEditModal, setIsEditModal }) => {
+  return (
+    <div>
+      <Modal
+        opened={isEditModal}
+        onClose={() => setIsEditModal(false)}
+        title="従業員編集"
+        centered
+      >
+        <div>{member?.name}</div>
+      </Modal>
+    </div>
+  );
+};
+
+const DeleteModal: FC<Props> = ({
+  member,
+  isDeleteModal,
+  setIsDeleteModal,
+}) => {
+  return (
+    <div>
+      <Modal
+        opened={isDeleteModal}
+        onClose={() => setIsDeleteModal(false)}
+        title="従業員削除"
+        centered
+      >
+        <div>{member?.name}</div>
+        <Group position={"center"}>
+          <Button color={"red"}>はい</Button>
+          <Button color={"teal"}>いいえ</Button>
+        </Group>
+      </Modal>
     </div>
   );
 };
