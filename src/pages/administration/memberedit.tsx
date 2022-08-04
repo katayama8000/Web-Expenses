@@ -8,6 +8,7 @@ import { supabase } from "src/lib/supabase/supabase";
 import { CustomNextPage } from "next";
 
 type Member = {
+  id: number;
   name: string;
   position: "役員" | "一般" | "リーダー";
   email: string;
@@ -153,7 +154,17 @@ const DeleteModal: FC<Props> = ({
       >
         <div>{member?.name}</div>
         <Group position={"center"}>
-          <Button color={"red"}>はい</Button>
+          <Button
+            color={"red"}
+            onClick={async () => {
+              const { data, error } = await supabase
+                .from("member")
+                .delete()
+                .match({ id: member.id });
+            }}
+          >
+            はい
+          </Button>
           <Button color={"teal"}>いいえ</Button>
         </Group>
       </Modal>
