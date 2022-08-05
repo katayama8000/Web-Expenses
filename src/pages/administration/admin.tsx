@@ -1,13 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Grid,
-  Group,
-  Image,
-  Modal,
-  Text,
-} from "@mantine/core";
+import { Button, Card, Grid, Group, Modal } from "@mantine/core";
 import React, { useCallback, useState } from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { DashboardLayout } from "src/layout";
@@ -93,7 +84,6 @@ const Admin = () => {
           </Group>
         </div>
       </Modal>
-
       <Modal
         opened={openedDenialReason}
         onClose={() => setOpenedDenialReason(false)}
@@ -101,7 +91,6 @@ const Admin = () => {
       >
         否認した理由を、Teams等で連絡してください。
       </Modal>
-
       <Group position="center">
         <Button onClick={() => setOpenedApplication(true)}>Open Modal</Button>
       </Group>
