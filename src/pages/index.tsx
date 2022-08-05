@@ -88,15 +88,15 @@ const Index: CustomNextPage = () => {
                       size="md"
                     />
                     <Select
-                      placeholder="Pick one"
+                      placeholder="費用分類"
                       data={[
-                        { value: "厚生費", label: "厚生費" },
-                        { value: "発送費用", label: "発送費用" },
-                        { value: "svelte", label: "交際費" },
-                        { value: "vue", label: "会議費" },
-                        { value: "svelte", label: "交通費" },
-                        { value: "vue", label: "通信費" },
-                        { value: "svelte", label: "消耗品費" },
+                        { value: "welfare", label: "厚生費" },
+                        { value: "send", label: "発送費用" },
+                        { value: "entertainment", label: "交際費" },
+                        { value: "conference", label: "会議費" },
+                        { value: "transportation", label: "交通費" },
+                        { value: "communication", label: "通信費" },
+                        { value: "Consumable", label: "消耗品費" },
                       ]}
                       {...form.getInputProps("kind")}
                       size="md"
