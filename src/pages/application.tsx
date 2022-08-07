@@ -1,50 +1,176 @@
-import { Grid, Stack } from "@mantine/core";
+import { Badge, Grid, Stack } from "@mantine/core";
 import React from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { PageContent } from "src/component/PageContent";
 import { DashboardLayout } from "src/layout";
-import { Card, Image, Text, Badge, Button, Group } from "@mantine/core";
+import { FC, useEffect } from "react";
+import { supabase } from "src/lib/supabase/supabase";
+import { useState } from "react";
+import {
+  Card,
+  Group,
+  Text,
+  Menu,
+  ActionIcon,
+  Image,
+  SimpleGrid,
+} from "@mantine/core";
+import { IconDots, IconEye, IconFileZip, IconTrash } from "@tabler/icons";
+import dayjs from "dayjs";
 
+type ApplicationProps = {
+  id: number;
+  payfor: string;
+  purpose: string;
+  detail: string;
+  categoryOfCost: string;
+  inside: string;
+  outside: string;
+  paidDate: Date;
+  cost: number;
+  isApproved: boolean;
+};
 const Application = () => {
-  const dummy: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const [application, setApplication] = useState<ApplicationProps[]>([]);
+
+  const getApplication = async () => {
+    try {
+      const { data, error } = await supabase.from("application").select();
+      console.log(data, error);
+      if (!data || error) {
+        return;
+      }
+
+      if (data) {
+        console.log(data);
+        setApplication(data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    getApplication();
+  }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      const { data, error } = await supabase
+        .from("application")
+        .delete()
+        .match({
+          id: id,
+        });
+      console.log(data, error);
+      if (!data || error) {
+        return;
+      }
+
+      if (data) {
+        console.log(data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleEdit = async (id: number) => {
+    try {
+      const { data, error } = await supabase.from("application").update({
+        id: id,
+      });
+      if (!data || error) {
+        return;
+      }
+      if (data) {
+        console.log(data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div>
       <PageContainer title="過去の申請書類">
         <Grid>
-          {dummy.map((item) => {
+          {application.map((item) => {
             return (
-              <Grid.Col span={4} key={item}>
-                <Card shadow="sm" p="lg" radius="md" withBorder>
-                  <Card.Section>
-                    <Image
-                      src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-                      height={160}
-                      alt="Norway"
-                    />
+              <Grid.Col span={4} key={item.id}>
+                <Card withBorder shadow="sm" radius="md">
+                  <Card.Section withBorder inheritPadding py="xs">
+                    <Group position="apart">
+                      <Text weight={500}>
+                        <div>
+                          {item.isApproved === true ? (
+                            <Badge
+                              color="teal"
+                              variant="filled"
+                              size="xl"
+                              radius="xs"
+                            >
+                              承認済み
+                            </Badge>
+                          ) : (
+                            <Badge
+                              color="yellow"
+                              variant="filled"
+                              size="xl"
+                              radius="xs"
+                            >
+                              承認前
+                            </Badge>
+                          )}
+                        </div>
+                      </Text>
+                      <Menu withinPortal position="bottom-end" shadow="sm">
+                        <Menu.Target>
+                          <ActionIcon>
+                            <IconDots size={16} />
+                          </ActionIcon>
+                        </Menu.Target>
+
+                        <Menu.Dropdown>
+                          {item.isApproved === true ? (
+                            <Menu.Item icon={<IconFileZip size={14} />}>
+                              Download zip
+                            </Menu.Item>
+                          ) : (
+                            <div>
+                              <Menu.Item icon={<IconEye size={14} />}>
+                                編集
+                              </Menu.Item>
+                              <Menu.Item
+                                icon={<IconTrash size={14} />}
+                                color="red"
+                              >
+                                削除
+                              </Menu.Item>
+                            </div>
+                          )}
+                        </Menu.Dropdown>
+                      </Menu>
+                    </Group>
                   </Card.Section>
 
-                  <Group position="apart" mt="md" mb="xs">
-                    <Text weight={500}>Norway Fjord Adventures</Text>
-                    <Badge color="pink" variant="light">
-                      On Sale
-                    </Badge>
-                  </Group>
-
-                  <Text size="sm" color="dimmed">
-                    With Fjord Tours you can explore more of the magical fjord
-                    landscapes with tours and activities on and around the
-                    fjords of Norway
+                  <Text mt="sm" color="dimmed" size="sm">
+                    <Grid className="px-6 py-3">
+                      <Grid.Col span={6}>
+                        <div>{item.payfor}</div>
+                        <div>{item.purpose}</div>
+                        <div>{item.detail}</div>
+                        <div>{item.categoryOfCost}</div>
+                      </Grid.Col>
+                      <Grid.Col span={6}>
+                        <div>{item.inside}</div>
+                        <div>{item.outside}</div>
+                        <div>{dayjs(item.paidDate).format("YYYY/MM/DD")}</div>
+                        <div>{item.cost}円</div>
+                      </Grid.Col>
+                    </Grid>
+                    <Text component="span" inherit color="blue"></Text>
                   </Text>
-
-                  <Button
-                    variant="light"
-                    color="blue"
-                    fullWidth
-                    mt="md"
-                    radius="md"
-                  >
-                    Book classic tour now
-                  </Button>
                 </Card>
               </Grid.Col>
             );
@@ -56,5 +182,4 @@ const Application = () => {
 };
 
 Application.getLayout = DashboardLayout;
-
 export default Application;

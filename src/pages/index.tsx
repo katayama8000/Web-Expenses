@@ -20,18 +20,32 @@ import { useState } from "react";
 import { DatePicker } from "@mantine/dates";
 import { DropZone } from "src/component/dropzone/dropzone";
 import { IconX } from "@tabler/icons";
+import { supabase } from "src/lib/supabase/supabase";
+
+type ApplicationProps = {
+  id?: number;
+  payfor: string;
+  purpose: string;
+  detail: string;
+  categoryOfCost: string;
+  inside: string;
+  outside: string;
+  paidDate: Date | null;
+  cost: number;
+};
 
 const Index: CustomNextPage = () => {
+  const today = new Date();
   const form = useForm({
     initialValues: {
       payfor: "",
       purpose: "",
       detail: "",
-      kind: "",
-      in: "",
-      out: "",
-      date: "",
-      cost: null,
+      categoryOfCost: "",
+      inside: "",
+      outside: "",
+      paidDate: null,
+      cost: 0,
     },
   });
 
@@ -41,21 +55,51 @@ const Index: CustomNextPage = () => {
     setFile(undefined);
   };
 
-  const handleSubmit = (value: any) => {
+  const handleSubmit = async (value: ApplicationProps) => {
     console.log(value);
-    if (file === undefined) {
-      showNotification({
-        title: "エラー",
-        message: "領収書をアップロードしてください",
-        color: "red",
-        icon: <IconX size={18} />,
-      });
-      return;
+    // if (file === undefined) {
+    //   showNotification({
+    //     title: "エラー",
+    //     message: "領収書をアップロードしてください",
+    //     color: "red",
+    //     icon: <IconX size={18} />,
+    //   });
+    //   return;
+    // }
+
+    try {
+      const { data, error } = await supabase.from("application").insert([
+        {
+          payfor: value.payfor,
+          purpose: value.purpose,
+          detail: value.detail,
+          categoryOfCost: value.categoryOfCost,
+          inside: value.inside,
+          outside: value.outside,
+          paidDate: value.paidDate,
+          cost: value.cost,
+        },
+      ]);
+
+      if (!data || error) {
+        showNotification({
+          title: "エラー",
+          message: "申請書の登録に失敗しました",
+          color: "red",
+          icon: <IconX size={18} />,
+        });
+        return;
+      }
+
+      if (data) {
+        showNotification({
+          title: "success",
+          message: "Form submitted",
+        });
+      }
+    } catch (e) {
+      console.error(e);
     }
-    showNotification({
-      title: "success",
-      message: "Form submitted",
-    });
   };
   return (
     <PageContainer title="経費申請">
@@ -90,15 +134,15 @@ const Index: CustomNextPage = () => {
                     <Select
                       placeholder="費用分類"
                       data={[
-                        { value: "welfare", label: "厚生費" },
-                        { value: "send", label: "発送費用" },
-                        { value: "entertainment", label: "交際費" },
-                        { value: "conference", label: "会議費" },
-                        { value: "transportation", label: "交通費" },
-                        { value: "communication", label: "通信費" },
-                        { value: "Consumable", label: "消耗品費" },
+                        { value: "厚生費", label: "厚生費" },
+                        { value: "発送費用", label: "発送費用" },
+                        { value: "交際費", label: "交際費" },
+                        { value: "会議費", label: "会議費" },
+                        { value: "交通費", label: "交通費" },
+                        { value: "通信費", label: "通信費" },
+                        { value: "消耗品費", label: "消耗品費" },
                       ]}
-                      {...form.getInputProps("kind")}
+                      {...form.getInputProps("categoryOfCost")}
                       size="md"
                     />
                   </div>
@@ -107,21 +151,21 @@ const Index: CustomNextPage = () => {
                   <TextInput
                     required
                     placeholder="誰(社内)"
-                    {...form.getInputProps("in")}
+                    {...form.getInputProps("inside")}
                     className="my-4"
                     size="md"
                   />
                   <TextInput
                     required
                     placeholder="誰(社外)"
-                    {...form.getInputProps("out")}
+                    {...form.getInputProps("outside")}
                     className="my-4"
                     size="md"
                   />
                   <DatePicker
                     size="md"
                     placeholder="支払日"
-                    {...form.getInputProps("date")}
+                    {...form.getInputProps("paidDate")}
                   />
                   <NumberInput
                     placeholder="支払金額"
