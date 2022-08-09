@@ -5,6 +5,7 @@
 - Mantine
 - ESLint
 - Prettier
+- Supabase
 
 ## DB
 **User**
