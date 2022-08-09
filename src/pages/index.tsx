@@ -49,24 +49,23 @@ const Index: CustomNextPage = () => {
     },
   });
 
-  const [file, setFile] = useState<string>();
   const [receipt, setReceipt] = useState<File | undefined>();
 
   const handleDelete = () => {
-    setFile(undefined);
+    setReceipt(undefined);
   };
 
   const handleSubmit = async (value: ApplicationProps) => {
     console.log(value);
-    // if (file === undefined) {
-    //   showNotification({
-    //     title: "エラー",
-    //     message: "領収書をアップロードしてください",
-    //     color: "red",
-    //     icon: <IconX size={18} />,
-    //   });
-    //   return;
-    // }
+    if (receipt) {
+      showNotification({
+        title: "エラー",
+        message: "領収書をアップロードしてください",
+        color: "red",
+        icon: <IconX size={18} />,
+      });
+      return;
+    }
 
     try {
       const { data, error } = await supabase.from("application").insert([
@@ -107,7 +106,7 @@ const Index: CustomNextPage = () => {
     if (receipt) {
       const { data, error } = await supabase.storage
         .from("avatars")
-        .upload(`aaaaaaaa`, receipt);
+        .upload(`bbb`, receipt);
 
       console.log(data, error);
     }
@@ -193,12 +192,7 @@ const Index: CustomNextPage = () => {
                   />
                 </Grid.Col>
               </Grid>
-              <DropZone
-                file={file}
-                setFile={setFile}
-                receipt={receipt}
-                setReceipt={setReceipt}
-              />
+              <DropZone receipt={receipt} setReceipt={setReceipt} />
               <Group position="right" mt="md">
                 <Button color="violet" onClick={handleStore}>
                   領収書を保存(開発中のみ)

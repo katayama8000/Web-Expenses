@@ -8,7 +8,7 @@ import { Badge, Stack } from "@mantine/core";
 import { PageContent } from "src/component/PageContent";
 import { FC, useEffect } from "react";
 import { supabase } from "src/lib/supabase/supabase";
-import { Text, Menu, ActionIcon, Image, SimpleGrid } from "@mantine/core";
+import { Text } from "@mantine/core";
 import dayjs from "dayjs";
 
 type ApplicationProps = {
@@ -112,7 +112,7 @@ const Admin = () => {
                     <Group position="apart">
                       <Text weight={500}>
                         <Badge
-                          color="yellow"
+                          color="grape"
                           variant="filled"
                           size="xl"
                           radius="xs"
