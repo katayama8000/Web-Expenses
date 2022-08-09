@@ -30,6 +30,7 @@ const Admin = () => {
   let today = new Date();
   const todayDate = dayjs(today).format("YYYY-MM-DD");
   const [id, setId] = useState<number>(0);
+  const [modalId, setModalId] = useState<number>(0);
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
   const [openedDenialReason, setOpenedDenialReason] = useState<boolean>(false);
 
@@ -100,7 +101,7 @@ const Admin = () => {
     <div>
       <PageContainer title="未承認の申請書類">
         <Grid>
-          {application.map((item) => {
+          {application.map((item, index) => {
             return (
               <Grid.Col span={4} key={item.id}>
                 <Card withBorder shadow="sm" radius="md">
@@ -122,6 +123,7 @@ const Admin = () => {
                   <div
                     onClick={() => {
                       setId(item.id);
+                      setModalId(index);
                       setOpenedApplication(true);
                     }}
                     className="hover:opacity-70 cursor-pointer"
@@ -158,12 +160,25 @@ const Admin = () => {
       >
         <div>
           <Card p="lg" radius="md" withBorder>
-            <div>片山</div>
-            <div>{todayDate}</div>
-            <div>React書籍</div>
-            <div>案件学習のため</div>
-            <div>本屋</div>
-            <div>4000円</div>
+            <Text mt="sm" color="dimmed" size="sm">
+              <Grid className="px-6 py-3">
+                <Grid.Col span={6}>
+                  <div>{application[modalId]?.payfor}</div>
+                  <div>{application[modalId]?.purpose}</div>
+                  <div>{application[modalId]?.detail}</div>
+                  <div>{application[modalId]?.categoryOfCost}</div>
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  <div>{application[modalId]?.inside}</div>
+                  <div>{application[modalId]?.outside}</div>
+                  <div>
+                    {dayjs(application[modalId]?.paidDate).format("YYYY/MM/DD")}
+                  </div>
+                  <div>{application[modalId]?.cost}円</div>
+                </Grid.Col>
+              </Grid>
+              <Text component="span" inherit color="blue"></Text>
+            </Text>
           </Card>
           <Group position="center" className="mt-3">
             <Button onClick={handelApprove} color="blue" size="lg">
