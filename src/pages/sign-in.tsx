@@ -13,12 +13,49 @@ import {
   Text,
   Group,
   Button,
+  Space,
 } from "@mantine/core";
+import { useState } from "react";
+import { useForm } from "@mantine/form";
+import { supabase } from "src/lib/supabase/supabase";
 
 const SignIn: CustomNextPage = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const signIn = () => {
     router.push(getPath("INDEX"));
+  };
+
+  const form = useForm({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+
+    validate: {
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+    },
+  });
+
+  const handleSignIn = async (values: { email: string; password: string }) => {
+    setIsLoading(true);
+    const { user, session, error } = await supabase.auth.signUp({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (user) {
+      console.log(user);
+      console.log(user.id);
+      signIn();
+    }
+    if (session) {
+      console.log("session", session);
+    }
+    if (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -40,26 +77,31 @@ const SignIn: CustomNextPage = () => {
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <TextInput
-          label="メールアドレス"
-          placeholder="test@example.com"
-          required
-        />
-        <PasswordInput
-          label="パスワード"
-          placeholder="Your password"
-          required
-          mt="md"
-        />
-        <Group position="apart" mt="md">
-          <Checkbox label="ログイン状態を保持" />
-          <Link href={getPath("FORGOT_PASSWORD")} passHref>
-            <Anchor<"a"> size="sm">パスワードをお忘れですか？</Anchor>
-          </Link>
-        </Group>
-        <Button fullWidth mt="xl" onClick={signIn}>
-          ログイン
-        </Button>
+        <form onSubmit={form.onSubmit((values) => handleSignIn(values))}>
+          <TextInput
+            label="メールアドレス"
+            placeholder="test@example.com"
+            required
+            {...form.getInputProps("email")}
+          />
+          <PasswordInput
+            label="パスワード"
+            placeholder="Your password"
+            required
+            mt="md"
+            {...form.getInputProps("password")}
+          />
+          <Space h="md" />
+          <Group position="apart" mt="md">
+            <Checkbox label="ログイン状態を保持" />
+            <Link href={getPath("FORGOT_PASSWORD")} passHref>
+              <Anchor<"a"> size="sm">パスワードをお忘れですか？</Anchor>
+            </Link>
+          </Group>
+          <Button fullWidth mt="xl" type="submit" loading={isLoading}>
+            ログイン
+          </Button>
+        </form>
       </Paper>
     </>
   );

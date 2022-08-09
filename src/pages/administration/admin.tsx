@@ -117,7 +117,7 @@ const Admin = () => {
                           size="xl"
                           radius="xs"
                         >
-                          片山達文
+                          {item.categoryOfCost}
                         </Badge>
                       </Text>
                     </Group>
