@@ -35,7 +35,9 @@ const Application = () => {
 
   const getApplication = async () => {
     try {
-      const { data, error } = await supabase.from("application").select();
+      const { data, error } = await supabase
+        .from<ApplicationProps>("application")
+        .select();
       console.log(data, error);
       if (!data || error) {
         console.error(error);

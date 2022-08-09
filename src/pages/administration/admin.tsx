@@ -89,11 +89,15 @@ const Admin = () => {
     getApplication();
     const subscription = supabase
       .from("application")
-      .on("*", (payload) => {
+      .on("UPDATE", (payload) => {
         getApplication();
-        console.log("Change received!", payload);
+        console.log("Change received!!!!", payload);
       })
       .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (
