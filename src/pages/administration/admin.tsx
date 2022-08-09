@@ -27,7 +27,6 @@ type ApplicationProps = {
 
 const Admin = () => {
   const [application, setApplication] = useState<ApplicationProps[]>([]);
-  const dummy: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   let today = new Date();
   const todayDate = dayjs(today).format("YYYY-MM-DD");
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
