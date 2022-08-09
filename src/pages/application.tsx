@@ -38,6 +38,7 @@ const Application = () => {
       const { data, error } = await supabase.from("application").select();
       console.log(data, error);
       if (!data || error) {
+        console.error(error);
         return;
       }
 

@@ -29,19 +29,36 @@ const Admin = () => {
   const [application, setApplication] = useState<ApplicationProps[]>([]);
   let today = new Date();
   const todayDate = dayjs(today).format("YYYY-MM-DD");
+  const [id, setId] = useState<number>(0);
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
   const [openedDenialReason, setOpenedDenialReason] = useState<boolean>(false);
 
-  const handlApprove = useCallback(() => {
+  const handelApprove = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("application")
+        .update([{ isApproved: true }])
+        .match({ id: id });
+
+      if (!data || error) {
+        console.error(error);
+        return;
+      }
+
+      if (data) {
+        showNotification({
+          disallowClose: true,
+          title: "経費申請",
+          message: "承認しました",
+          color: "teal",
+          icon: <IconCheck size={18} />,
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
     setOpenedApplication(false);
-    showNotification({
-      disallowClose: true,
-      title: "経費申請",
-      message: "承認しました",
-      color: "teal",
-      icon: <IconCheck size={18} />,
-    });
-  }, []);
+  }, [id]);
 
   const handleDenial = useCallback(() => {
     setOpenedApplication(false);
@@ -50,7 +67,10 @@ const Admin = () => {
 
   const getApplication = async () => {
     try {
-      const { data, error } = await supabase.from("application").select();
+      const { data, error } = await supabase
+        .from("application")
+        .select("*")
+        .filter("isApproved", "in", '("false")');
       console.log(data, error);
       if (!data || error) {
         return;
@@ -67,6 +87,13 @@ const Admin = () => {
 
   useEffect(() => {
     getApplication();
+    const subscription = supabase
+      .from("application")
+      .on("*", (payload) => {
+        getApplication();
+        console.log("Change received!", payload);
+      })
+      .subscribe();
   }, []);
 
   return (
@@ -76,63 +103,61 @@ const Admin = () => {
           {application.map((item) => {
             return (
               <Grid.Col span={4} key={item.id}>
-                {item.isApproved === false ? (
-                  <Card withBorder shadow="sm" radius="md">
-                    <Card.Section withBorder inheritPadding py="xs">
-                      <Group position="apart">
-                        <Text weight={500}>
-                          <Badge
-                            color="yellow"
-                            variant="filled"
-                            size="xl"
-                            radius="xs"
-                          >
-                            片山達文
-                          </Badge>
-                        </Text>
-                      </Group>
-                    </Card.Section>
-
-                    <div onClick={() => setOpenedApplication(true)}>
-                      <Text mt="sm" color="dimmed" size="sm">
-                        <Grid className="px-6 py-3">
-                          <Grid.Col span={6}>
-                            <div>{item.payfor}</div>
-                            <div>{item.purpose}</div>
-                            <div>{item.detail}</div>
-                            <div>{item.categoryOfCost}</div>
-                          </Grid.Col>
-                          <Grid.Col span={6}>
-                            <div>{item.inside}</div>
-                            <div>{item.outside}</div>
-                            <div>
-                              {dayjs(item.paidDate).format("YYYY/MM/DD")}
-                            </div>
-                            <div>{item.cost}円</div>
-                          </Grid.Col>
-                        </Grid>
-                        <Text component="span" inherit color="blue"></Text>
+                <Card withBorder shadow="sm" radius="md">
+                  <Card.Section withBorder inheritPadding py="xs">
+                    <Group position="apart">
+                      <Text weight={500}>
+                        <Badge
+                          color="yellow"
+                          variant="filled"
+                          size="xl"
+                          radius="xs"
+                        >
+                          片山達文
+                        </Badge>
                       </Text>
-                    </div>
-                  </Card>
-                ) : null}
+                    </Group>
+                  </Card.Section>
+
+                  <div
+                    onClick={() => {
+                      setId(item.id);
+                      setOpenedApplication(true);
+                    }}
+                    className="hover:opacity-70 cursor-pointer"
+                  >
+                    <Text mt="sm" color="dimmed" size="sm">
+                      <Grid className="px-6 py-3">
+                        <Grid.Col span={6}>
+                          <div>{item.payfor}</div>
+                          <div>{item.purpose}</div>
+                          <div>{item.detail}</div>
+                          <div>{item.categoryOfCost}</div>
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                          <div>{item.inside}</div>
+                          <div>{item.outside}</div>
+                          <div>{dayjs(item.paidDate).format("YYYY/MM/DD")}</div>
+                          <div>{item.cost}円</div>
+                        </Grid.Col>
+                      </Grid>
+                      <Text component="span" inherit color="blue"></Text>
+                    </Text>
+                  </div>
+                </Card>
               </Grid.Col>
             );
           })}
         </Grid>
       </PageContainer>
+
       <Modal
         opened={openedApplication}
         onClose={() => setOpenedApplication(false)}
         title="慎重に確認してください"
       >
         <div>
-          <Card
-            p="lg"
-            radius="md"
-            withBorder
-            onClick={() => setOpenedApplication(true)}
-          >
+          <Card p="lg" radius="md" withBorder>
             <div>片山</div>
             <div>{todayDate}</div>
             <div>React書籍</div>
@@ -141,7 +166,7 @@ const Admin = () => {
             <div>4000円</div>
           </Card>
           <Group position="center" className="mt-3">
-            <Button onClick={handlApprove} color="blue" size="lg">
+            <Button onClick={handelApprove} color="blue" size="lg">
               承認
             </Button>
             <Button onClick={handleDenial} color="red" size="lg">
