@@ -45,7 +45,10 @@ const Profile = () => {
           <input
             type="file"
             accept={"image/jpeg image/png"}
-            onChange={(e) => setImage(e.target.files?.[0])}
+            onChange={(e) => {
+              console.log(e.target.files?.[0]);
+              //setImage(e.target.files?.[0]);
+            }}
           />
         </div>
 

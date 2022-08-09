@@ -50,6 +50,7 @@ const Index: CustomNextPage = () => {
   });
 
   const [file, setFile] = useState<string>();
+  const [receipt, setReceipt] = useState<File | undefined>();
 
   const handleDelete = () => {
     setFile(undefined);
@@ -99,6 +100,16 @@ const Index: CustomNextPage = () => {
       }
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  const handleStore = async () => {
+    if (receipt) {
+      const { data, error } = await supabase.storage
+        .from("avatars")
+        .upload(`aaaaaaaa`, receipt);
+
+      console.log(data, error);
     }
   };
   return (
@@ -182,8 +193,16 @@ const Index: CustomNextPage = () => {
                   />
                 </Grid.Col>
               </Grid>
-              <DropZone file={file} setFile={setFile} />
+              <DropZone
+                file={file}
+                setFile={setFile}
+                receipt={receipt}
+                setReceipt={setReceipt}
+              />
               <Group position="right" mt="md">
+                <Button color="violet" onClick={handleStore}>
+                  領収書を保存(開発中のみ)
+                </Button>
                 <Button color="red" onClick={handleDelete}>
                   領収書を削除
                 </Button>

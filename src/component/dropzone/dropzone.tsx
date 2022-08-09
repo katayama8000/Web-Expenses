@@ -6,9 +6,11 @@ import { Dispatch, FC, SetStateAction, useState } from "react";
 type Props = {
   file: string | undefined;
   setFile: Dispatch<SetStateAction<string | undefined>>;
+  receipt: File | undefined;
+  setReceipt: Dispatch<SetStateAction<File | undefined>>;
 };
 
-export const DropZone: FC<Props> = ({ file, setFile }) => {
+export const DropZone: FC<Props> = ({ file, setFile, receipt, setReceipt }) => {
   const theme = useMantineTheme();
 
   return (
@@ -16,6 +18,7 @@ export const DropZone: FC<Props> = ({ file, setFile }) => {
       onDrop={(files) => {
         console.log("accepted files", files);
         setFile(URL.createObjectURL(files[0]));
+        setReceipt(files[0]);
       }}
       onReject={(files) => {
         console.log("rejected files", files);
