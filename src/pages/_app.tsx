@@ -4,6 +4,7 @@ import { NotificationsProvider } from "@mantine/notifications";
 import type { CustomAppPage } from "next/app";
 import { AppMantineProvider, GlobalStyleProvider } from "src/lib/mantine";
 import Head from "next/head";
+import { useIsLoggedIn } from "src/lib/hooks/useIsLoggedIn";
 
 const App: CustomAppPage = ({ Component, pageProps }) => {
   const getLayout =
@@ -11,6 +12,8 @@ const App: CustomAppPage = ({ Component, pageProps }) => {
     ((page) => {
       return page;
     });
+
+  useIsLoggedIn();
 
   return (
     <>

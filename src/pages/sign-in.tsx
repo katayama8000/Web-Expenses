@@ -15,16 +15,27 @@ import {
   Button,
   Space,
 } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { supabase } from "src/lib/supabase/supabase";
 
 const SignIn: CustomNextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+  const { pathname, push } = useRouter();
   const signIn = () => {
     router.push(getPath("INDEX"));
   };
+
+  //authの変更を検知
+  supabase.auth.onAuthStateChange((_, session) => {
+    console.log(session);
+    if (session?.user && (pathname === "/sign-in" || pathname === "/sign-up")) {
+      push("/");
+    } else if (!session?.user && pathname !== "/signup") {
+      push("/sign-in");
+    }
+  });
 
   const form = useForm({
     initialValues: {
@@ -39,7 +50,7 @@ const SignIn: CustomNextPage = () => {
 
   const handleSignIn = async (values: { email: string; password: string }) => {
     setIsLoading(true);
-    const { user, session, error } = await supabase.auth.signUp({
+    const { user, session, error } = await supabase.auth.signIn({
       email: values.email,
       password: values.password,
     });

@@ -21,6 +21,7 @@ import { DatePicker } from "@mantine/dates";
 import { DropZone } from "src/component/dropzone/dropzone";
 import { IconX } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
+import { useIsLoggedIn } from "src/lib/hooks/useIsLoggedIn";
 
 type ApplicationProps = {
   id?: number;
@@ -35,7 +36,7 @@ type ApplicationProps = {
 };
 
 const Index: CustomNextPage = () => {
-  const today = new Date();
+  const [receipt, setReceipt] = useState<File | undefined>();
   const form = useForm({
     initialValues: {
       payfor: "",
@@ -48,8 +49,7 @@ const Index: CustomNextPage = () => {
       cost: 0,
     },
   });
-
-  const [receipt, setReceipt] = useState<File | undefined>();
+  //useIsLoggedIn();
 
   const handleDelete = () => {
     setReceipt(undefined);
