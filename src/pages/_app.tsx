@@ -13,8 +13,6 @@ const App: CustomAppPage = ({ Component, pageProps }) => {
       return page;
     });
 
-  useIsLoggedIn();
-
   return (
     <>
       <Head>

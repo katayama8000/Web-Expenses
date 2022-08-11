@@ -49,7 +49,7 @@ const Index: CustomNextPage = () => {
       cost: 0,
     },
   });
-  //useIsLoggedIn();
+  useIsLoggedIn();
 
   const handleDelete = () => {
     setReceipt(undefined);

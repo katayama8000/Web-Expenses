@@ -9,6 +9,7 @@ const PATH = {
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
   FORGOT_PASSWORD: "/forgot-password",
+  AUTHENTICATION: "/authentication",
   TEST: "/test",
 } as const;
 

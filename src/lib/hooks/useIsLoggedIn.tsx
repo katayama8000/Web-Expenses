@@ -7,9 +7,10 @@ export const useIsLoggedIn = () => {
   if (isready) {
     const user = supabase.auth.user();
     console.log(user);
+    //ユーザーがあるかつログイン画面にいるとき
     if (user && pathname === "/sign-in") {
       push("/");
-      //ユーザーがsessionにないとき、新規登録以外はログイン画面に遷移
+      //ユーザーがないときかつ新規登録画面にいないとき
     } else if (!user && pathname !== "/sign-up") {
       push("/sign-in");
     }

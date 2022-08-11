@@ -15,9 +15,11 @@ import {
 import { supabase } from "src/lib/supabase/supabase";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const SignUp: CustomNextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
   const form = useForm({
     initialValues: {
       email: "",
@@ -40,6 +42,7 @@ const SignUp: CustomNextPage = () => {
       console.log(user);
       console.log(user.id);
       alert("メールを送信しました");
+      router.push("sign-up/authentication");
     }
     if (session) {
       console.log("session", session);

@@ -21,6 +21,7 @@ import { supabase } from "src/lib/supabase/supabase";
 
 const SignIn: CustomNextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const router = useRouter();
   const { pathname, push } = useRouter();
   const signIn = () => {
@@ -50,21 +51,33 @@ const SignIn: CustomNextPage = () => {
 
   const handleSignIn = async (values: { email: string; password: string }) => {
     setIsLoading(true);
-    const { user, session, error } = await supabase.auth.signIn({
-      email: values.email,
-      password: values.password,
-    });
+    try {
+      const { user, session, error } = await supabase.auth.signIn({
+        email: values.email,
+        password: values.password,
+      });
 
-    if (user) {
-      console.log(user);
-      console.log(user.id);
-      signIn();
-    }
-    if (session) {
-      console.log("session", session);
-    }
-    if (error) {
-      console.log(error);
+      if (user) {
+        console.log(user);
+        console.log(user.id);
+        signIn();
+      }
+      if (session) {
+        console.log("session", session);
+      }
+      if (error) {
+        console.log(error);
+        // if (error.message === "Invalid password") {
+        //   setIsError("パスワードが間違っています");
+        // } else if (error.message === "User not found") {
+        //   setIsError("ユーザーが見つかりません");
+        // } else if (error.message === "Email not comfired") {
+        //   setIsError("メールアドレスが確認できません");
+        // }
+        setError(error.message);
+      }
+    } catch (e) {
+      alert(e);
     }
     setIsLoading(false);
   };
@@ -103,6 +116,13 @@ const SignIn: CustomNextPage = () => {
             {...form.getInputProps("password")}
           />
           <Space h="md" />
+          <div>
+            {error && (
+              <Text color="red" className="text-center font-bold text-lg">
+                {error}
+              </Text>
+            )}
+          </div>
           <Group position="apart" mt="md">
             <Checkbox label="ログイン状態を保持" />
             <Link href={getPath("FORGOT_PASSWORD")} passHref>
