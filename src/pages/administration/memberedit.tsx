@@ -10,7 +10,7 @@ import { CustomNextPage } from "next";
 type Member = {
   id: number;
   name: string;
-  position: "役員" | "一般" | "リーダー";
+  position: "役員" | "リーダー" | "一般";
   email: string;
 };
 
@@ -20,11 +20,11 @@ const MemberEdit: CustomNextPage = () => {
   const [members, setMembers] = useState<Member[]>();
 
   const getMember = async () => {
-    const { data, error } = await supabase.from("member").select();
+    const { data, error } = await supabase.from<Member>("member").select();
     console.log(data, error);
     try {
       if (data) {
-        setMembers(data as Member[]);
+        setMembers(data);
       }
 
       if (!data || error) {

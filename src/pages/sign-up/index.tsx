@@ -24,6 +24,7 @@ const SignUp: CustomNextPage = () => {
     initialValues: {
       email: "",
       password: "",
+      name: "",
     },
 
     validate: {
@@ -31,7 +32,11 @@ const SignUp: CustomNextPage = () => {
     },
   });
 
-  const handleSignUp = async (values: { email: string; password: string }) => {
+  const handleSignUp = async (values: {
+    name: string;
+    email: string;
+    password: string;
+  }) => {
     setIsLoading(true);
     const { user, session, error } = await supabase.auth.signUp({
       email: values.email,
@@ -41,6 +46,7 @@ const SignUp: CustomNextPage = () => {
     if (user) {
       console.log(user);
       console.log(user.id);
+      handleRegisterMember(values.name, user.id, values.email);
       alert("メールを送信しました");
       router.push("sign-up/authentication");
     }
@@ -51,6 +57,22 @@ const SignUp: CustomNextPage = () => {
       console.log(error);
     }
     setIsLoading(false);
+  };
+
+  const handleRegisterMember = async (
+    userName: string,
+    userId: string,
+    userEmail: string
+  ) => {
+    const { data, error } = await supabase.from("member").insert([
+      {
+        name: userName,
+        userID: userId,
+        email: userEmail,
+      },
+    ]);
+
+    console.log(data, error);
   };
 
   return (
@@ -74,9 +96,16 @@ const SignUp: CustomNextPage = () => {
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         <form onSubmit={form.onSubmit((values) => handleSignUp(values))}>
           <TextInput
+            label="名前"
+            placeholder="名前を入力してください"
+            required
+            {...form.getInputProps("name")}
+          />
+          <TextInput
             label="メールアドレス"
             placeholder="test@example.com"
             required
+            mt="md"
             {...form.getInputProps("email")}
           />
           <PasswordInput

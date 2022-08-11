@@ -16,7 +16,7 @@ import { DashboardLayout } from "src/layout";
 import { PageContent } from "src/component/PageContent";
 import { PageContainer } from "src/component/PageContainer";
 import { showNotification } from "@mantine/notifications";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DatePicker } from "@mantine/dates";
 import { DropZone } from "src/component/dropzone/dropzone";
 import { IconX } from "@tabler/icons";
@@ -35,8 +35,14 @@ type ApplicationProps = {
   cost: number;
 };
 
+type Member = {
+  userID: string;
+  name: string;
+};
+
 const Index: CustomNextPage = () => {
   const [receipt, setReceipt] = useState<File | undefined>();
+  const [member, setMember] = useState<Member>();
   const form = useForm({
     initialValues: {
       payfor: "",
@@ -78,6 +84,8 @@ const Index: CustomNextPage = () => {
           outside: value.outside,
           paidDate: value.paidDate,
           cost: value.cost,
+          //name: member?.name,
+          userID: member?.userID,
         },
       ]);
 
@@ -111,10 +119,41 @@ const Index: CustomNextPage = () => {
       console.log(data, error);
     }
   };
+
+  const getUser = async () => {
+    try {
+      const user = supabase.auth.user();
+      console.log(user);
+      const { data, error } = await supabase
+        .from("member")
+        .select()
+        .match({ userID: user!.id });
+      console.log(data, error);
+      if (!data || error) {
+        console.error(error);
+        return;
+      }
+
+      if (data) {
+        console.log(data);
+        setMember(data[0]);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
   return (
     <PageContainer title="経費申請">
       <Stack spacing="xl">
         <PageContent className="w-[600px] m-auto">
+          <Group position="right" className="px-6">
+            名前:
+            <span className="underline underline-offset-2">{member?.name}</span>
+          </Group>
           <div className="px-6">
             <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
               <Grid>
