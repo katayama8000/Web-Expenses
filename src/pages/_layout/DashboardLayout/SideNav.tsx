@@ -12,6 +12,11 @@ import {
 import {
   Home,
   Settings,
+  Notes,
+  UserPlus,
+  Edit,
+  Folders,
+  TestPipe,
   ArrowLeft,
   ArrowRight,
   DeviceAnalytics,
@@ -102,7 +107,20 @@ const useStyles = createStyles<string, { collapsed?: boolean }>(
 
 const ITEMS = [
   { href: getPath("INDEX"), label: "ホーム", Icon: Home },
+  { href: getPath("USERAPPLICATION"), label: "申請書一覧", Icon: Notes },
   { href: getPath("SETTINGS"), label: "設定", Icon: Settings },
+  { href: getPath("ADMIN"), label: "管理者", Icon: UserPlus },
+  { href: getPath("MEMBEREDIT"), label: "メンバー編集", Icon: Edit },
+  {
+    href: getPath("APPROVEDAPPLICATION"),
+    label: "過去の申請書",
+    Icon: Folders,
+  },
+  {
+    href: getPath("TEST"),
+    label: "テスト(開発中のみ)",
+    Icon: TestPipe,
+  },
 ];
 
 export const SideNav: FC<{ className?: string }> = ({ className }) => {
@@ -116,7 +134,7 @@ export const SideNav: FC<{ className?: string }> = ({ className }) => {
           <Link href={getPath("INDEX")}>
             <a className={classes.logo}>
               <DeviceAnalytics />
-              <span className={classes.linkLabel}>Admin Dashboard</span>
+              <span className={classes.linkLabel}>Web-Expenses</span>
             </a>
           </Link>
         </Group>

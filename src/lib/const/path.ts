@@ -1,10 +1,16 @@
 const PATH = {
   INDEX: "/",
   NOTIFICATION: "/notification",
+  USERAPPLICATION: "/user-application",
   SETTINGS: "/settings",
+  ADMIN: "/administration/admin",
+  APPROVEDAPPLICATION: "/administration/approvedapp",
+  MEMBEREDIT: "/administration/memberedit",
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
   FORGOT_PASSWORD: "/forgot-password",
+  AUTHENTICATION: "/authentication",
+  TEST: "/test",
 } as const;
 
 export const getPath = (pathKey: keyof typeof PATH, ...args: string[]) => {
