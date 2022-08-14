@@ -107,7 +107,7 @@ const useStyles = createStyles<string, { collapsed?: boolean }>(
 
 const ITEMS = [
   { href: getPath("INDEX"), label: "ホーム", Icon: Home },
-  { href: getPath("APPLICATION"), label: "申請書一覧", Icon: Notes },
+  { href: getPath("USERAPPLICATION"), label: "申請書一覧", Icon: Notes },
   { href: getPath("SETTINGS"), label: "設定", Icon: Settings },
   { href: getPath("ADMIN"), label: "管理者", Icon: UserPlus },
   { href: getPath("MEMBEREDIT"), label: "メンバー編集", Icon: Edit },

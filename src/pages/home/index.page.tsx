@@ -15,7 +15,7 @@ import { PageContainer } from "src/component/PageContainer";
 import { showNotification } from "@mantine/notifications";
 import { useCallback, useEffect, useState } from "react";
 import { DatePicker } from "@mantine/dates";
-import { DropZone } from "src/component/dropzone/dropzone";
+import { DropZone } from "./dropzone";
 import { IconX } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
 import { useIsLoggedIn } from "src/lib/hooks/useIsLoggedIn";
