@@ -1,11 +1,8 @@
 import {
   Button,
   Stack,
-  Table,
   TextInput,
-  Checkbox,
   Group,
-  Box,
   Grid,
   NumberInput,
   Select,
@@ -16,7 +13,7 @@ import { DashboardLayout } from "src/layout";
 import { PageContent } from "src/component/PageContent";
 import { PageContainer } from "src/component/PageContainer";
 import { showNotification } from "@mantine/notifications";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { DatePicker } from "@mantine/dates";
 import { DropZone } from "src/component/dropzone/dropzone";
 import { IconX } from "@tabler/icons";
@@ -57,60 +54,62 @@ const Index: CustomNextPage = () => {
   });
   useIsLoggedIn();
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     setReceipt(undefined);
-  };
+  }, []);
 
-  const handleSubmit = async (value: ApplicationProps) => {
-    console.log(value);
-    if (receipt) {
-      showNotification({
-        title: "エラー",
-        message: "領収書をアップロードしてください",
-        color: "red",
-        icon: <IconX size={18} />,
-      });
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase.from("application").insert([
-        {
-          payfor: value.payfor,
-          purpose: value.purpose,
-          detail: value.detail,
-          categoryOfCost: value.categoryOfCost,
-          inside: value.inside,
-          outside: value.outside,
-          paidDate: value.paidDate,
-          cost: value.cost,
-          //name: member?.name,
-          userID: member?.userID,
-        },
-      ]);
-
-      if (!data || error) {
+  const handleSubmit = useCallback(
+    async (value: ApplicationProps) => {
+      if (receipt) {
         showNotification({
           title: "エラー",
-          message: "申請書の登録に失敗しました",
+          message: "領収書をアップロードしてください",
           color: "red",
           icon: <IconX size={18} />,
         });
         return;
       }
 
-      if (data) {
-        showNotification({
-          title: "success",
-          message: "Form submitted",
-        });
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+      try {
+        const { data, error } = await supabase.from("application").insert([
+          {
+            payfor: value.payfor,
+            purpose: value.purpose,
+            detail: value.detail,
+            categoryOfCost: value.categoryOfCost,
+            inside: value.inside,
+            outside: value.outside,
+            paidDate: value.paidDate,
+            cost: value.cost,
+            //name: member?.name,
+            userID: member?.userID,
+          },
+        ]);
 
-  const handleStore = async () => {
+        if (!data || error) {
+          showNotification({
+            title: "エラー",
+            message: "申請書の登録に失敗しました",
+            color: "red",
+            icon: <IconX size={18} />,
+          });
+          return;
+        }
+
+        if (data) {
+          showNotification({
+            title: "success",
+            message: "Form submitted",
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [receipt, member]
+  );
+
+  const handleStore = useCallback(async () => {
     if (receipt) {
       const { data, error } = await supabase.storage
         .from("avatars")
@@ -118,9 +117,9 @@ const Index: CustomNextPage = () => {
 
       console.log(data, error);
     }
-  };
+  }, [receipt]);
 
-  const getUser = async () => {
+  const getUser = useCallback(async () => {
     try {
       const user = supabase.auth.user();
       console.log(user);
@@ -141,7 +140,7 @@ const Index: CustomNextPage = () => {
     } catch (e) {
       console.error(e);
     }
-  };
+  }, []);
 
   useEffect(() => {
     getUser();

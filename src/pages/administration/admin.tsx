@@ -4,9 +4,8 @@ import { PageContainer } from "src/component/PageContainer";
 import { DashboardLayout } from "src/layout";
 import { showNotification } from "@mantine/notifications";
 import { IconCheck } from "@tabler/icons";
-import { Badge, Stack } from "@mantine/core";
-import { PageContent } from "src/component/PageContent";
-import { FC, useEffect } from "react";
+import { Badge } from "@mantine/core";
+import { useEffect } from "react";
 import { supabase } from "src/lib/supabase/supabase";
 import { Text } from "@mantine/core";
 import dayjs from "dayjs";
@@ -65,7 +64,7 @@ const Admin = () => {
     setOpenedDenialReason(true);
   }, []);
 
-  const getApplication = async () => {
+  const getApplication = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from("application")
@@ -83,7 +82,9 @@ const Admin = () => {
     } catch (e) {
       console.error(e);
     }
-  };
+  }, []);
+
+  const getMemberName = useCallback(async (id: number) => {}, []);
 
   useEffect(() => {
     getApplication();
@@ -117,7 +118,7 @@ const Admin = () => {
                           size="xl"
                           radius="xs"
                         >
-                          {item.categoryOfCost}
+                          片山帆乃果
                         </Badge>
                       </Text>
                     </Group>

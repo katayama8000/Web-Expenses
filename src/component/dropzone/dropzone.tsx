@@ -87,5 +87,3 @@ export const DropZone: FC<Props> = ({ receipt, setReceipt }) => {
     </Dropzone>
   );
 };
-
-export default DropZone;

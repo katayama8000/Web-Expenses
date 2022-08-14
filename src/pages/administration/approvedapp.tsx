@@ -34,19 +34,36 @@ const Approved = () => {
   const [application, setApplication] = useState<ApplicationProps[]>([]);
   let today = new Date();
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
+  const [id, setId] = useState<number>(0);
 
-  const handlApprove = useCallback(() => {
-    setOpenedApplication(false);
-    showNotification({
-      disallowClose: true,
-      title: "経費申請",
-      message: "未承認に戻しました",
-      color: "teal",
-      icon: <IconCheck size={18} />,
-    });
-  }, []);
+  const handleIsApprovedFalse = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("application")
+        .update([{ isApproved: false }])
+        .match({ id: id });
 
-  const getApplication = async () => {
+      if (!data || error) {
+        console.error(error);
+        return;
+      }
+
+      if (data) {
+        setOpenedApplication(false);
+        showNotification({
+          disallowClose: true,
+          title: "経費申請",
+          message: "未承認に戻しました",
+          color: "teal",
+          icon: <IconCheck size={18} />,
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const getApplication = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from("application")
@@ -64,22 +81,34 @@ const Approved = () => {
     } catch (e) {
       console.error(e);
     }
-  };
+  }, []);
+
+  const handleSet = useCallback(
+    (id: number) => {
+      setId(id);
+      setOpenedApplication(true);
+    },
+    [setId, setOpenedApplication]
+  );
 
   useEffect(() => {
     getApplication();
-    supabase
+    const subscription = supabase
       .from("application")
-      .on("*", (payload) => {
+      .on("UPDATE", (payload) => {
         getApplication();
         console.log("Change received!", payload);
       })
       .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (
     <div>
-      <PageContainer title="承認済み申請書">
+      <PageContainer title="過去の申請書">
         <Grid>
           {application.map((item) => {
             return (
@@ -107,7 +136,7 @@ const Approved = () => {
                         <Menu.Dropdown>
                           <Menu.Item
                             icon={<IconArrowBackUp className="text-red-500" />}
-                            onClick={() => setOpenedApplication(true)}
+                            onClick={() => handleSet(item.id)}
                           >
                             承認前に戻す
                           </Menu.Item>
@@ -153,7 +182,7 @@ const Approved = () => {
         <div>
           <Button
             color="primary"
-            onClick={handlApprove}
+            onClick={() => handleIsApprovedFalse()}
             size="sm"
             variant="outline"
           >
