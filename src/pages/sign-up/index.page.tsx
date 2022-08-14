@@ -126,5 +126,4 @@ const SignUp: CustomNextPage = () => {
 };
 
 SignUp.getLayout = AuthLayout;
-
 export default SignUp;

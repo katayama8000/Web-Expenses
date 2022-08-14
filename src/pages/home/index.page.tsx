@@ -145,6 +145,7 @@ const Index: CustomNextPage = () => {
   useEffect(() => {
     getUser();
   }, []);
+
   return (
     <PageContainer title="経費申請">
       <Stack spacing="xl">
