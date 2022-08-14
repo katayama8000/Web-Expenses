@@ -1,7 +1,7 @@
 import { Button, Card, Grid, Group, Modal } from "@mantine/core";
 import React, { useCallback, useState } from "react";
 import { PageContainer } from "src/component/PageContainer";
-import { DashboardLayout } from "src/layout";
+import { DashboardLayout } from "src/pages/_layout";
 import { showNotification } from "@mantine/notifications";
 import { IconCheck } from "@tabler/icons";
 import { Badge } from "@mantine/core";

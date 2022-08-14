@@ -2,7 +2,7 @@ import { Badge, Grid, Stack } from "@mantine/core";
 import React from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { PageContent } from "src/component/PageContent";
-import { DashboardLayout } from "src/layout";
+import { DashboardLayout } from "src/pages/_layout";
 import { FC, useEffect } from "react";
 import { supabase } from "src/lib/supabase/supabase";
 import { useState } from "react";

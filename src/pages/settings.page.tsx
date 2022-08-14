@@ -1,6 +1,6 @@
 import type { CustomNextPage } from "next";
 import { Group, Stack } from "@mantine/core";
-import { DashboardLayout } from "src/layout";
+import { DashboardLayout } from "src/pages/_layout";
 import { PageContent } from "src/component/PageContent";
 import { PageContainer } from "src/component/PageContainer";
 

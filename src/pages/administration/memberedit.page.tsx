@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { DashboardLayout } from "src/layout";
+import { DashboardLayout } from "src/pages/_layout";
 import { Button, Group, Modal, Table, Tooltip } from "@mantine/core";
 import { PageContainer } from "src/component/PageContainer";
 import { PageContent } from "src/component/PageContent";
