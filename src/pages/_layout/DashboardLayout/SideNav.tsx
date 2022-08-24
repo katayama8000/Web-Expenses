@@ -139,29 +139,29 @@ export const SideNav: FC<{ className?: string }> = ({ className }) => {
           </Link>
         </Group>
         {ITEMS.map(({ label, href, Icon }) => (
-          <Tooltip
-            key={label}
-            label={label}
-            disabled={!collapsed}
-            position="right"
-            withArrow
-            sx={{ width: "100%" }}
-          >
-            <ActiveLink href={href} passHref>
-              {(isActive) => {
-                return (
-                  <a
-                    className={cx(classes.link, {
-                      [classes.linkActive]: isActive,
-                    })}
-                  >
-                    <Icon className={classes.linkIcon} />
-                    <span className={classes.linkLabel}>{label}</span>
-                  </a>
-                );
-              }}
-            </ActiveLink>
-          </Tooltip>
+          // <Tooltip
+          //   label={label}
+          //   key={label}
+          //   disabled={!collapsed}
+          //   position="right"
+          //   withArrow
+          //   sx={{ width: "100%" }}
+          // >
+          <ActiveLink href={href} passHref key={label}>
+            {(isActive) => {
+              return (
+                <a
+                  className={cx(classes.link, {
+                    [classes.linkActive]: isActive,
+                  })}
+                >
+                  <Icon className={classes.linkIcon} />
+                  <span className={classes.linkLabel}>{label}</span>
+                </a>
+              );
+            }}
+          </ActiveLink>
+          // </Tooltip>
         ))}
       </Navbar.Section>
 
