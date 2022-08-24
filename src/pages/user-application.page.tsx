@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Badge, Grid, Stack } from "@mantine/core";
-import React from "react";
+import React, { useCallback } from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { PageContent } from "src/component/PageContent";
 import { DashboardLayout } from "src/pages/_layout";
@@ -33,7 +34,7 @@ type ApplicationProps = {
 const Application = () => {
   const [application, setApplication] = useState<ApplicationProps[]>([]);
 
-  const getApplication = async () => {
+  const getApplication = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from<ApplicationProps>("application")
@@ -51,13 +52,13 @@ const Application = () => {
     } catch (e) {
       console.error(e);
     }
-  };
+  }, []);
 
   useEffect(() => {
     getApplication();
   }, []);
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = useCallback(async (id: number) => {
     try {
       const { data, error } = await supabase
         .from("application")
@@ -76,7 +77,7 @@ const Application = () => {
     } catch (e) {
       console.error(e);
     }
-  };
+  }, []);
 
   const handleEdit = async (id: number) => {
     try {

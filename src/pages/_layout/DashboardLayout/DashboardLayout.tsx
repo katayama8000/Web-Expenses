@@ -49,12 +49,7 @@ export const DashboardLayout: CustomLayout = (page) => {
       <Header
         left={
           <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-            <ActionIcon
-              //variant="hover"
-              radius="xl"
-              size={40}
-              onClick={handlers.open}
-            >
+            <ActionIcon radius="xl" size={40} onClick={handlers.open}>
               <Menu2 />
             </ActionIcon>
           </MediaQuery>
@@ -89,6 +84,7 @@ const DrawerNav: FC<{ opened: boolean; handleClose: () => void }> = ({
       withCloseButton={false}
       sx={{ position: "relative" }}
     >
+      <div>aaa</div>
       <CloseButton
         size="xl"
         radius="xl"

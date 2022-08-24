@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import type { CustomNextPage } from "next";
 import Link from "next/link";
 import { AuthLayout } from "src/pages/_layout";
@@ -14,7 +15,7 @@ import {
 } from "@mantine/core";
 import { supabase } from "src/lib/supabase/supabase";
 import { useForm } from "@mantine/form";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 
 const SignUp: CustomNextPage = () => {
@@ -32,48 +33,46 @@ const SignUp: CustomNextPage = () => {
     },
   });
 
-  const handleSignUp = async (values: {
-    name: string;
-    email: string;
-    password: string;
-  }) => {
-    setIsLoading(true);
-    const { user, session, error } = await supabase.auth.signUp({
-      email: values.email,
-      password: values.password,
-    });
+  const handleSignUp = useCallback(
+    async (values: { name: string; email: string; password: string }) => {
+      setIsLoading(true);
+      const { user, session, error } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+      });
 
-    if (user) {
-      console.log(user);
-      console.log(user.id);
-      handleRegisterMember(values.name, user.id, values.email);
-      alert("メールを送信しました");
-      router.push("sign-up/authentication");
-    }
-    if (session) {
-      console.log("session", session);
-    }
-    if (error) {
-      console.log(error);
-    }
-    setIsLoading(false);
-  };
+      if (user) {
+        console.log(user);
+        console.log(user.id);
+        handleRegisterMember(values.name, user.id, values.email);
+        alert("メールを送信しました");
+        router.push("sign-up/authentication");
+      }
+      if (session) {
+        console.log("session", session);
+      }
+      if (error) {
+        console.log(error);
+      }
+      setIsLoading(false);
+    },
+    [router]
+  );
 
-  const handleRegisterMember = async (
-    userName: string,
-    userId: string,
-    userEmail: string
-  ) => {
-    const { data, error } = await supabase.from("member").insert([
-      {
-        name: userName,
-        userID: userId,
-        email: userEmail,
-      },
-    ]);
+  const handleRegisterMember = useCallback(
+    async (userName: string, userId: string, userEmail: string) => {
+      const { data, error } = await supabase.from("member").insert([
+        {
+          name: userName,
+          userID: userId,
+          email: userEmail,
+        },
+      ]);
 
-    console.log(data, error);
-  };
+      console.log(data, error);
+    },
+    []
+  );
 
   return (
     <>
