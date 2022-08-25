@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { supabase } from "src/lib/supabase/supabase";
 import { Text } from "@mantine/core";
 import dayjs from "dayjs";
+import { CommonApplication } from "@component/application/application";
 
 type ApplicationProps = {
   id: number;
@@ -86,6 +87,12 @@ const Admin = () => {
 
   const getMemberName = useCallback(async (id: number) => {}, []);
 
+  const handleDecideApprove = useCallback(async (id: number, index: number) => {
+    setId(id);
+    setModalId(index);
+    setOpenedApplication(true);
+  }, []);
+
   useEffect(() => {
     getApplication();
     const subscription = supabase
@@ -108,7 +115,22 @@ const Admin = () => {
           {application.map((item, index) => {
             return (
               <Grid.Col span={4} key={item.id}>
-                <Card withBorder shadow="sm" radius="md">
+                <CommonApplication
+                  id={item.id}
+                  payfor={item.payfor}
+                  purpose={item.purpose}
+                  detail={item.detail}
+                  categoryOfCost={item.categoryOfCost}
+                  inside={item.inside}
+                  outside={item.outside}
+                  paidDate={item.paidDate}
+                  cost={item.cost}
+                  isApproved={item.isApproved}
+                  handleDecideApprove={() =>
+                    handleDecideApprove(item.id, index)
+                  }
+                />
+                {/* <Card withBorder shadow="sm" radius="md">
                   <Card.Section withBorder inheritPadding py="xs">
                     <Group position="apart">
                       <Text weight={500}>
@@ -126,9 +148,7 @@ const Admin = () => {
 
                   <div
                     onClick={() => {
-                      setId(item.id);
-                      setModalId(index);
-                      setOpenedApplication(true);
+                      handleDecideApprove(item.id, index);
                     }}
                     className="hover:opacity-70 cursor-pointer"
                   >
@@ -150,7 +170,7 @@ const Admin = () => {
                       <Text component="span" inherit color="blue"></Text>
                     </Text>
                   </div>
-                </Card>
+                </Card> */}
               </Grid.Col>
             );
           })}

@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import { showNotification } from "@mantine/notifications";
 import { IconCheck, IconDots, IconArrowBackUp } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
+import { CommonApplication } from "@component/application/application";
 
 type ApplicationProps = {
   id: number;
@@ -83,7 +84,7 @@ const Approved = () => {
     }
   }, []);
 
-  const handleSet = useCallback(
+  const handleSetBeforeApproved = useCallback(
     (id: number) => {
       setId(id);
       setOpenedApplication(true);
@@ -113,7 +114,20 @@ const Approved = () => {
           {application.map((item) => {
             return (
               <Grid.Col span={4} key={item.id}>
-                <Card withBorder shadow="sm" radius="md">
+                <CommonApplication
+                  id={item.id}
+                  payfor={item.payfor}
+                  purpose={item.purpose}
+                  detail={item.detail}
+                  categoryOfCost={item.categoryOfCost}
+                  inside={item.inside}
+                  outside={item.outside}
+                  paidDate={item.paidDate}
+                  cost={item.cost}
+                  isApproved={item.isApproved}
+                  handleSetBeforeApproved={handleSetBeforeApproved}
+                />
+                {/* <Card withBorder shadow="sm" radius="md">
                   <Card.Section withBorder inheritPadding py="xs">
                     <Group position="apart">
                       <Text weight={500}>
@@ -136,7 +150,7 @@ const Approved = () => {
                         <Menu.Dropdown>
                           <Menu.Item
                             icon={<IconArrowBackUp className="text-red-500" />}
-                            onClick={() => handleSet(item.id)}
+                            onClick={() => handleSetBeforeApproved(item.id)}
                           >
                             承認前に戻す
                           </Menu.Item>
@@ -164,7 +178,7 @@ const Approved = () => {
                       <Text component="span" inherit color="blue"></Text>
                     </Text>
                   </div>
-                </Card>
+                </Card> */}
               </Grid.Col>
             );
           })}
