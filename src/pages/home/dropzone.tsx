@@ -1,14 +1,15 @@
 import { Group, Image, Text, useMantineTheme } from "@mantine/core";
 import { IconUpload, IconPhoto, IconX } from "@tabler/icons";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, memo, SetStateAction } from "react";
 
 type Props = {
   receipt: File | undefined;
   setReceipt: Dispatch<SetStateAction<File | undefined>>;
 };
 
-export const DropZone: FC<Props> = ({ receipt, setReceipt }) => {
+export const DropZone: FC<Props> = memo(({ receipt, setReceipt }) => {
+  console.log("DropZone");
   const theme = useMantineTheme();
 
   return (
@@ -85,4 +86,6 @@ export const DropZone: FC<Props> = ({ receipt, setReceipt }) => {
       </Group>
     </Dropzone>
   );
-};
+});
+
+DropZone.displayName = "DropZone";
