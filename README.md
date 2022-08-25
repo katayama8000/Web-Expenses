@@ -7,6 +7,11 @@
 - Prettier
 - Supabase
 
+## レンダリング
+- memo
+- useMemo
+- useCallback
+
 ## DB
 **User**
 
