@@ -1,8 +1,9 @@
 import type { CustomNextPage } from "next";
-import { Group, Stack } from "@mantine/core";
+import { Button, Group, Stack } from "@mantine/core";
 import { DashboardLayout } from "src/pages/_layout";
 import { PageContent } from "src/component/PageContent";
 import { PageContainer } from "src/component/PageContainer";
+import { supabase } from "src/lib/supabase/supabase";
 
 const Settings: CustomNextPage = () => {
   return (
@@ -14,6 +15,19 @@ const Settings: CustomNextPage = () => {
         { label: "リスト", href: "#" },
       ]}
     >
+      <Button
+        onClick={async () => {
+          const { error } = await supabase.auth.signOut();
+          if (error) {
+            console.error(error);
+          } else {
+            alert("ログアウトしました");
+            window.location.href = "/sign-in";
+          }
+        }}
+      >
+        ログアウト
+      </Button>
       <Stack spacing="xl">
         <PageContent outerTitle title="Foo!">
           Foo

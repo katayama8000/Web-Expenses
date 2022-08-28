@@ -143,7 +143,7 @@ export const CommonApplication: FC<Props> = memo(
             );
             break;
           default:
-            return <div>header4</div>;
+            return <div>error</div>;
             break;
         }
       }

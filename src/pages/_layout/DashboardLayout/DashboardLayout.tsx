@@ -84,7 +84,6 @@ const DrawerNav: FC<{ opened: boolean; handleClose: () => void }> = ({
       withCloseButton={false}
       sx={{ position: "relative" }}
     >
-      <div>aaa</div>
       <CloseButton
         size="xl"
         radius="xl"

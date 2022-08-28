@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { DashboardLayout } from "src/pages/_layout";
 import { Button, Group, Modal, Table, Tooltip } from "@mantine/core";
 import { PageContainer } from "src/component/PageContainer";
@@ -6,6 +6,7 @@ import { PageContent } from "src/component/PageContent";
 import { Trash, Edit } from "tabler-icons-react";
 import { supabase } from "src/lib/supabase/supabase";
 import { CustomNextPage } from "next";
+import { useGetAllMembers } from "src/lib/hooks/useGetAllMembers";
 
 type Member = {
   id: number;
@@ -35,19 +36,22 @@ const MemberEdit: CustomNextPage = () => {
     }
   };
 
+  // const data = useGetAllMembers();
+  // console.log("member", data);
+
   useEffect(() => {
     getMember();
   }, []);
 
-  const handleEdit = (member: Member) => {
+  const handleEdit = useCallback((member: Member) => {
     setIsEditModal(true);
     console.log(member);
-  };
+  }, []);
 
-  const handleDelete = (member: Member) => {
+  const handleDelete = useCallback((member: Member) => {
     setIsDeleteModal(true);
     console.log(member);
-  };
+  }, []);
 
   const rows = members?.map((member) => (
     <tr key={member.name}>

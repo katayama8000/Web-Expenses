@@ -3,8 +3,7 @@ import { supabase } from "src/lib/supabase/supabase";
 
 export const useIsLoggedIn = () => {
   const { pathname, push, isReady } = useRouter();
-  const isready = isReady;
-  if (isready) {
+  if (isReady) {
     const user = supabase.auth.user();
     console.log(user);
     //ユーザーがあるかつログイン画面にいるとき
