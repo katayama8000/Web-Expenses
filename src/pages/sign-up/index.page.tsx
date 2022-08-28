@@ -53,6 +53,7 @@ const SignUp: CustomNextPage = () => {
       }
       if (error) {
         console.log(error);
+        alert(error.message);
       }
       setIsLoading(false);
     },
@@ -119,6 +120,20 @@ const SignUp: CustomNextPage = () => {
             新規登録
           </Button>
         </form>
+        {/* <Button
+          fullWidth
+          mt="xl"
+          type="submit"
+          loading={isLoading}
+          onClick={async () => {
+            const { user, session, error } = await supabase.auth.signIn({
+              provider: "github",
+            });
+            alert(user);
+          }}
+        >
+          新規登録 with github
+        </Button> */}
       </Paper>
     </>
   );

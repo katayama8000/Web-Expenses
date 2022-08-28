@@ -1,6 +1,7 @@
 const PATH = {
   INDEX: "/",
   NOTIFICATION: "/notification",
+  LIBRARY: "/library",
   USERAPPLICATION: "/user-application",
   SETTINGS: "/settings",
   ADMIN: "/administration/admin",

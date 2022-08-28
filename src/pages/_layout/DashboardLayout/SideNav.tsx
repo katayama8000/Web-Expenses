@@ -21,6 +21,7 @@ import {
   ArrowLeft,
   ArrowRight,
   DeviceAnalytics,
+  Book,
 } from "tabler-icons-react";
 import { getPath } from "src/lib/const";
 import { ActiveLink } from "src/lib/next";
@@ -115,6 +116,11 @@ const ITEMS_ADMIN = [
     href: getPath("APPROVEDAPPLICATION"),
     label: "承認済みの申請書",
     Icon: Folders,
+  },
+  {
+    href: getPath("LIBRARY"),
+    label: "本棚",
+    Icon: Book,
   },
   { href: getPath("MEMBEREDIT"), label: "メンバー編集", Icon: Edit },
   { href: getPath("SETTINGS"), label: "設定", Icon: Settings },
