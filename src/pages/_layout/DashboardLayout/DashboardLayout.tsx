@@ -14,6 +14,7 @@ import {
 import { Menu2 } from "tabler-icons-react";
 
 import { LayoutErrorBoundary } from "../LayoutErrorBoundary";
+import { useIsLoggedIn } from "src/lib/hooks/useIsLoggedIn";
 
 const Header = dynamic(async () => {
   const { Header } = await import("./Header");
@@ -27,6 +28,7 @@ const SideNav = dynamic(async () => {
 
 export const DashboardLayout: CustomLayout = (page) => {
   const [opened, handlers] = useDisclosure(false);
+  useIsLoggedIn();
 
   return (
     <AppShell

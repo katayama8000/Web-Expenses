@@ -23,15 +23,13 @@ import { supabase } from "src/lib/supabase/supabase";
 const SignIn: CustomNextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const router = useRouter();
   const { pathname, push } = useRouter();
   const signIn = () => {
-    router.push(getPath("INDEX"));
+    push(getPath("INDEX"));
   };
 
   //authの変更を検知
   supabase.auth.onAuthStateChange((_, session) => {
-    console.log(session);
     if (session?.user && (pathname === "/sign-in" || pathname === "/sign-up")) {
       push("/");
     } else if (!session?.user && pathname !== "/signup") {

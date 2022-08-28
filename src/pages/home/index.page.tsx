@@ -19,7 +19,6 @@ import { DatePicker } from "@mantine/dates";
 import { DropZone } from "./dropzone";
 import { IconX } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
-import { useIsLoggedIn } from "src/lib/hooks/useIsLoggedIn";
 
 type ApplicationProps = {
   id?: number;
@@ -53,7 +52,6 @@ const Index: CustomNextPage = () => {
       cost: 0,
     },
   });
-  useIsLoggedIn();
 
   const handleDelete = useCallback(() => {
     setReceipt(undefined);

@@ -21,8 +21,7 @@ const Settings: CustomNextPage = () => {
           if (error) {
             console.error(error);
           } else {
-            alert("ログアウトしました");
-            window.location.href = "/sign-in";
+            window.alert("ログアウトしました");
           }
         }}
       >
