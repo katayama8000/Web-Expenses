@@ -19,16 +19,17 @@ type ApplicationProps = {
   paidDate: Date;
   cost: number;
   isApproved: boolean;
+  receipt: string;
 };
 const Application = () => {
   const [application, setApplication] = useState<ApplicationProps[]>([]);
+  const [storagePath, setStoragePath] = useState<string>();
 
   const getApplication = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from<ApplicationProps>("application")
         .select();
-      console.log(data, error);
       if (!data || error) {
         console.error(error);
         return;
@@ -36,76 +37,98 @@ const Application = () => {
 
       if (data) {
         console.log(data);
-        setApplication(data);
+
+        getApplicationImage().then((url) => {
+          const app = data.map((application) => {
+            application.receipt = url! + "/" + String(application.id);
+            return application;
+          });
+          console.log("ここがみたい", app);
+          setApplication(app);
+        });
       }
     } catch (e) {
       console.error(e);
     }
   }, []);
+
+  const getApplicationImage = async (): Promise<string | Error | null> => {
+    const { publicURL, error } = supabase.storage
+      .from("application")
+      .getPublicUrl("receipt");
+
+    console.log("aaaaa", publicURL);
+    console.log("bbbbb", error);
+    if (publicURL) return publicURL;
+    return error;
+  };
 
   useEffect(() => {
     getApplication();
+    //getApplicationImage();
   }, []);
 
-  const handleDelete = useCallback(async (id: number) => {
-    try {
-      const { data, error } = await supabase
-        .from("application")
-        .delete()
-        .match({
-          id: id,
-        });
-      console.log(data, error);
-      if (!data || error) {
-        return;
-      }
+  // const handleDelete = useCallback(async (id: number) => {
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from("application")
+  //       .delete()
+  //       .match({
+  //         id: id,
+  //       });
+  //     console.log(data, error);
+  //     if (!data || error) {
+  //       return;
+  //     }
 
-      if (data) {
-        console.log(data);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
+  //     if (data) {
+  //       console.log(data);
+  //     }
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, []);
 
-  const handleEdit = async (id: number) => {
-    try {
-      const { data, error } = await supabase.from("application").update({
-        id: id,
-      });
-      if (!data || error) {
-        return;
-      }
-      if (data) {
-        console.log(data);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const handleEdit = async (id: number) => {
+  //   try {
+  //     const { data, error } = await supabase.from("application").update({
+  //       id: id,
+  //     });
+  //     if (!data || error) {
+  //       return;
+  //     }
+  //     if (data) {
+  //       console.log(data);
+  //     }
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   return (
     <div>
       <PageContainer title="過去の申請書類">
         <Grid>
-          {application.map((item) => {
-            return (
-              <Grid.Col span={4} key={item.id}>
-                <CommonApplication
-                  id={item.id}
-                  payfor={item.payfor}
-                  purpose={item.purpose}
-                  detail={item.detail}
-                  categoryOfCost={item.categoryOfCost}
-                  inside={item.inside}
-                  outside={item.outside}
-                  paidDate={item.paidDate}
-                  cost={item.cost}
-                  isApproved={item.isApproved}
-                />
-              </Grid.Col>
-            );
-          })}
+          {application &&
+            application.map((item) => {
+              return (
+                <Grid.Col span={4} key={item.id}>
+                  <CommonApplication
+                    id={item.id}
+                    payfor={item.payfor}
+                    purpose={item.purpose}
+                    detail={item.detail}
+                    categoryOfCost={item.categoryOfCost}
+                    inside={item.inside}
+                    outside={item.outside}
+                    paidDate={item.paidDate}
+                    cost={item.cost}
+                    isApproved={item.isApproved}
+                    receipt={item.receipt}
+                  />
+                </Grid.Col>
+              );
+            })}
         </Grid>
       </PageContainer>
     </div>

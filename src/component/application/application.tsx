@@ -1,4 +1,4 @@
-import { Badge, Grid } from "@mantine/core";
+import { Badge, Grid, Image } from "@mantine/core";
 import React, { memo, useCallback } from "react";
 import { FC, useEffect, useState } from "react";
 import { Card, Group, Text, Menu, ActionIcon } from "@mantine/core";
@@ -24,6 +24,7 @@ type Props = {
   paidDate: Date;
   cost: number;
   isApproved: boolean;
+  receipt?: string;
   handleSetBeforeApproved?: (id: number) => void;
   handleDecideApprove?: (id: number, index: number) => void;
 };
@@ -41,6 +42,7 @@ export const CommonApplication: FC<Props> = memo(
     paidDate,
     cost,
     isApproved,
+    receipt,
     handleSetBeforeApproved,
     handleDecideApprove,
   }) => {
@@ -173,18 +175,21 @@ export const CommonApplication: FC<Props> = memo(
             <Text mt="sm" color="dimmed" size="sm">
               <Grid className="px-6 py-3">
                 <Grid.Col span={6}>
-                  <div>{payfor}</div>
-                  <div>{purpose}</div>
-                  <div>{detail}</div>
-                  <div>{categoryOfCost}</div>
+                  <div className="truncate">{payfor}</div>
+                  <div className="truncate">{purpose}</div>
+                  <div className="truncate">{detail}</div>
+                  <div className="truncate">{categoryOfCost}</div>
                 </Grid.Col>
                 <Grid.Col span={6}>
-                  <div>{inside}</div>
-                  <div>{outside}</div>
-                  <div>{dayjs(paidDate).format("YYYY/MM/DD")}</div>
-                  <div>{cost}円</div>
+                  <div className="truncate">{inside}</div>
+                  <div className="truncate">{outside}</div>
+                  <div className="truncate">
+                    {dayjs(paidDate).format("YYYY/MM/DD")}
+                  </div>
+                  <div className="truncate">{cost}円</div>
                 </Grid.Col>
               </Grid>
+              <Image src={receipt} alt="application" radius="md" height={150} />
             </Text>
           </div>
         </Card>

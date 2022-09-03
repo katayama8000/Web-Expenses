@@ -13,8 +13,8 @@ const Profile = () => {
 
     if (image) {
       const { data, error } = await supabase.storage
-        .from("avatars")
-        .upload(`admin/${Date.now()}`, image);
+        .from("application")
+        .upload(`receipt/${Date.now()}`, image);
 
       console.log(data);
 

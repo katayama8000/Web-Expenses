@@ -15,6 +15,7 @@ export const DropZone: FC<Props> = memo(({ receipt, setReceipt }) => {
   return (
     <Dropzone
       onDrop={(files) => {
+        console.log(files[0]);
         setReceipt(files[0]);
       }}
       onReject={(files) => {
