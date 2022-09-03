@@ -189,7 +189,7 @@ export const CommonApplication: FC<Props> = memo(
                   <div className="truncate">{cost}円</div>
                 </Grid.Col>
               </Grid>
-              <Image src={receipt} alt="application" radius="md" height={150} />
+              <Image src={receipt} alt="receipt" radius="md" height={150} />
             </Text>
           </div>
         </Card>

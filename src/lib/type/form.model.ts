@@ -1,1 +1,1 @@
-export type FormType = {};
+export type FormModel = {};

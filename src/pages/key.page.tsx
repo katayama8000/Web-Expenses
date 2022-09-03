@@ -5,7 +5,7 @@ import { PageContent } from "@component/PageContent";
 import { Select } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { supabase } from "src/lib/supabase/supabase";
-import { Member } from "@type/index";
+import { MemberModel } from "@type/index";
 
 type dataType = {
   value: string;
@@ -13,12 +13,12 @@ type dataType = {
 };
 
 const Key: CustomNextPage = () => {
-  const [haveKeyMember, setHaveKeyMember] = useState<Member[]>([]);
+  const [haveKeyMember, setHaveKeyMember] = useState<MemberModel[]>([]);
   const [selectData, setSelectData] = useState<dataType[]>([]);
 
   const getHaveKeyMember = async () => {
     const { data, error } = await supabase
-      .from<Member>("member")
+      .from<MemberModel>("member")
       .select()
       .eq("isHaveKey", true);
     console.log(data, error);

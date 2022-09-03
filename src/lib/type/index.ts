@@ -1,2 +1,3 @@
-import { Member } from "./member.model";
-export type { Member };
+import { MemberModel } from "./member.model";
+import { ApplicationModel } from "./application.model";
+export type { MemberModel, ApplicationModel };

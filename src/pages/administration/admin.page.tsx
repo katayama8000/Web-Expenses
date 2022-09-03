@@ -10,28 +10,18 @@ import { supabase } from "src/lib/supabase/supabase";
 import { Text } from "@mantine/core";
 import dayjs from "dayjs";
 import { CommonApplication } from "@component/application/application";
-
-type ApplicationProps = {
-  id: number;
-  payfor: string;
-  purpose: string;
-  detail: string;
-  categoryOfCost: string;
-  inside: string;
-  outside: string;
-  paidDate: Date;
-  cost: number;
-  isApproved: boolean;
-};
+import { useGetApplicationStoragePath } from "@hooks/useGetApplicationStoragePath";
+import type { ApplicationModel } from "@type/index";
 
 const Admin = () => {
-  const [application, setApplication] = useState<ApplicationProps[]>([]);
+  const [application, setApplication] = useState<ApplicationModel[]>([]);
   let today = new Date();
   const todayDate = dayjs(today).format("YYYY-MM-DD");
   const [id, setId] = useState<number>(0);
   const [modalId, setModalId] = useState<number>(0);
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
   const [openedDenialReason, setOpenedDenialReason] = useState<boolean>(false);
+  const ApplicationStoragePath = useGetApplicationStoragePath();
 
   const handelApprove = useCallback(async () => {
     try {
@@ -71,14 +61,22 @@ const Admin = () => {
         .from("application")
         .select("*")
         .filter("isApproved", "in", '("false")');
-      console.log(data, error);
       if (!data || error) {
         return;
       }
 
       if (data) {
-        console.log(data);
-        setApplication(data);
+        ApplicationStoragePath.then((url) => {
+          if (typeof url === "string") {
+            const app = data.map((application) => {
+              application.receipt = url! + "/" + String(application.id);
+              return application;
+            });
+            setApplication(app);
+          } else {
+            console.error(url);
+          }
+        });
       }
     } catch (e) {
       console.error(e);
@@ -126,6 +124,7 @@ const Admin = () => {
                   paidDate={item.paidDate}
                   cost={item.cost}
                   isApproved={item.isApproved}
+                  receipt={item.receipt}
                   handleDecideApprove={() =>
                     handleDecideApprove(item.id, index)
                   }

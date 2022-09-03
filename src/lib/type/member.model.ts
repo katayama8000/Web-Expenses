@@ -1,4 +1,4 @@
-export type Member = {
+export type MemberModel = {
   id: number;
   name: string;
   position: "役員" | "リーダー" | "一般";

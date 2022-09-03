@@ -8,22 +8,15 @@ import { supabase } from "src/lib/supabase/supabase";
 import { CustomNextPage } from "next";
 import { useGetAllMembers } from "src/lib/hooks/useGetAllMembers";
 import { Key } from "tabler-icons-react";
-
-type Member = {
-  id: number;
-  name: string;
-  position: "役員" | "リーダー" | "一般";
-  email: string;
-  isHaveKey: boolean;
-};
+import type { MemberModel } from "@type/index";
 
 const MemberEdit: CustomNextPage = () => {
   const [isEditModal, setIsEditModal] = useState<boolean>(false);
   const [isDeleteModal, setIsDeleteModal] = useState<boolean>(false);
-  const [members, setMembers] = useState<Member[]>();
+  const [members, setMembers] = useState<MemberModel[]>();
 
   const getMember = async () => {
-    const { data, error } = await supabase.from<Member>("member").select();
+    const { data, error } = await supabase.from<MemberModel>("member").select();
     console.log(data, error);
     try {
       if (data) {
@@ -42,12 +35,12 @@ const MemberEdit: CustomNextPage = () => {
     getMember();
   }, []);
 
-  const handleEdit = useCallback((member: Member) => {
+  const handleEdit = useCallback((member: MemberModel) => {
     setIsEditModal(true);
     console.log(member);
   }, []);
 
-  const handleDelete = useCallback((member: Member) => {
+  const handleDelete = useCallback((member: MemberModel) => {
     setIsDeleteModal(true);
     console.log(member);
   }, []);
@@ -124,7 +117,7 @@ const MemberEdit: CustomNextPage = () => {
 };
 
 type Props = {
-  member: Member;
+  member: MemberModel;
   isEditModal: boolean;
   setIsEditModal: React.Dispatch<React.SetStateAction<boolean>>;
   isDeleteModal: boolean;

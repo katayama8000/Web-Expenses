@@ -7,28 +7,17 @@ import { useEffect } from "react";
 import { supabase } from "src/lib/supabase/supabase";
 import { useState } from "react";
 import { CommonApplication } from "@component/application/application";
+import { useGetApplicationStoragePath } from "@hooks/useGetApplicationStoragePath";
 
-type ApplicationProps = {
-  id: number;
-  payfor: string;
-  purpose: string;
-  detail: string;
-  categoryOfCost: string;
-  inside: string;
-  outside: string;
-  paidDate: Date;
-  cost: number;
-  isApproved: boolean;
-  receipt: string;
-};
+import type { ApplicationModel } from "@type/index";
 const Application = () => {
-  const [application, setApplication] = useState<ApplicationProps[]>([]);
-  const [storagePath, setStoragePath] = useState<string>();
+  const [application, setApplication] = useState<ApplicationModel[]>([]);
+  const ApplicationStoragePath = useGetApplicationStoragePath();
 
   const getApplication = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from<ApplicationProps>("application")
+        .from<ApplicationModel>("application")
         .select();
       if (!data || error) {
         console.error(error);
@@ -38,13 +27,17 @@ const Application = () => {
       if (data) {
         console.log(data);
 
-        getApplicationImage().then((url) => {
-          const app = data.map((application) => {
-            application.receipt = url! + "/" + String(application.id);
-            return application;
-          });
-          console.log("ここがみたい", app);
-          setApplication(app);
+        ApplicationStoragePath.then((url) => {
+          if (typeof url === "string") {
+            const app = data.map((application) => {
+              application.receipt = url! + "/" + String(application.id);
+              return application;
+            });
+            console.log("ここがみたい", app);
+            setApplication(app);
+          } else {
+            console.error(url);
+          }
         });
       }
     } catch (e) {
@@ -52,20 +45,8 @@ const Application = () => {
     }
   }, []);
 
-  const getApplicationImage = async (): Promise<string | Error | null> => {
-    const { publicURL, error } = supabase.storage
-      .from("application")
-      .getPublicUrl("receipt");
-
-    console.log("aaaaa", publicURL);
-    console.log("bbbbb", error);
-    if (publicURL) return publicURL;
-    return error;
-  };
-
   useEffect(() => {
     getApplication();
-    //getApplicationImage();
   }, []);
 
   // const handleDelete = useCallback(async (id: number) => {
