@@ -1,16 +1,10 @@
 import { useGetUserId } from "@hooks/useGetUserId";
 import React, { useState } from "react";
 import { supabase } from "src/lib/supabase/supabase";
+import { MemberModel } from "@type/index";
 
-type Member = {
-  id: number;
-  name: string;
-  position: "役員" | "リーダー" | "一般";
-  email: string;
-};
-
-export const useGetMember = async () => {
-  const [member, setMember] = useState<Member>();
+export const useGetMember = async (): Promise<MemberModel | undefined> => {
+  const [member, setMember] = useState<MemberModel>();
   const userId = useGetUserId();
   try {
     const { data, error } = await supabase

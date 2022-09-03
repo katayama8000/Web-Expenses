@@ -20,6 +20,8 @@ import { DropZone } from "./dropzone";
 import { IconX } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
 import { useGetUserId } from "@hooks/useGetUserId";
+import { useGetMember } from "@hooks/useGetMember";
+import { toast } from "src/lib/function/toast";
 
 type ApplicationProps = {
   id?: number;
@@ -54,7 +56,6 @@ const Index: CustomNextPage = () => {
   const [member, setMember] = useState<Member>();
 
   const userId = useGetUserId();
-  //const user = useGetMember();
 
   const form = useForm({
     initialValues: {
@@ -127,6 +128,7 @@ const Index: CustomNextPage = () => {
         .upload(`receipt/${id}`, receipt!);
 
       console.log(data, error);
+      toast("成功", "申請書を登録しました", "teal");
     },
     [receipt]
   );

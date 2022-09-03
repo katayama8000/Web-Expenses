@@ -129,47 +129,6 @@ const Admin = () => {
                     handleDecideApprove(item.id, index)
                   }
                 />
-                {/* <Card withBorder shadow="sm" radius="md">
-                  <Card.Section withBorder inheritPadding py="xs">
-                    <Group position="apart">
-                      <Text weight={500}>
-                        <Badge
-                          color="grape"
-                          variant="filled"
-                          size="xl"
-                          radius="xs"
-                        >
-                          片山帆乃果
-                        </Badge>
-                      </Text>
-                    </Group>
-                  </Card.Section>
-
-                  <div
-                    onClick={() => {
-                      handleDecideApprove(item.id, index);
-                    }}
-                    className="hover:opacity-70 cursor-pointer"
-                  >
-                    <Text mt="sm" color="dimmed" size="sm">
-                      <Grid className="px-6 py-3">
-                        <Grid.Col span={6}>
-                          <div>{item.payfor}</div>
-                          <div>{item.purpose}</div>
-                          <div>{item.detail}</div>
-                          <div>{item.categoryOfCost}</div>
-                        </Grid.Col>
-                        <Grid.Col span={6}>
-                          <div>{item.inside}</div>
-                          <div>{item.outside}</div>
-                          <div>{dayjs(item.paidDate).format("YYYY/MM/DD")}</div>
-                          <div>{item.cost}円</div>
-                        </Grid.Col>
-                      </Grid>
-                      <Text component="span" inherit color="blue"></Text>
-                    </Text>
-                  </div>
-                </Card> */}
               </Grid.Col>
             );
           })}
