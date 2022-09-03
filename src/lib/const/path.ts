@@ -6,6 +6,8 @@ const PATH = {
   SETTINGS: "/settings",
   ADMIN: "/administration/admin",
   APPROVEDAPPLICATION: "/administration/approvedapp",
+  KEY: "/key",
+  SALES: "/sales",
   MEMBEREDIT: "/administration/memberedit",
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",

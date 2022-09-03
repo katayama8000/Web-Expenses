@@ -19,6 +19,8 @@ import { DatePicker } from "@mantine/dates";
 import { DropZone } from "./dropzone";
 import { IconX } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
+import { useGetUserId } from "@hooks/useGetUserId";
+import { useGetMember } from "@hooks/useGetMember";
 
 type ApplicationProps = {
   id?: number;
@@ -40,6 +42,10 @@ type Member = {
 const Index: CustomNextPage = () => {
   const [receipt, setReceipt] = useState<File | undefined>();
   const [member, setMember] = useState<Member>();
+
+  const userId = useGetUserId();
+  //const user = useGetMember();
+
   const form = useForm({
     initialValues: {
       payfor: "",
@@ -120,20 +126,16 @@ const Index: CustomNextPage = () => {
 
   const getUser = useCallback(async () => {
     try {
-      const user = supabase.auth.user();
-      console.log(user);
       const { data, error } = await supabase
         .from("member")
         .select()
-        .match({ userID: user!.id });
+        .match({ userID: userId });
       console.log(data, error);
       if (!data || error) {
         console.error(error);
         return;
       }
-
       if (data) {
-        console.log(data);
         setMember(data[0]);
       }
     } catch (e) {

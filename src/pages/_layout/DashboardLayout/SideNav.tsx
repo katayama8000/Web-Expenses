@@ -21,6 +21,8 @@ import {
   ArrowLeft,
   ArrowRight,
   DeviceAnalytics,
+  Key,
+  ReportMoney,
   Book,
 } from "tabler-icons-react";
 import { getPath } from "src/lib/const";
@@ -118,6 +120,16 @@ const ITEMS_ADMIN = [
     Icon: Folders,
   },
   {
+    href: getPath("KEY"),
+    label: "鍵",
+    Icon: Key,
+  },
+  {
+    href: getPath("SALES"),
+    label: "営業",
+    Icon: ReportMoney,
+  },
+  {
     href: getPath("LIBRARY"),
     label: "本棚",
     Icon: Book,
@@ -134,6 +146,16 @@ const ITEMS_ADMIN = [
 const ITEMS_MEMBER = [
   { href: getPath("INDEX"), label: "ホーム", Icon: Home },
   { href: getPath("USERAPPLICATION"), label: "申請書一覧", Icon: Notes },
+  {
+    href: getPath("KEY"),
+    label: "鍵",
+    Icon: Key,
+  },
+  {
+    href: getPath("SALES"),
+    label: "営業",
+    Icon: ReportMoney,
+  },
   { href: getPath("SETTINGS"), label: "設定", Icon: Settings },
   {
     href: getPath("TEST"),

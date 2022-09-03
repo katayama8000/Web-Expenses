@@ -7,12 +7,14 @@ import { Trash, Edit } from "tabler-icons-react";
 import { supabase } from "src/lib/supabase/supabase";
 import { CustomNextPage } from "next";
 import { useGetAllMembers } from "src/lib/hooks/useGetAllMembers";
+import { Key } from "tabler-icons-react";
 
 type Member = {
   id: number;
   name: string;
   position: "役員" | "リーダー" | "一般";
   email: string;
+  isHaveKey: boolean;
 };
 
 const MemberEdit: CustomNextPage = () => {
@@ -36,9 +38,6 @@ const MemberEdit: CustomNextPage = () => {
     }
   };
 
-  // const data = useGetAllMembers();
-  // console.log("member", data);
-
   useEffect(() => {
     getMember();
   }, []);
@@ -59,6 +58,10 @@ const MemberEdit: CustomNextPage = () => {
       <td>{member.position}</td>
       <td>{member.email}</td>
       <td>
+        {member.isHaveKey && <Key size={22} strokeWidth={2} color={"black"} />}
+      </td>
+
+      {/* <td>
         <div className="flex">
           <Trash
             size={22}
@@ -79,13 +82,13 @@ const MemberEdit: CustomNextPage = () => {
             }}
           />
         </div>
-      </td>
+      </td> */}
     </tr>
   ));
 
   return (
     <div>
-      <EditModal
+      {/* <EditModal
         member={members?.[0]!}
         isEditModal={isEditModal}
         setIsEditModal={setIsEditModal}
@@ -94,7 +97,7 @@ const MemberEdit: CustomNextPage = () => {
         member={members?.[0]!}
         isDeleteModal={isDeleteModal}
         setIsDeleteModal={setIsDeleteModal}
-      />
+      /> */}
 
       <PageContainer title="従業員一覧">
         <PageContent className="w-[800px] m-auto">
@@ -109,7 +112,7 @@ const MemberEdit: CustomNextPage = () => {
                 <th>名前</th>
                 <th>役職</th>
                 <th>メールアドレス</th>
-                <th></th>
+                <th>オフィスキー</th>
               </tr>
             </thead>
             <tbody>{rows}</tbody>
