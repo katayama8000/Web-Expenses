@@ -22,7 +22,6 @@ import type { ApplicationModel } from "@type/index";
 
 const Approved = () => {
   const [application, setApplication] = useState<ApplicationModel[]>([]);
-  let today = new Date();
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
   const [id, setId] = useState<number>(0);
   const ApplicationStoragePath = useGetApplicationStoragePath();
@@ -57,7 +56,7 @@ const Approved = () => {
   const getApplication = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from("application")
+        .from<ApplicationModel>("application")
         .select("*")
         .filter("isApproved", "in", '("true")');
       console.log(data, error);
@@ -67,9 +66,12 @@ const Approved = () => {
 
       if (data) {
         console.log(data);
+
         ApplicationStoragePath.then((url) => {
           if (typeof url === "string") {
             const app = data.map((application) => {
+              //getUserName(application.userID);
+              //application.userName = memberName;
               application.receipt = url! + "/" + String(application.id);
               return application;
             });
@@ -126,6 +128,7 @@ const Approved = () => {
                   cost={item.cost}
                   isApproved={item.isApproved}
                   receipt={item.receipt}
+                  userID={item.userID}
                   handleSetBeforeApproved={handleSetBeforeApproved}
                 />
               </Grid.Col>

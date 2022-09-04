@@ -106,6 +106,7 @@ const Application = () => {
                     cost={item.cost}
                     isApproved={item.isApproved}
                     receipt={item.receipt}
+                    userID={item.userID}
                   />
                 </Grid.Col>
               );

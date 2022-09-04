@@ -20,8 +20,8 @@ import { DropZone } from "./dropzone";
 import { IconX } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
 import { useGetUserId } from "@hooks/useGetUserId";
-import { useGetMember } from "@hooks/useGetMember";
 import { toast } from "src/lib/function/toast";
+import type { MemberModel, ApplicationModel } from "@type/index";
 
 type ApplicationProps = {
   id?: number;
@@ -36,11 +36,6 @@ type ApplicationProps = {
   userID?: string;
 };
 
-type Member = {
-  userID: string;
-  name: string;
-};
-
 const categoryOfCost: { value: string; label: string }[] = [
   { value: "厚生費", label: "厚生費" },
   { value: "発送費用", label: "発送費用" },
@@ -53,7 +48,7 @@ const categoryOfCost: { value: string; label: string }[] = [
 
 const Index: CustomNextPage = () => {
   const [receipt, setReceipt] = useState<File | undefined>();
-  const [member, setMember] = useState<Member>();
+  const [member, setMember] = useState<MemberModel>();
 
   const userId = useGetUserId();
 
@@ -136,7 +131,7 @@ const Index: CustomNextPage = () => {
   const getUser = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from("member")
+        .from<MemberModel>("member")
         .select()
         .match({ userID: userId });
       console.log(data, error);

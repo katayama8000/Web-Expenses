@@ -10,4 +10,5 @@ export type ApplicationModel = {
   cost: number;
   isApproved: boolean;
   receipt: string;
+  userID: string;
 };

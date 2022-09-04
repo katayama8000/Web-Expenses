@@ -83,8 +83,6 @@ const Admin = () => {
     }
   }, []);
 
-  const getMemberName = useCallback(async (id: number) => {}, []);
-
   const handleDecideApprove = useCallback(async (id: number, index: number) => {
     setId(id);
     setModalId(index);
@@ -125,6 +123,7 @@ const Admin = () => {
                   cost={item.cost}
                   isApproved={item.isApproved}
                   receipt={item.receipt}
+                  userID={item.userID}
                   handleDecideApprove={() =>
                     handleDecideApprove(item.id, index)
                   }

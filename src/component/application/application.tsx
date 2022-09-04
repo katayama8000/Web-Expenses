@@ -11,6 +11,8 @@ import {
 } from "@tabler/icons";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
+import { supabase } from "src/lib/supabase/supabase";
+import { MemberModel } from "@type/index";
 
 type Props = {
   id: number;
@@ -24,7 +26,8 @@ type Props = {
   paidDate: Date;
   cost: number;
   isApproved: boolean;
-  receipt?: string;
+  receipt: string;
+  userID: string;
   handleSetBeforeApproved?: (id: number) => void;
   handleDecideApprove?: (id: number, index: number) => void;
 };
@@ -43,11 +46,13 @@ export const CommonApplication: FC<Props> = memo(
     cost,
     isApproved,
     receipt,
+    userID,
     handleSetBeforeApproved,
     handleDecideApprove,
   }) => {
     const [style, setStyle] = useState<string>("");
     const { pathname, isReady } = useRouter();
+    const [memberName, setMemberName] = useState<string>("");
 
     const applicationHeader = useCallback((): JSX.Element | undefined => {
       if (isReady) {
@@ -58,7 +63,7 @@ export const CommonApplication: FC<Props> = memo(
               <Group position="apart">
                 <Text weight={500}>
                   <Badge color="grape" variant="filled" size="xl" radius="xs">
-                    片山帆乃果
+                    {memberName}
                   </Badge>
                 </Text>
               </Group>
@@ -70,7 +75,7 @@ export const CommonApplication: FC<Props> = memo(
               <Group position="apart">
                 <Text weight={500}>
                   <Badge color="yellow" variant="filled" size="xl" radius="xs">
-                    片山達文
+                    {memberName}
                   </Badge>
                 </Text>
                 <Menu withinPortal position="bottom-end" shadow="sm">
@@ -149,13 +154,42 @@ export const CommonApplication: FC<Props> = memo(
             break;
         }
       }
-    }, [pathname, isReady, isApproved, id, handleSetBeforeApproved]);
+    }, [
+      isReady,
+      pathname,
+      memberName,
+      isApproved,
+      handleSetBeforeApproved,
+      id,
+    ]);
 
     useEffect(() => {
       if (pathname === "/administration/admin" && isReady) {
         setStyle("hover:opacity-70 cursor-pointer");
       }
     }, [pathname, isReady]);
+
+    useEffect(() => {
+      const getUserName = async (userId: string) => {
+        try {
+          const { data, error } = await supabase
+            .from<MemberModel>("member")
+            .select()
+            .match({ userID: userId });
+          console.log(data, error);
+          if (!data || error) {
+            console.error(error);
+            return;
+          }
+          if (data) {
+            setMemberName(data[0].name);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      };
+      getUserName(userID);
+    }, [userID]);
 
     return (
       <div>
