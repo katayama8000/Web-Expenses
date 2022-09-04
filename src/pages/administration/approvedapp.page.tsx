@@ -1,4 +1,4 @@
-import { DashboardLayout } from "src/pages/_layout";
+import { DashboardLayout } from "@pages/_layout";
 import {
   ActionIcon,
   Badge,
@@ -16,25 +16,15 @@ import dayjs from "dayjs";
 import { showNotification } from "@mantine/notifications";
 import { IconCheck, IconDots, IconArrowBackUp } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
-
-type ApplicationProps = {
-  id: number;
-  payfor: string;
-  purpose: string;
-  detail: string;
-  categoryOfCost: string;
-  inside: string;
-  outside: string;
-  paidDate: Date;
-  cost: number;
-  isApproved: boolean;
-};
+import { CommonApplication } from "@component/application/application";
+import { useGetApplicationStoragePath } from "@hooks/useGetApplicationStoragePath";
+import type { ApplicationModel } from "@type/index";
 
 const Approved = () => {
-  const [application, setApplication] = useState<ApplicationProps[]>([]);
-  let today = new Date();
+  const [application, setApplication] = useState<ApplicationModel[]>([]);
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
   const [id, setId] = useState<number>(0);
+  const ApplicationStoragePath = useGetApplicationStoragePath();
 
   const handleIsApprovedFalse = async () => {
     try {
@@ -66,7 +56,7 @@ const Approved = () => {
   const getApplication = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from("application")
+        .from<ApplicationModel>("application")
         .select("*")
         .filter("isApproved", "in", '("true")');
       console.log(data, error);
@@ -76,14 +66,27 @@ const Approved = () => {
 
       if (data) {
         console.log(data);
-        setApplication(data);
+
+        ApplicationStoragePath.then((url) => {
+          if (typeof url === "string") {
+            const app = data.map((application) => {
+              //getUserName(application.userID);
+              //application.userName = memberName;
+              application.receipt = url! + "/" + String(application.id);
+              return application;
+            });
+            setApplication(app);
+          } else {
+            console.error(url);
+          }
+        });
       }
     } catch (e) {
       console.error(e);
     }
   }, []);
 
-  const handleSet = useCallback(
+  const handleSetBeforeApproved = useCallback(
     (id: number) => {
       setId(id);
       setOpenedApplication(true);
@@ -113,58 +116,21 @@ const Approved = () => {
           {application.map((item) => {
             return (
               <Grid.Col span={4} key={item.id}>
-                <Card withBorder shadow="sm" radius="md">
-                  <Card.Section withBorder inheritPadding py="xs">
-                    <Group position="apart">
-                      <Text weight={500}>
-                        <Badge
-                          color="yellow"
-                          variant="filled"
-                          size="xl"
-                          radius="xs"
-                        >
-                          片山達文
-                        </Badge>
-                      </Text>
-                      <Menu withinPortal position="bottom-end" shadow="sm">
-                        <Menu.Target>
-                          <ActionIcon>
-                            <IconDots size={16} />
-                          </ActionIcon>
-                        </Menu.Target>
-
-                        <Menu.Dropdown>
-                          <Menu.Item
-                            icon={<IconArrowBackUp className="text-red-500" />}
-                            onClick={() => handleSet(item.id)}
-                          >
-                            承認前に戻す
-                          </Menu.Item>
-                        </Menu.Dropdown>
-                      </Menu>
-                    </Group>
-                  </Card.Section>
-
-                  <div className="hover:opacity-70 cursor-pointer">
-                    <Text mt="sm" color="dimmed" size="sm">
-                      <Grid className="px-6 py-3">
-                        <Grid.Col span={6}>
-                          <div>{item.payfor}</div>
-                          <div>{item.purpose}</div>
-                          <div>{item.detail}</div>
-                          <div>{item.categoryOfCost}</div>
-                        </Grid.Col>
-                        <Grid.Col span={6}>
-                          <div>{item.inside}</div>
-                          <div>{item.outside}</div>
-                          <div>{dayjs(item.paidDate).format("YYYY/MM/DD")}</div>
-                          <div>{item.cost}円</div>
-                        </Grid.Col>
-                      </Grid>
-                      <Text component="span" inherit color="blue"></Text>
-                    </Text>
-                  </div>
-                </Card>
+                <CommonApplication
+                  id={item.id}
+                  payfor={item.payfor}
+                  purpose={item.purpose}
+                  detail={item.detail}
+                  categoryOfCost={item.categoryOfCost}
+                  inside={item.inside}
+                  outside={item.outside}
+                  paidDate={item.paidDate}
+                  cost={item.cost}
+                  isApproved={item.isApproved}
+                  receipt={item.receipt}
+                  userID={item.userID}
+                  handleSetBeforeApproved={handleSetBeforeApproved}
+                />
               </Grid.Col>
             );
           })}

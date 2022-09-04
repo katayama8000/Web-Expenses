@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import type { CustomNextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { AuthLayout } from "src/pages/_layout";
+import { AuthLayout } from "@pages/_layout";
 import { getPath } from "src/lib/const";
 import {
   TextInput,
@@ -15,28 +16,26 @@ import {
   Button,
   Space,
 } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { supabase } from "src/lib/supabase/supabase";
 
 const SignIn: CustomNextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const router = useRouter();
   const { pathname, push } = useRouter();
   const signIn = () => {
-    router.push(getPath("INDEX"));
+    push(getPath("INDEX"));
   };
 
   //authの変更を検知
-  supabase.auth.onAuthStateChange((_, session) => {
-    console.log(session);
-    if (session?.user && (pathname === "/sign-in" || pathname === "/sign-up")) {
-      push("/");
-    } else if (!session?.user && pathname !== "/signup") {
-      push("/sign-in");
-    }
-  });
+  // supabase.auth.onAuthStateChange((_, session) => {
+  //   if (session?.user && (pathname === "/sign-in" || pathname === "/sign-up")) {
+  //     push("/");
+  //   } else if (!session?.user && pathname !== "/signup") {
+  //     push("/sign-in");
+  //   }
+  // });
 
   const form = useForm({
     initialValues: {
@@ -49,38 +48,41 @@ const SignIn: CustomNextPage = () => {
     },
   });
 
-  const handleSignIn = async (values: { email: string; password: string }) => {
-    setIsLoading(true);
-    try {
-      const { user, session, error } = await supabase.auth.signIn({
-        email: values.email,
-        password: values.password,
-      });
+  const handleSignIn = useCallback(
+    async (values: { email: string; password: string }) => {
+      setIsLoading(true);
+      try {
+        const { user, session, error } = await supabase.auth.signIn({
+          email: values.email,
+          password: values.password,
+        });
 
-      if (user) {
-        console.log(user);
-        console.log(user.id);
-        signIn();
+        if (user) {
+          console.log(user);
+          console.log(user.id);
+          signIn();
+        }
+        if (session) {
+          console.log("session", session);
+        }
+        if (error) {
+          console.log(error);
+          // if (error.message === "Invalid password") {
+          //   setIsError("パスワードが間違っています");
+          // } else if (error.message === "User not found") {
+          //   setIsError("ユーザーが見つかりません");
+          // } else if (error.message === "Email not comfired") {
+          //   setIsError("メールアドレスが確認できません");
+          // }
+          setError(error.message);
+        }
+      } catch (e) {
+        alert(e);
       }
-      if (session) {
-        console.log("session", session);
-      }
-      if (error) {
-        console.log(error);
-        // if (error.message === "Invalid password") {
-        //   setIsError("パスワードが間違っています");
-        // } else if (error.message === "User not found") {
-        //   setIsError("ユーザーが見つかりません");
-        // } else if (error.message === "Email not comfired") {
-        //   setIsError("メールアドレスが確認できません");
-        // }
-        setError(error.message);
-      }
-    } catch (e) {
-      alert(e);
-    }
-    setIsLoading(false);
-  };
+      setIsLoading(false);
+    },
+    []
+  );
 
   return (
     <>

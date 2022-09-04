@@ -1,21 +1,22 @@
 import { Button } from "@mantine/core";
-import React, { useState } from "react";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
 import { supabase } from "src/lib/supabase/supabase";
 const Profile = () => {
   const [image, setImage] = useState<File | undefined>();
-  const [username, setUsername] = useState("");
   const [website, setWebsite] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState<File | undefined>();
-  const [message, setMessage] = useState("");
+  const [path, setPath] = useState("");
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: any) => {
+    //e.preventDefault();
     let avatarUrl = "";
 
     if (image) {
       const { data, error } = await supabase.storage
-        .from("avatars")
-        .upload(`${Date.now()}`, image);
+        .from("application")
+        .upload(`receipt/${Date.now()}`, image);
+
+      console.log(data);
 
       if (error) {
         console.log(error);
@@ -23,55 +24,72 @@ const Profile = () => {
     }
   };
 
+  const handleDownLoad = async () => {
+    const { data, error } = await supabase.storage
+      .from("avatars")
+      .download("admin/1662205999133");
+
+    console.log(data, error);
+  };
+
+  const handleGetPath = async () => {
+    const { publicURL, error } = supabase.storage
+      .from("avatars")
+      .getPublicUrl("admin/1662207408855");
+
+    console.log(publicURL, error);
+    setPath(publicURL!);
+  };
+
   return (
     <div>
-      {message && message}
+      {path && <Image src={path} width={200} height={200} alt="aaa" />}
+      <div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="avatar">Choose Avatar:</label>
+            <input
+              type="file"
+              accept={"image/jpeg image/png"}
+              onChange={(e) => {
+                console.log(e.target.files?.[0]);
+                setImage(e.target.files?.[0]);
+              }}
+            />
+          </div>
 
-      <h1>Profile</h1>
+          <div className="form-group">
+            <label htmlFor="website">Website:</label>
+            <input
+              type="text"
+              onChange={(e) => setWebsite(e.target.value)}
+              value={website}
+            />
+          </div>
 
-      {avatarUrl ? (
-        <img
-          src={`https://rmzhnvojmpqewraookpz.supabase.in/storage/v1/object/public/${avatarUrl}`}
-          width={200}
-          alt=""
-        />
-      ) : (
-        "No Avatar set"
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="avatar">Choose Avatar:</label>
-          <input
-            type="file"
-            accept={"image/jpeg image/png"}
-            onChange={(e) => {
-              console.log(e.target.files?.[0]);
-              //setImage(e.target.files?.[0]);
+          <Button
+            onClick={() => {
+              handleSubmit();
             }}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="website">Website:</label>
-          <input
-            type="text"
-            onChange={(e) => setWebsite(e.target.value)}
-            value={website}
-          />
-        </div>
-
-        <Button type={"submit"}>Save profile!</Button>
-      </form>
+          >
+            storage
+          </Button>
+          <Button
+            onClick={() => {
+              handleDownLoad();
+            }}
+          >
+            DownLoad
+          </Button>
+          <Button
+            onClick={() => {
+              handleGetPath();
+            }}
+          >
+            getPath
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };

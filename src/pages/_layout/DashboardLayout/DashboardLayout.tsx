@@ -14,6 +14,8 @@ import {
 import { Menu2 } from "tabler-icons-react";
 
 import { LayoutErrorBoundary } from "../LayoutErrorBoundary";
+import { useIsLoggedIn } from "src/lib/hooks/useIsLoggedIn";
+import { useGetUserId } from "@hooks/useGetUserId";
 
 const Header = dynamic(async () => {
   const { Header } = await import("./Header");
@@ -27,6 +29,9 @@ const SideNav = dynamic(async () => {
 
 export const DashboardLayout: CustomLayout = (page) => {
   const [opened, handlers] = useDisclosure(false);
+  useIsLoggedIn();
+  const userId = useGetUserId();
+  console.log("", userId);
 
   return (
     <AppShell
@@ -49,12 +54,7 @@ export const DashboardLayout: CustomLayout = (page) => {
       <Header
         left={
           <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-            <ActionIcon
-              //variant="hover"
-              radius="xl"
-              size={40}
-              onClick={handlers.open}
-            >
+            <ActionIcon radius="xl" size={40} onClick={handlers.open}>
               <Menu2 />
             </ActionIcon>
           </MediaQuery>

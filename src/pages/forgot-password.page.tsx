@@ -1,5 +1,5 @@
 import type { CustomNextPage } from "next";
-import { AuthLayout } from "src/pages/_layout";
+import { AuthLayout } from "@pages/_layout";
 import { getPath } from "src/lib/const";
 import {
   createStyles,

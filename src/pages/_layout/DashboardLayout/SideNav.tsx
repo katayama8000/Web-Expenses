@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import Link from "next/link";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -8,6 +8,7 @@ import {
   UnstyledButton,
   Tooltip,
   MediaQuery,
+  Switch,
 } from "@mantine/core";
 import {
   Home,
@@ -20,9 +21,13 @@ import {
   ArrowLeft,
   ArrowRight,
   DeviceAnalytics,
+  Key,
+  ReportMoney,
+  Book,
 } from "tabler-icons-react";
 import { getPath } from "src/lib/const";
 import { ActiveLink } from "src/lib/next";
+import { useIsAdmin } from "src/lib/hooks/useIsAdmin";
 
 const useStyles = createStyles<string, { collapsed?: boolean }>(
   (theme, params, getRef) => {
@@ -105,17 +110,32 @@ const useStyles = createStyles<string, { collapsed?: boolean }>(
   }
 );
 
-const ITEMS = [
+const ITEMS_ADMIN = [
   { href: getPath("INDEX"), label: "ホーム", Icon: Home },
   { href: getPath("USERAPPLICATION"), label: "申請書一覧", Icon: Notes },
-  { href: getPath("SETTINGS"), label: "設定", Icon: Settings },
-  { href: getPath("ADMIN"), label: "管理者", Icon: UserPlus },
-  { href: getPath("MEMBEREDIT"), label: "メンバー編集", Icon: Edit },
+  { href: getPath("ADMIN"), label: "未承認の申請書", Icon: UserPlus },
   {
     href: getPath("APPROVEDAPPLICATION"),
-    label: "過去の申請書",
+    label: "承認済みの申請書",
     Icon: Folders,
   },
+  {
+    href: getPath("KEY"),
+    label: "鍵",
+    Icon: Key,
+  },
+  {
+    href: getPath("SALES"),
+    label: "営業",
+    Icon: ReportMoney,
+  },
+  {
+    href: getPath("LIBRARY"),
+    label: "本棚",
+    Icon: Book,
+  },
+  { href: getPath("MEMBEREDIT"), label: "メンバー編集", Icon: Edit },
+  { href: getPath("SETTINGS"), label: "設定", Icon: Settings },
   {
     href: getPath("TEST"),
     label: "テスト(開発中のみ)",
@@ -123,9 +143,38 @@ const ITEMS = [
   },
 ];
 
+const ITEMS_MEMBER = [
+  { href: getPath("INDEX"), label: "ホーム", Icon: Home },
+  { href: getPath("USERAPPLICATION"), label: "申請書一覧", Icon: Notes },
+  {
+    href: getPath("KEY"),
+    label: "鍵",
+    Icon: Key,
+  },
+  {
+    href: getPath("SALES"),
+    label: "営業",
+    Icon: ReportMoney,
+  },
+  { href: getPath("SETTINGS"), label: "設定", Icon: Settings },
+  {
+    href: getPath("TEST"),
+    label: "テスト(開発中のみ)",
+    Icon: TestPipe,
+  },
+];
+
+type Item = {
+  href: string;
+  label: string;
+  Icon: FC;
+};
+
 export const SideNav: FC<{ className?: string }> = ({ className }) => {
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [collapsed, handlers] = useDisclosure(false);
   const { classes, cx } = useStyles({ collapsed });
+  let ITEMS: Item[] = useIsAdmin(isAdmin) === true ? ITEMS_MEMBER : ITEMS_ADMIN;
 
   return (
     <Navbar p="md" className={cx(classes.navbar, className)}>
@@ -139,31 +188,39 @@ export const SideNav: FC<{ className?: string }> = ({ className }) => {
           </Link>
         </Group>
         {ITEMS.map(({ label, href, Icon }) => (
-          <Tooltip
-            key={label}
-            label={label}
-            disabled={!collapsed}
-            position="right"
-            withArrow
-            sx={{ width: "100%" }}
-          >
-            <ActiveLink href={href} passHref>
-              {(isActive) => {
-                return (
-                  <a
-                    className={cx(classes.link, {
-                      [classes.linkActive]: isActive,
-                    })}
-                  >
-                    <Icon className={classes.linkIcon} />
-                    <span className={classes.linkLabel}>{label}</span>
-                  </a>
-                );
-              }}
-            </ActiveLink>
-          </Tooltip>
+          // <Tooltip
+          //   label={label}
+          //   key={label}
+          //   disabled={!collapsed}
+          //   position="right"
+          //   withArrow
+          //   sx={{ width: "100%" }}
+          // >
+          <ActiveLink href={href} passHref key={label}>
+            {(isActive) => {
+              return (
+                <a
+                  className={cx(classes.link, {
+                    [classes.linkActive]: isActive,
+                  })}
+                >
+                  <Icon className={classes.linkIcon} />
+                  <span className={classes.linkLabel}>{label}</span>
+                </a>
+              );
+            }}
+          </ActiveLink>
+          // </Tooltip>
         ))}
       </Navbar.Section>
+      <Switch
+        size="xl"
+        onLabel="メンバー"
+        offLabel="管理者"
+        onClick={() => {
+          setIsAdmin(!isAdmin);
+        }}
+      />
 
       <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
         <Navbar.Section className={classes.footer}>

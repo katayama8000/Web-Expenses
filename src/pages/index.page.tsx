@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Button,
   Stack,
@@ -9,7 +10,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import type { CustomNextPage } from "next";
-import { DashboardLayout } from "src/pages/_layout";
+import { DashboardLayout } from "@pages/_layout";
 import { PageContent } from "src/component/PageContent";
 import { PageContainer } from "src/component/PageContainer";
 import { showNotification } from "@mantine/notifications";
@@ -18,7 +19,9 @@ import { DatePicker } from "@mantine/dates";
 import { DropZone } from "./dropzone";
 import { IconX } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
-import { useIsLoggedIn } from "src/lib/hooks/useIsLoggedIn";
+import { useGetUserId } from "@hooks/useGetUserId";
+import { toast } from "src/lib/function/toast";
+import type { MemberModel, ApplicationModel } from "@type/index";
 
 type ApplicationProps = {
   id?: number;
@@ -30,16 +33,25 @@ type ApplicationProps = {
   outside: string;
   paidDate: Date | null;
   cost: number;
+  userID?: string;
 };
 
-type Member = {
-  userID: string;
-  name: string;
-};
+const categoryOfCost: { value: string; label: string }[] = [
+  { value: "厚生費", label: "厚生費" },
+  { value: "発送費用", label: "発送費用" },
+  { value: "交際費", label: "交際費" },
+  { value: "会議費", label: "会議費" },
+  { value: "交通費", label: "交通費" },
+  { value: "通信費", label: "通信費" },
+  { value: "消耗品費", label: "消耗品費" },
+];
 
 const Index: CustomNextPage = () => {
   const [receipt, setReceipt] = useState<File | undefined>();
-  const [member, setMember] = useState<Member>();
+  const [member, setMember] = useState<MemberModel>();
+
+  const userId = useGetUserId();
+
   const form = useForm({
     initialValues: {
       payfor: "",
@@ -52,7 +64,6 @@ const Index: CustomNextPage = () => {
       cost: 0,
     },
   });
-  useIsLoggedIn();
 
   const handleDelete = useCallback(() => {
     setReceipt(undefined);
@@ -60,7 +71,7 @@ const Index: CustomNextPage = () => {
 
   const handleSubmit = useCallback(
     async (value: ApplicationProps) => {
-      if (receipt) {
+      if (!receipt) {
         showNotification({
           title: "エラー",
           message: "領収書をアップロードしてください",
@@ -69,23 +80,23 @@ const Index: CustomNextPage = () => {
         });
         return;
       }
-
       try {
-        const { data, error } = await supabase.from("application").insert([
-          {
-            payfor: value.payfor,
-            purpose: value.purpose,
-            detail: value.detail,
-            categoryOfCost: value.categoryOfCost,
-            inside: value.inside,
-            outside: value.outside,
-            paidDate: value.paidDate,
-            cost: value.cost,
-            //name: member?.name,
-            userID: member?.userID,
-          },
-        ]);
-
+        const { data, error } = await supabase
+          .from<ApplicationProps>("application")
+          .insert([
+            {
+              payfor: value.payfor,
+              purpose: value.purpose,
+              detail: value.detail,
+              categoryOfCost: value.categoryOfCost,
+              inside: value.inside,
+              outside: value.outside,
+              paidDate: value.paidDate,
+              cost: value.cost,
+              //name: member?.name,
+              userID: member?.userID,
+            },
+          ]);
         if (!data || error) {
           showNotification({
             title: "エラー",
@@ -95,12 +106,8 @@ const Index: CustomNextPage = () => {
           });
           return;
         }
-
         if (data) {
-          showNotification({
-            title: "success",
-            message: "Form submitted",
-          });
+          handleStoreReceipt(data[0].id!);
         }
       } catch (e) {
         console.error(e);
@@ -109,32 +116,30 @@ const Index: CustomNextPage = () => {
     [receipt, member]
   );
 
-  const handleStore = useCallback(async () => {
-    if (receipt) {
+  const handleStoreReceipt = useCallback(
+    async (id: number) => {
       const { data, error } = await supabase.storage
-        .from("avatars")
-        .upload(`bbb`, receipt);
+        .from("application")
+        .upload(`receipt/${id}`, receipt!);
 
       console.log(data, error);
-    }
-  }, [receipt]);
+      toast("成功", "申請書を登録しました", "teal");
+    },
+    [receipt]
+  );
 
   const getUser = useCallback(async () => {
     try {
-      const user = supabase.auth.user();
-      console.log(user);
       const { data, error } = await supabase
-        .from("member")
+        .from<MemberModel>("member")
         .select()
-        .match({ userID: user!.id });
+        .match({ userID: userId });
       console.log(data, error);
       if (!data || error) {
         console.error(error);
         return;
       }
-
       if (data) {
-        console.log(data);
         setMember(data[0]);
       }
     } catch (e) {
@@ -145,6 +150,7 @@ const Index: CustomNextPage = () => {
   useEffect(() => {
     getUser();
   }, []);
+
   return (
     <PageContainer title="経費申請">
       <Stack spacing="xl">
@@ -181,15 +187,7 @@ const Index: CustomNextPage = () => {
                     />
                     <Select
                       placeholder="費用分類"
-                      data={[
-                        { value: "厚生費", label: "厚生費" },
-                        { value: "発送費用", label: "発送費用" },
-                        { value: "交際費", label: "交際費" },
-                        { value: "会議費", label: "会議費" },
-                        { value: "交通費", label: "交通費" },
-                        { value: "通信費", label: "通信費" },
-                        { value: "消耗品費", label: "消耗品費" },
-                      ]}
+                      data={categoryOfCost}
                       {...form.getInputProps("categoryOfCost")}
                       size="md"
                     />
@@ -232,7 +230,7 @@ const Index: CustomNextPage = () => {
               </Grid>
               <DropZone receipt={receipt} setReceipt={setReceipt} />
               <Group position="right" mt="md">
-                <Button color="violet" onClick={handleStore}>
+                <Button color="violet" onClick={() => handleStoreReceipt(1)}>
                   領収書を保存(開発中のみ)
                 </Button>
                 <Button color="red" onClick={handleDelete}>

@@ -1,7 +1,6 @@
 import { FC, ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { NextLink } from "@mantine/next";
 import {
   Avatar,
   Box,
@@ -22,6 +21,7 @@ import {
   IconTrash,
   IconArrowsLeftRight,
 } from "@tabler/icons";
+import { supabase } from "src/lib/supabase/supabase";
 
 export const Header: FC<{ left: ReactNode }> = ({ left }) => {
   return (
@@ -79,9 +79,9 @@ const Notification: FC = () => {
 };
 
 const UserMenu: FC = () => {
-  const router = useRouter();
+  const { push } = useRouter();
   const signOut = () => {
-    router.push(getPath("SIGN_IN"));
+    push(getPath("SIGN_IN"));
   };
 
   return (
@@ -95,9 +95,28 @@ const UserMenu: FC = () => {
 
       <Menu.Dropdown>
         <Menu.Label>Application</Menu.Label>
-        <Menu.Item icon={<IconSettings size={14} />}>Settings</Menu.Item>
-        <Menu.Item icon={<IconMessageCircle size={14} />}>Messages</Menu.Item>
-        <Menu.Item icon={<IconPhoto size={14} />}>Gallery</Menu.Item>
+        <Menu.Item icon={<IconSettings size={14} />}>
+          <Link href={getPath("SETTINGS")}>
+            <a>Settings</a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item icon={<IconMessageCircle size={14} />}>
+          <div className="line-through">Messages</div>
+        </Menu.Item>
+        <Menu.Item
+          onClick={async () => {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+              console.error(error);
+            } else {
+              window.alert("ログアウトしました");
+              push("/sign-in");
+            }
+          }}
+          icon={<Logout size={14} strokeWidth={2} color={"black"} />}
+        >
+          <div>logout</div>
+        </Menu.Item>
         <Menu.Item
           icon={<IconSearch size={14} />}
           rightSection={
@@ -106,7 +125,7 @@ const UserMenu: FC = () => {
             </Text>
           }
         >
-          Search
+          <div className="line-through">Search</div>
         </Menu.Item>
         <Menu.Divider />
         <Menu.Label>Danger zone</Menu.Label>

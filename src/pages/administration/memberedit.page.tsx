@@ -1,26 +1,22 @@
-import React, { FC, useEffect, useState } from "react";
-import { DashboardLayout } from "src/pages/_layout";
+import React, { FC, useCallback, useEffect, useState } from "react";
+import { DashboardLayout } from "@pages/_layout";
 import { Button, Group, Modal, Table, Tooltip } from "@mantine/core";
 import { PageContainer } from "src/component/PageContainer";
 import { PageContent } from "src/component/PageContent";
 import { Trash, Edit } from "tabler-icons-react";
 import { supabase } from "src/lib/supabase/supabase";
 import { CustomNextPage } from "next";
-
-type Member = {
-  id: number;
-  name: string;
-  position: "役員" | "リーダー" | "一般";
-  email: string;
-};
+import { useGetAllMembers } from "src/lib/hooks/useGetAllMembers";
+import { Key } from "tabler-icons-react";
+import type { MemberModel } from "@type/index";
 
 const MemberEdit: CustomNextPage = () => {
   const [isEditModal, setIsEditModal] = useState<boolean>(false);
   const [isDeleteModal, setIsDeleteModal] = useState<boolean>(false);
-  const [members, setMembers] = useState<Member[]>();
+  const [members, setMembers] = useState<MemberModel[]>();
 
   const getMember = async () => {
-    const { data, error } = await supabase.from<Member>("member").select();
+    const { data, error } = await supabase.from<MemberModel>("member").select();
     console.log(data, error);
     try {
       if (data) {
@@ -39,15 +35,15 @@ const MemberEdit: CustomNextPage = () => {
     getMember();
   }, []);
 
-  const handleEdit = (member: Member) => {
+  const handleEdit = useCallback((member: MemberModel) => {
     setIsEditModal(true);
     console.log(member);
-  };
+  }, []);
 
-  const handleDelete = (member: Member) => {
+  const handleDelete = useCallback((member: MemberModel) => {
     setIsDeleteModal(true);
     console.log(member);
-  };
+  }, []);
 
   const rows = members?.map((member) => (
     <tr key={member.name}>
@@ -55,6 +51,10 @@ const MemberEdit: CustomNextPage = () => {
       <td>{member.position}</td>
       <td>{member.email}</td>
       <td>
+        {member.isHaveKey && <Key size={22} strokeWidth={2} color={"black"} />}
+      </td>
+
+      {/* <td>
         <div className="flex">
           <Trash
             size={22}
@@ -75,13 +75,13 @@ const MemberEdit: CustomNextPage = () => {
             }}
           />
         </div>
-      </td>
+      </td> */}
     </tr>
   ));
 
   return (
     <div>
-      <EditModal
+      {/* <EditModal
         member={members?.[0]!}
         isEditModal={isEditModal}
         setIsEditModal={setIsEditModal}
@@ -90,7 +90,7 @@ const MemberEdit: CustomNextPage = () => {
         member={members?.[0]!}
         isDeleteModal={isDeleteModal}
         setIsDeleteModal={setIsDeleteModal}
-      />
+      /> */}
 
       <PageContainer title="従業員一覧">
         <PageContent className="w-[800px] m-auto">
@@ -105,7 +105,7 @@ const MemberEdit: CustomNextPage = () => {
                 <th>名前</th>
                 <th>役職</th>
                 <th>メールアドレス</th>
-                <th></th>
+                <th>オフィスキー</th>
               </tr>
             </thead>
             <tbody>{rows}</tbody>
@@ -117,7 +117,7 @@ const MemberEdit: CustomNextPage = () => {
 };
 
 type Props = {
-  member: Member;
+  member: MemberModel;
   isEditModal: boolean;
   setIsEditModal: React.Dispatch<React.SetStateAction<boolean>>;
   isDeleteModal: boolean;

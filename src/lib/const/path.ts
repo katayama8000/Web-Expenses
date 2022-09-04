@@ -1,10 +1,13 @@
 const PATH = {
   INDEX: "/",
   NOTIFICATION: "/notification",
+  LIBRARY: "/library",
   USERAPPLICATION: "/user-application",
   SETTINGS: "/settings",
   ADMIN: "/administration/admin",
   APPROVEDAPPLICATION: "/administration/approvedapp",
+  KEY: "/key",
+  SALES: "/sales",
   MEMBEREDIT: "/administration/memberedit",
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
