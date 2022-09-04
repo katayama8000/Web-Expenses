@@ -1,5 +1,5 @@
 import type { CustomNextPage } from "next";
-import { DashboardLayout } from "src/pages/_layout";
+import { DashboardLayout } from "@pages/_layout";
 import { PageContainer } from "src/component/PageContainer";
 import { PageContent } from "@component/PageContent";
 import { Select } from "@mantine/core";

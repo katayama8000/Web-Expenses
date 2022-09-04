@@ -2,7 +2,7 @@
 import type { CustomNextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { AuthLayout } from "src/pages/_layout";
+import { AuthLayout } from "@pages/_layout";
 import { getPath } from "src/lib/const";
 import {
   TextInput,
@@ -29,13 +29,13 @@ const SignIn: CustomNextPage = () => {
   };
 
   //authの変更を検知
-  supabase.auth.onAuthStateChange((_, session) => {
-    if (session?.user && (pathname === "/sign-in" || pathname === "/sign-up")) {
-      push("/");
-    } else if (!session?.user && pathname !== "/signup") {
-      push("/sign-in");
-    }
-  });
+  // supabase.auth.onAuthStateChange((_, session) => {
+  //   if (session?.user && (pathname === "/sign-in" || pathname === "/sign-up")) {
+  //     push("/");
+  //   } else if (!session?.user && pathname !== "/signup") {
+  //     push("/sign-in");
+  //   }
+  // });
 
   const form = useForm({
     initialValues: {

@@ -11,6 +11,8 @@ export const useIsLoggedIn = () => {
     //ユーザーがあるかつログイン画面にいるとき
     if (user && pathname === "/sign-in") {
       push("/");
+      //ユーザーがないときかつログイン画面にいるとき
+    } else if (!user && pathname === "/sign-in") {
       //ユーザーがないときかつ新規登録画面にいないとき
     } else if (!user && pathname !== "/sign-up") {
       push("/sign-in");

@@ -1,4 +1,4 @@
-import { DashboardLayout } from "src/pages/_layout";
+import { DashboardLayout } from "@pages/_layout";
 import {
   ActionIcon,
   Badge,

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import type { CustomNextPage } from "next";
 import Link from "next/link";
-import { AuthLayout } from "src/pages/_layout";
+import { AuthLayout } from "@pages/_layout";
 import { getPath } from "src/lib/const";
 import {
   TextInput,

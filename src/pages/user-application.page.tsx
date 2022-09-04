@@ -2,7 +2,7 @@
 import { Grid } from "@mantine/core";
 import React, { useCallback } from "react";
 import { PageContainer } from "src/component/PageContainer";
-import { DashboardLayout } from "src/pages/_layout";
+import { DashboardLayout } from "@pages/_layout";
 import { useEffect } from "react";
 import { supabase } from "src/lib/supabase/supabase";
 import { useState } from "react";

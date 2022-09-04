@@ -1,11 +1,13 @@
 import type { CustomNextPage } from "next";
 import { Button, Group, Stack } from "@mantine/core";
-import { DashboardLayout } from "src/pages/_layout";
+import { DashboardLayout } from "@pages/_layout";
 import { PageContent } from "src/component/PageContent";
 import { PageContainer } from "src/component/PageContainer";
 import { supabase } from "src/lib/supabase/supabase";
+import { useRouter } from "next/router";
 
 const Settings: CustomNextPage = () => {
+  const { push } = useRouter();
   return (
     <PageContainer
       title="設定"
@@ -22,6 +24,7 @@ const Settings: CustomNextPage = () => {
             console.error(error);
           } else {
             window.alert("ログアウトしました");
+            push("/sign-in");
           }
         }}
       >

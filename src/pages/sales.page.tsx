@@ -1,7 +1,7 @@
 import { PageContainer } from "@component/PageContainer";
 import { PageContent } from "@component/PageContent";
 import type { CustomNextPage } from "next";
-import { DashboardLayout } from "src/pages/_layout";
+import { DashboardLayout } from "@pages/_layout";
 
 const Sales: CustomNextPage = () => {
   return (
