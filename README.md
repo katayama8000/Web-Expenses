@@ -12,7 +12,7 @@
 - useMemo
 - useCallback
 
-## DB
+## DB(仮)
 **User**
 
 項目名|内容|型|キー
