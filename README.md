@@ -1,5 +1,3 @@
-# Admin Dashboard
-
 ## Stacks
 
 - Next.js
@@ -7,9 +5,28 @@
 - Mantine
 - ESLint
 - Prettier
+- Supabase
 
-## Getting Started
+## レンダリング
+- memo
+- useMemo
+- useCallback
 
-```bash
-yarn create next-app --example https://github.com/qin-salon/admin-dashboard-with-next-mantine
-```
+## DB(仮)
+**User**
+
+項目名|内容|型|キー
+---|---|---|---
+loginToken|primary-key|int8|◎
+created_at|作成日|date|
+name|名前|string|
+admin|管理者|boolean|
+
+**Application**
+項目名|内容|型|キー
+---|---|---|---
+loginToken|primary-key|int8|◎
+create_at|作成日|date|
+name|名前|string|
+admin|管理者|boolean|
+
