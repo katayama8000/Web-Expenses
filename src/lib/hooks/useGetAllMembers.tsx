@@ -1,34 +1,38 @@
 import { PostgrestError } from "@supabase/supabase-js";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "src/lib/supabase/supabase";
-
-type Member = {
-  id: number;
-  name: string;
-  position: "役員" | "リーダー" | "一般";
-  email: string;
-};
+import { MemberModel } from "@type/index";
 
 type Error = {
   error: PostgrestError | null | unknown;
 };
 
-type Result = Member[] | Error;
+type Result = {
+  AllMembers: MemberModel[];
+};
 
-export const useGetAllMembers = async () => {
-  const [result, setResult] = useState<Result>([]);
-  const { data, error } = await supabase.from<Member>("member").select();
-  try {
-    if (data) {
-      setResult(data);
+export const useGetAllMembers = (): Result => {
+  const [AllMembers, setAllMembers] = useState<MemberModel[]>([]);
+
+  const getAllMembers = async () => {
+    const { data, error } = await supabase.from<MemberModel>("member").select();
+    try {
+      if (data) {
+        setAllMembers(data);
+      }
+
+      if (!data || error) {
+        console.error(error);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    if (!data || error) {
-      setResult({ error });
-    }
-  } catch (error) {
-    setResult({ error });
-  }
+  useEffect(() => {
+    getAllMembers();
+  }, []);
 
-  return result;
+  return { AllMembers };
 };

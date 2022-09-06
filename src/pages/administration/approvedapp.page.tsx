@@ -65,21 +65,14 @@ const Approved = () => {
       }
 
       if (data) {
-        console.log(data);
-
-        ApplicationStoragePath.then((url) => {
-          if (typeof url === "string") {
-            const app = data.map((application) => {
-              //getUserName(application.userID);
-              //application.userName = memberName;
-              application.receipt = url! + "/" + String(application.id);
-              return application;
-            });
-            setApplication(app);
-          } else {
-            console.error(url);
-          }
+        const app = data.map((application) => {
+          application.receipt =
+            ApplicationStoragePath! + "/" + String(application.id);
+          return application;
         });
+        setApplication(app);
+      } else {
+        console.error(error);
       }
     } catch (e) {
       console.error(e);
