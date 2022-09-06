@@ -70,8 +70,6 @@ const Approved = () => {
         ApplicationStoragePath.then((url) => {
           if (typeof url === "string") {
             const app = data.map((application) => {
-              //getUserName(application.userID);
-              //application.userName = memberName;
               application.receipt = url! + "/" + String(application.id);
               return application;
             });
