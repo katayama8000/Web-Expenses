@@ -6,34 +6,14 @@ import { PageContent } from "src/component/PageContent";
 import { Trash, Edit } from "tabler-icons-react";
 import { supabase } from "src/lib/supabase/supabase";
 import { CustomNextPage } from "next";
-import { useGetAllMembers } from "src/lib/hooks/useGetAllMembers";
+import { useGetAllMembers } from "@hooks/useGetAllMembers";
 import { Key } from "tabler-icons-react";
 import type { MemberModel } from "@type/index";
 
 const MemberEdit: CustomNextPage = () => {
   const [isEditModal, setIsEditModal] = useState<boolean>(false);
   const [isDeleteModal, setIsDeleteModal] = useState<boolean>(false);
-  const [members, setMembers] = useState<MemberModel[]>();
-
-  const getMember = async () => {
-    const { data, error } = await supabase.from<MemberModel>("member").select();
-    console.log(data, error);
-    try {
-      if (data) {
-        setMembers(data);
-      }
-
-      if (!data || error) {
-        console.log(error);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getMember();
-  }, []);
+  const { AllMembers } = useGetAllMembers();
 
   const handleEdit = useCallback((member: MemberModel) => {
     setIsEditModal(true);
@@ -45,7 +25,7 @@ const MemberEdit: CustomNextPage = () => {
     console.log(member);
   }, []);
 
-  const rows = members?.map((member) => (
+  const rows = AllMembers?.map((member) => (
     <tr key={member.name}>
       <td>{member.name}</td>
       <td>{member.position}</td>
