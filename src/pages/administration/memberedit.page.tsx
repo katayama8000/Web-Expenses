@@ -17,12 +17,10 @@ const MemberEdit: CustomNextPage = () => {
 
   const handleEdit = useCallback((member: MemberModel) => {
     setIsEditModal(true);
-    console.log(member);
   }, []);
 
   const handleDelete = useCallback((member: MemberModel) => {
     setIsDeleteModal(true);
-    console.log(member);
   }, []);
 
   const rows = AllMembers?.map((member) => (

@@ -16,8 +16,6 @@ const Profile = () => {
         .from("application")
         .upload(`receipt/${Date.now()}`, image);
 
-      console.log(data);
-
       if (error) {
         console.log(error);
       }

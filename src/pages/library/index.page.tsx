@@ -10,5 +10,4 @@ const Library: CustomNextPage = () => {
 };
 
 Library.getLayout = DashboardLayout;
-
 export default Library;

@@ -158,7 +158,7 @@ export const CommonApplication: FC<Props> = memo(
     }, [isReady, pathname, isApproved, handleSetBeforeApproved, id, member]);
 
     useEffect(() => {
-      if (pathname === "/administration/admin" && isReady) {
+      if (pathname === "/administration/unapprovedapp" && isReady) {
         setStyle("hover:opacity-70 cursor-pointer");
       }
     }, [pathname, isReady]);
@@ -172,7 +172,7 @@ export const CommonApplication: FC<Props> = memo(
 
           <div
             onClick={() => {
-              pathname === "/administration/admin"
+              pathname === "/administration/unapprovedapp"
                 ? handleDecideApprove!(id, index!)
                 : alert("hey");
             }}

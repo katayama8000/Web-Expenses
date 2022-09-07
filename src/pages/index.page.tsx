@@ -22,6 +22,7 @@ import { supabase } from "src/lib/supabase/supabase";
 import { useGetUserId } from "@hooks/useGetUserId";
 import { toast } from "src/lib/function/toast";
 import type { MemberModel, ApplicationModel } from "@type/index";
+import { useGetMember } from "@hooks/useGetMember";
 
 type ApplicationProps = {
   id?: number;
@@ -48,9 +49,9 @@ const categoryOfCost: { value: string; label: string }[] = [
 
 const Index: CustomNextPage = () => {
   const [receipt, setReceipt] = useState<File | undefined>();
-  const [member, setMember] = useState<MemberModel>();
-
+  //onst [member, setMember] = useState<MemberModel>();
   const userId = useGetUserId();
+  const { member } = useGetMember(userId!);
 
   const form = useForm({
     initialValues: {
@@ -127,29 +128,6 @@ const Index: CustomNextPage = () => {
     },
     [receipt]
   );
-
-  const getUser = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from<MemberModel>("member")
-        .select()
-        .match({ userID: userId });
-      console.log(data, error);
-      if (!data || error) {
-        console.error(error);
-        return;
-      }
-      if (data) {
-        setMember(data[0]);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
-
-  useEffect(() => {
-    getUser();
-  }, []);
 
   return (
     <PageContainer title="経費申請">
@@ -252,5 +230,4 @@ const Index: CustomNextPage = () => {
 };
 
 Index.getLayout = DashboardLayout;
-
 export default Index;
