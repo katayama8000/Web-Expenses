@@ -59,7 +59,7 @@ export const CommonApplication: FC<Props> = memo(
       if (isReady) {
         switch (pathname) {
           //管理者が承認する
-          case "/administration/admin":
+          case "/administration/unapprovedapp":
             return (
               <Group position="apart">
                 <Text weight={500}>

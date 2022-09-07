@@ -1,27 +1,22 @@
 import { Button, Card, Grid, Group, Modal } from "@mantine/core";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { DashboardLayout } from "@pages/_layout";
 import { showNotification } from "@mantine/notifications";
 import { IconCheck } from "@tabler/icons";
-import { Badge } from "@mantine/core";
-import { useEffect } from "react";
-import { supabase } from "src/lib/supabase/supabase";
 import { Text } from "@mantine/core";
 import dayjs from "dayjs";
 import { CommonApplication } from "@component/application/application";
-import { useGetApplicationStoragePath } from "@hooks/useGetApplicationStoragePath";
-import type { ApplicationModel } from "@type/index";
+import { supabase } from "src/lib/supabase/supabase";
+import { useGetUnApprovedApplication } from "@hooks/administration/useGetUnApprovedApplication";
 
-const Admin = () => {
-  const [application, setApplication] = useState<ApplicationModel[]>([]);
+const UnApproved = () => {
   let today = new Date();
-  const todayDate = dayjs(today).format("YYYY-MM-DD");
   const [id, setId] = useState<number>(0);
   const [modalId, setModalId] = useState<number>(0);
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
   const [openedDenialReason, setOpenedDenialReason] = useState<boolean>(false);
-  const ApplicationStoragePath = useGetApplicationStoragePath();
+  const { application } = useGetUnApprovedApplication();
 
   const handelApprove = useCallback(async () => {
     try {
@@ -55,32 +50,6 @@ const Admin = () => {
     setOpenedDenialReason(true);
   }, []);
 
-  const getApplication = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from<ApplicationModel>("application")
-        .select("*")
-        .filter("isApproved", "in", '("false")');
-
-      if (!data || error) {
-        return;
-      }
-
-      if (data) {
-        const app = data.map((application) => {
-          application.receipt =
-            ApplicationStoragePath! + "/" + String(application.id);
-          return application;
-        });
-        setApplication(app);
-      } else {
-        console.error(error);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
-
   const handleDecideApprove = useCallback(async (id: number, index: number) => {
     setId(id);
     setModalId(index);
@@ -88,11 +57,11 @@ const Admin = () => {
   }, []);
 
   useEffect(() => {
-    getApplication();
+    //getApplication();
     const subscription = supabase
       .from("application")
       .on("UPDATE", (payload) => {
-        getApplication();
+        //getApplication();
         console.log("Change received!!!!", payload);
       })
       .subscribe();
@@ -180,5 +149,5 @@ const Admin = () => {
   );
 };
 
-Admin.getLayout = DashboardLayout;
-export default Admin;
+UnApproved.getLayout = DashboardLayout;
+export default UnApproved;

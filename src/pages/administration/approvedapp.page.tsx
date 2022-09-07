@@ -1,25 +1,12 @@
 import { DashboardLayout } from "@pages/_layout";
-import {
-  ActionIcon,
-  Badge,
-  Button,
-  Card,
-  Grid,
-  Group,
-  Menu,
-  Modal,
-  Text,
-} from "@mantine/core";
+import { Button, Grid, Modal } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { PageContainer } from "src/component/PageContainer";
-import dayjs from "dayjs";
 import { showNotification } from "@mantine/notifications";
-import { IconCheck, IconDots, IconArrowBackUp } from "@tabler/icons";
+import { IconCheck } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
 import { CommonApplication } from "@component/application/application";
-import { useGetApplicationStoragePath } from "@hooks/useGetApplicationStoragePath";
-import type { ApplicationModel } from "@type/index";
-import { useGetApprovedApplication } from "@hooks/useGetApprovedApplication";
+import { useGetApprovedApplication } from "@hooks/administration/useGetApprovedApplication";
 
 const Approved = () => {
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);

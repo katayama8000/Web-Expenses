@@ -7,10 +7,10 @@ import { useEffect } from "react";
 import { supabase } from "src/lib/supabase/supabase";
 import { useState } from "react";
 import { CommonApplication } from "@component/application/application";
-import { useGetApplicationStoragePath } from "@hooks/useGetApplicationStoragePath";
+import { useGetApplicationStoragePath } from "@hooks/administration/useGetApplicationStoragePath";
 
 import type { ApplicationModel } from "@type/index";
-import { useGetApplication } from "@hooks/useGetApplication";
+import { useGetApplication } from "@hooks/administration/useGetApplication";
 const Application = () => {
   const { application, getApplication } = useGetApplication();
 

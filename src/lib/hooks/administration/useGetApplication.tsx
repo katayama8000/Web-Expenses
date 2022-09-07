@@ -1,17 +1,13 @@
-import { useGetApplicationStoragePath } from "@hooks/useGetApplicationStoragePath";
+import { useGetApplicationStoragePath } from "@hooks/administration/useGetApplicationStoragePath";
 import { ApplicationModel } from "@type/application.model";
+import { UseApplicationModel } from "@type/index";
 import { useEffect, useState } from "react";
 import { supabase } from "src/lib/supabase/supabase";
 
-type Result = {
-  application: ApplicationModel[];
-  getApplication: () => void;
-};
-
-export const useGetApplication = (): Result => {
+export const useGetApplication = (): UseApplicationModel => {
   const [application, setApplication] = useState<ApplicationModel[]>([]);
   const ApplicationStoragePath = useGetApplicationStoragePath();
-  const getApplication = async () => {
+  const getApplication = async (): Promise<void> => {
     try {
       const { data, error } = await supabase
         .from<ApplicationModel>("application")

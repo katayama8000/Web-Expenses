@@ -1,3 +1,4 @@
 import { MemberModel } from "./member.model";
 import { ApplicationModel } from "./application.model";
-export type { MemberModel, ApplicationModel };
+import { UseApplicationModel } from "./useApplication.model";
+export type { MemberModel, ApplicationModel, UseApplicationModel };
