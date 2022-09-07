@@ -113,7 +113,11 @@ const useStyles = createStyles<string, { collapsed?: boolean }>(
 const ITEMS_ADMIN = [
   { href: getPath("INDEX"), label: "ホーム", Icon: Home },
   { href: getPath("USERAPPLICATION"), label: "申請書一覧", Icon: Notes },
-  { href: getPath("ADMIN"), label: "未承認の申請書", Icon: UserPlus },
+  {
+    href: getPath("UNAPPROVEDAPPLICATION"),
+    label: "未承認の申請書",
+    Icon: UserPlus,
+  },
   {
     href: getPath("APPROVEDAPPLICATION"),
     label: "承認済みの申請書",
