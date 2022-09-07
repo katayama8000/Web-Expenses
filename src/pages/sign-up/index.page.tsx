@@ -42,8 +42,6 @@ const SignUp: CustomNextPage = () => {
       });
 
       if (user) {
-        console.log(user);
-        console.log(user.id);
         handleRegisterMember(values.name, user.id, values.email);
         alert("メールを送信しました");
         router.push("sign-up/authentication");

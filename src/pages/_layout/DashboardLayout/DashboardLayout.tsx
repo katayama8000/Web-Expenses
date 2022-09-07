@@ -31,7 +31,6 @@ export const DashboardLayout: CustomLayout = (page) => {
   const [opened, handlers] = useDisclosure(false);
   useIsLoggedIn();
   const userId = useGetUserId();
-  console.log("", userId);
 
   return (
     <AppShell

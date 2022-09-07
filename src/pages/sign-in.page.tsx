@@ -16,7 +16,7 @@ import {
   Button,
   Space,
 } from "@mantine/core";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "@mantine/form";
 import { supabase } from "src/lib/supabase/supabase";
 
@@ -67,13 +67,13 @@ const SignIn: CustomNextPage = () => {
         }
         if (error) {
           console.log(error);
-          // if (error.message === "Invalid password") {
-          //   setIsError("パスワードが間違っています");
-          // } else if (error.message === "User not found") {
-          //   setIsError("ユーザーが見つかりません");
-          // } else if (error.message === "Email not comfired") {
-          //   setIsError("メールアドレスが確認できません");
-          // }
+          if (error.message === "Invalid password") {
+            setError("パスワードが間違っています");
+          } else if (error.message === "User not found") {
+            setError("ユーザーが見つかりません");
+          } else if (error.message === "Email not comfired") {
+            setError("メールアドレスが確認できません");
+          }
           setError(error.message);
         }
       } catch (e) {
