@@ -5,19 +5,20 @@ import { supabase } from "src/lib/supabase/supabase";
 
 type Result = {
   application: ApplicationModel[];
-  getApplication: () => void;
+  getApprovedApplication: () => void;
 };
-
-export const useGetApplication = (): Result => {
+export const useGetApprovedApplication = (): Result => {
   const [application, setApplication] = useState<ApplicationModel[]>([]);
   const ApplicationStoragePath = useGetApplicationStoragePath();
-  const getApplication = async () => {
+  const getApprovedApplication = async () => {
     try {
       const { data, error } = await supabase
         .from<ApplicationModel>("application")
-        .select();
+        .select("*")
+        .filter("isApproved", "in", '("true")');
+      console.log(data, error);
       if (!data || error) {
-        console.error(error);
+        return;
       }
 
       if (data) {
@@ -36,8 +37,7 @@ export const useGetApplication = (): Result => {
   };
 
   useEffect(() => {
-    getApplication();
+    getApprovedApplication();
   }, []);
-
-  return { application, getApplication };
+  return { application, getApprovedApplication };
 };

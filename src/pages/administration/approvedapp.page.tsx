@@ -19,12 +19,12 @@ import { supabase } from "src/lib/supabase/supabase";
 import { CommonApplication } from "@component/application/application";
 import { useGetApplicationStoragePath } from "@hooks/useGetApplicationStoragePath";
 import type { ApplicationModel } from "@type/index";
+import { useGetApprovedApplication } from "@hooks/useGetApprovedApplication";
 
 const Approved = () => {
-  const [application, setApplication] = useState<ApplicationModel[]>([]);
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
   const [id, setId] = useState<number>(0);
-  const ApplicationStoragePath = useGetApplicationStoragePath();
+  const { application } = useGetApprovedApplication();
 
   const handleIsApprovedFalse = async () => {
     try {
@@ -53,32 +53,6 @@ const Approved = () => {
     }
   };
 
-  const getApplication = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from<ApplicationModel>("application")
-        .select("*")
-        .filter("isApproved", "in", '("true")');
-      console.log(data, error);
-      if (!data || error) {
-        return;
-      }
-
-      if (data) {
-        const app = data.map((application) => {
-          application.receipt =
-            ApplicationStoragePath! + "/" + String(application.id);
-          return application;
-        });
-        setApplication(app);
-      } else {
-        console.error(error);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
-
   const handleSetBeforeApproved = useCallback(
     (id: number) => {
       setId(id);
@@ -88,11 +62,11 @@ const Approved = () => {
   );
 
   useEffect(() => {
-    getApplication();
+    //getApplication();
     const subscription = supabase
       .from("application")
       .on("UPDATE", (payload) => {
-        getApplication();
+        //getApplication();
         console.log("Change received!", payload);
       })
       .subscribe();

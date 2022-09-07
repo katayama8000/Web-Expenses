@@ -58,9 +58,10 @@ const Admin = () => {
   const getApplication = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from("application")
+        .from<ApplicationModel>("application")
         .select("*")
         .filter("isApproved", "in", '("false")');
+
       if (!data || error) {
         return;
       }
