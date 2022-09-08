@@ -52,6 +52,7 @@ export const CommonApplication: FC<Props> = memo(
     handleDecideApprove,
   }) => {
     const [style, setStyle] = useState<string>("");
+    const [approvedStyle, setApprovedStyle] = useState<string>("");
     const { pathname, isReady } = useRouter();
     const { member, getMember } = useGetMember(userID);
 
@@ -161,7 +162,11 @@ export const CommonApplication: FC<Props> = memo(
       if (pathname === "/administration/unapprovedapp" && isReady) {
         setStyle("hover:opacity-70 cursor-pointer");
       }
-    }, [pathname, isReady]);
+
+      // if (pathname === "/administration/approvedapp" && isReady && isApproved) {
+      //   setApprovedStyle("hover:opacity-70 cursor-pointer");
+      // }
+    }, [pathname, isReady, isApproved]);
 
     return (
       <div>
@@ -178,25 +183,50 @@ export const CommonApplication: FC<Props> = memo(
             }}
             className={style}
           >
-            <Text mt="sm" color="dimmed" size="sm">
-              <Grid className="px-3 py-3">
-                <Grid.Col span={6}>
-                  <div className="truncate">{payfor}</div>
-                  <div className="truncate">{purpose}</div>
-                  <div className="truncate">{detail}</div>
-                  <div className="truncate">{categoryOfCost}</div>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <div className="truncate">{inside}</div>
-                  <div className="truncate">{outside}</div>
-                  <div className="truncate">
-                    {dayjs(paidDate).format("YYYY/MM/DD")}
-                  </div>
-                  <div className="truncate">{cost}円</div>
-                </Grid.Col>
-              </Grid>
-              <Image src={receipt} alt="receipt" radius="md" height={150} />
-            </Text>
+            {isApproved === true ? (
+              <Text mt="sm" color="dimmed" size="sm" className="relative">
+                <div className="absolute top-[100px] left-[36px]  text-red-500 z-50 bg-red-200 py-2 px-10 rounded-md origin-center -rotate-12 text-3xl text-bold opacity-90">
+                  承認済み
+                </div>
+                <Grid className="px-3 py-3">
+                  <Grid.Col span={6}>
+                    <div className="truncate">{payfor}</div>
+                    <div className="truncate">{purpose}</div>
+                    <div className="truncate">{detail}</div>
+                    <div className="truncate">{categoryOfCost}</div>
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <div className="truncate">{inside}</div>
+                    <div className="truncate">{outside}</div>
+                    <div className="truncate">
+                      {dayjs(paidDate).format("YYYY/MM/DD")}
+                    </div>
+                    <div className="truncate">{cost}円</div>
+                  </Grid.Col>
+                </Grid>
+                <Image src={receipt} alt="receipt" radius="md" height={150} />
+              </Text>
+            ) : (
+              <Text mt="sm" color="dimmed" size="sm">
+                <Grid className="px-3 py-3">
+                  <Grid.Col span={6}>
+                    <div className="truncate">{payfor}</div>
+                    <div className="truncate">{purpose}</div>
+                    <div className="truncate">{detail}</div>
+                    <div className="truncate">{categoryOfCost}</div>
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <div className="truncate">{inside}</div>
+                    <div className="truncate">{outside}</div>
+                    <div className="truncate">
+                      {dayjs(paidDate).format("YYYY/MM/DD")}
+                    </div>
+                    <div className="truncate">{cost}円</div>
+                  </Grid.Col>
+                </Grid>
+                <Image src={receipt} alt="receipt" radius="md" height={150} />
+              </Text>
+            )}
           </div>
         </Card>
       </div>

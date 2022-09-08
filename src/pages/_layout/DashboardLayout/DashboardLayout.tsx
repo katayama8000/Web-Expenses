@@ -30,7 +30,6 @@ const SideNav = dynamic(async () => {
 export const DashboardLayout: CustomLayout = (page) => {
   const [opened, handlers] = useDisclosure(false);
   useIsLoggedIn();
-  const userId = useGetUserId();
 
   return (
     <AppShell

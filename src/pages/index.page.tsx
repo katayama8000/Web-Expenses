@@ -49,7 +49,6 @@ const categoryOfCost: { value: string; label: string }[] = [
 
 const Index: CustomNextPage = () => {
   const [receipt, setReceipt] = useState<File | undefined>();
-  //onst [member, setMember] = useState<MemberModel>();
   const userId = useGetUserId();
   const { member } = useGetMember(userId!);
 
