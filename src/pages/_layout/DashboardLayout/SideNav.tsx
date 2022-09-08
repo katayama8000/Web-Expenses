@@ -116,7 +116,7 @@ const ITEMS_ADMIN = [
   {
     href: getPath("UNAPPROVEDAPPLICATION"),
     label: "未承認の申請書",
-    Icon: UserPlus,
+    Icon: Folders,
   },
   {
     href: getPath("APPROVEDAPPLICATION"),
