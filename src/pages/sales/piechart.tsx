@@ -1,6 +1,4 @@
-import { Button } from "@mantine/core";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { FC, memo, useEffect, useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
@@ -8,13 +6,13 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const salesGoals = 10000000;
 let team1 = 2800000;
-let team2 = 38000;
+let team2 = 3800000;
 
-export const data = {
+const data = {
   labels: ["team1", "team2", "left"],
   datasets: [
     {
-      label: "# of Votes",
+      label: "売上",
       data: [team1, team2, salesGoals - (team1 + team2)],
       backgroundColor: [
         "rgb(255, 0, 0)",
@@ -34,8 +32,21 @@ export const data = {
   ],
 };
 
-const Profile = () => {
-  return <Doughnut data={data} />;
+type Props = {
+  width: number;
+  height: number;
 };
 
-export default Profile;
+export const PieChart: FC<Props> = memo(({ width, height }) => {
+  const [style, setStyle] = useState("");
+  useEffect(() => {
+    setStyle(`w-[${width}px] h-[${height}px]`);
+  }, []);
+  return (
+    <div className={style}>
+      <Doughnut data={data} />
+    </div>
+  );
+});
+
+PieChart.displayName = "PieChart";

@@ -14,14 +14,13 @@ import { DashboardLayout } from "@pages/_layout";
 import { PageContent } from "src/component/PageContent";
 import { PageContainer } from "src/component/PageContainer";
 import { showNotification } from "@mantine/notifications";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { DatePicker } from "@mantine/dates";
-import { DropZone } from "./dropzone";
+import { DropZone } from "@component/dropzone/dropzone";
 import { IconX } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
 import { useGetUserId } from "@hooks/useGetUserId";
 import { toast } from "src/lib/function/toast";
-import type { MemberModel, ApplicationModel } from "@type/index";
 import { useGetMember } from "@hooks/useGetMember";
 
 type ApplicationProps = {
