@@ -1,41 +1,61 @@
 import { Button } from "@mantine/core";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
-
-const salesGoals = 10000000;
-let team1 = 2800000;
-let team2 = 38000;
-
-export const data = {
-  labels: ["team1", "team2", "left"],
-  datasets: [
-    {
-      label: "# of Votes",
-      data: [team1, team2, salesGoals - (team1 + team2)],
-      backgroundColor: [
-        "rgb(255, 0, 0)",
-        "rgba(255, 165, 0)",
-        "rgba(201, 203, 207)",
-      ],
-      // borderColor: [
-      //   "rgba(255, 99, 132, 1)",
-      //   "rgba(54, 162, 235, 1)",
-      //   "rgba(255, 206, 86, 1)",
-      //   "rgba(75, 192, 192, 1)",
-      //   "rgba(153, 102, 255, 1)",
-      //   "rgba(255, 159, 64, 1)",
-      // ],
-      // borderWidth: 1,
-    },
-  ],
-};
+import { supabase } from "src/lib/supabase/supabase";
+import { Breadcrumbs, Anchor } from "@mantine/core";
 
 const Profile = () => {
-  return <Doughnut data={data} />;
+  const [image, setImage] = useState<File | undefined>();
+  const [website, setWebsite] = useState("");
+  const [path, setPath] = useState("");
+
+  const handleSubmit = async (e?: any) => {
+    //e.preventDefault();
+    let avatarUrl = "";
+
+    if (image) {
+      const { data, error } = await supabase.storage
+        .from("application")
+        .upload(`receipt/${Date.now()}`, image);
+
+      if (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleDownLoad = async () => {
+    const { data, error } = await supabase.storage
+      .from("avatars")
+      .download("admin/1662205999133");
+
+    console.log(data, error);
+  };
+
+  const handleGetPath = async () => {
+    const { publicURL, error } = supabase.storage
+      .from("avatars")
+      .getPublicUrl("admin/1662207408855");
+
+    console.log(publicURL, error);
+    setPath(publicURL!);
+  };
+
+  const items = [
+    { title: "Mantine", href: "test/aaa" },
+    { title: "Mantine hooks", href: "test/lll" },
+    { title: "use-id", href: "aaa/yyy" },
+  ].map((item, index) => (
+    <Anchor href={item.href} key={index}>
+      {item.title}
+    </Anchor>
+  ));
+  return (
+    <div>
+      <Breadcrumbs>{items}</Breadcrumbs>
+      <Breadcrumbs separator="→">{items}</Breadcrumbs>
+    </div>
+  );
 };
 
 export default Profile;
