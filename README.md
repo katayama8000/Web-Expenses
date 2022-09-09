@@ -1,32 +1,15 @@
 ## Stacks
 
-- Next.js
-- TypeScript
-- Mantine
-- ESLint
-- Prettier
-- Supabase
+- [React.js](https://ja.reactjs.org/)
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Mantine](https://mantine.dev/)
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
+- [Supabase](https://supabase.com/)
 
 ## レンダリング
 - memo
 - useMemo
 - useCallback
-
-## DB(仮)
-**User**
-
-項目名|内容|型|キー
----|---|---|---
-loginToken|primary-key|int8|◎
-created_at|作成日|date|
-name|名前|string|
-admin|管理者|boolean|
-
-**Application**
-項目名|内容|型|キー
----|---|---|---
-loginToken|primary-key|int8|◎
-create_at|作成日|date|
-name|名前|string|
-admin|管理者|boolean|
 
