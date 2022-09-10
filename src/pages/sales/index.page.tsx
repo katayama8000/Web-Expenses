@@ -6,8 +6,8 @@ import { PieChart } from "./piechart";
 import { Grid } from "@mantine/core";
 import { Breadcrumbs, Anchor } from "@mantine/core";
 
-const items = [
-  { title: "Mantine", href: "sales/order" },
+const items: JSX.Element[] = [
+  { title: "受注", href: "sales/order" },
   { title: "Mantine hooks", href: "#" },
   { title: "use-id", href: "#" },
 ].map((item, index) => (
