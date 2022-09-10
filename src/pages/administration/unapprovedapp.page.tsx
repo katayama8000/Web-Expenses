@@ -112,20 +112,34 @@ const UnApproved = () => {
               <div>
                 <Grid className="px-6 py-3 font-bold text-xl text-black">
                   <Grid.Col span={6}>
-                    <div>{application[modalId]?.payfor}</div>
-                    <div>{application[modalId]?.purpose}</div>
-                    <div>{application[modalId]?.detail}</div>
-                    <div>{application[modalId]?.categoryOfCost}</div>
+                    <div className="truncate">
+                      {application[modalId]?.payfor}
+                    </div>
+                    <div className="truncate">
+                      {application[modalId]?.purpose}
+                    </div>
+                    <div className="truncate">
+                      {application[modalId]?.detail}
+                    </div>
+                    <div className="truncate">
+                      {application[modalId]?.categoryOfCost}
+                    </div>
                   </Grid.Col>
                   <Grid.Col span={6}>
-                    <div>{application[modalId]?.inside}</div>
-                    <div>{application[modalId]?.outside}</div>
-                    <div>
+                    <div className="truncate">
+                      {application[modalId]?.inside}
+                    </div>
+                    <div className="truncate">
+                      {application[modalId]?.outside}
+                    </div>
+                    <div className="truncate">
                       {dayjs(application[modalId]?.paidDate).format(
                         "YYYY/MM/DD"
                       )}
                     </div>
-                    <div>{application[modalId]?.cost}円</div>
+                    <div className="truncate">
+                      {application[modalId]?.cost}円
+                    </div>
                   </Grid.Col>
                 </Grid>
                 <Image
