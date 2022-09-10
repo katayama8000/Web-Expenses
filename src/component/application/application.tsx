@@ -11,9 +11,7 @@ import {
 } from "@tabler/icons";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import { supabase } from "src/lib/supabase/supabase";
-import { MemberModel } from "@type/index";
-import { useGetMember } from "@hooks/useGetMember";
+import { useGetMember } from "@hooks/member/useGetMember";
 
 type Props = {
   id: number;

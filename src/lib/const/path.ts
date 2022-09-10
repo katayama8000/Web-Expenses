@@ -3,6 +3,7 @@ const PATH = {
   NOTIFICATION: "/notification",
   LIBRARY: "/library",
   USERAPPLICATION: "/user-application",
+  ACCOUNT: "/account",
   SETTINGS: "/settings",
   APPROVEDAPPLICATION: "/administration/approvedapp",
   UNAPPROVEDAPPLICATION: "/administration/unapprovedapp",

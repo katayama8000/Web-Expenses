@@ -4,7 +4,7 @@ import React, { useCallback } from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { DashboardLayout } from "@pages/_layout";
 import { CommonApplication } from "@component/application/application";
-import { useGetApplication } from "@hooks/administration/useGetApplication";
+import { useGetApplication } from "@hooks/application/useGetApplication";
 const Application = () => {
   const { application, getApplication } = useGetApplication();
 

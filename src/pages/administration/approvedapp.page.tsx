@@ -6,7 +6,7 @@ import { showNotification } from "@mantine/notifications";
 import { IconCheck } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
 import { CommonApplication } from "@component/application/application";
-import { useGetApprovedApplication } from "@hooks/administration/useGetApprovedApplication";
+import { useGetApprovedApplication } from "@hooks/application/useGetApprovedApplication";
 
 const Approved = () => {
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);

@@ -19,9 +19,9 @@ import { DatePicker } from "@mantine/dates";
 import { DropZone } from "@component/dropzone/dropzone";
 import { IconX } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
-import { useGetUserId } from "@hooks/useGetUserId";
+import { useGetUserId } from "@hooks/member/useGetUserId";
 import { toast } from "src/lib/function/toast";
-import { useGetMember } from "@hooks/useGetMember";
+import { useGetMember } from "@hooks/member/useGetMember";
 
 type ApplicationProps = {
   id?: number;
