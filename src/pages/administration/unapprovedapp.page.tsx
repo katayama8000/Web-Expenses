@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import { CommonApplication } from "@component/application/application";
 import { supabase } from "src/lib/supabase/supabase";
 import { useGetUnApprovedApplication } from "@hooks/application/useGetUnApprovedApplication";
+import { toast } from "@lib/function/toast";
 
 const UnApproved = () => {
   const [id, setId] = useState<number>(0);
@@ -30,18 +31,14 @@ const UnApproved = () => {
       }
 
       if (data) {
-        showNotification({
-          disallowClose: true,
-          title: "経費申請",
-          message: "承認しました",
-          color: "teal",
-          icon: <IconCheck size={18} />,
-        });
+        console.log("katayama", data);
+        toast("経費申請", "承認しました", "teal");
       }
     } catch (e) {
       console.error(e);
+    } finally {
+      setOpenedApplication(false);
     }
-    setOpenedApplication(false);
   }, [id]);
 
   const handleDenial = useCallback(() => {

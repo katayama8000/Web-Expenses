@@ -18,7 +18,6 @@ import { showNotification } from "@mantine/notifications";
 import { useCallback, useState } from "react";
 import { DatePicker } from "@mantine/dates";
 import { DropZone } from "@component/dropzone/dropzone";
-import { IconX } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
 import { useGetUserId } from "@hooks/member/useGetUserId";
 import { toast } from "src/lib/function/toast";
@@ -75,12 +74,7 @@ const Index: CustomNextPage = () => {
     async (value: ApplicationProps) => {
       setIsLoading(true);
       if (!receipt) {
-        showNotification({
-          title: "エラー",
-          message: "領収書をアップロードしてください",
-          color: "red",
-          icon: <IconX size={18} />,
-        });
+        toast("エラー", "領収書をアップロードしてください", "red");
         return;
       }
       try {

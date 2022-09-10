@@ -15,7 +15,6 @@ import { Menu, Text } from "@mantine/core";
 import {
   IconSettings,
   IconSearch,
-  IconPhoto,
   IconMessageCircle,
   IconTrash,
   IconArrowsLeftRight,
