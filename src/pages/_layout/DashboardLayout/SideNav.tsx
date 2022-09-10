@@ -208,7 +208,7 @@ export const SideNav: FC<{ className?: string }> = ({ className }) => {
                     [classes.linkActive]: isActive,
                   })}
                 >
-                  <Icon className={classes.linkIcon} />
+                  <Icon />
                   <span className={classes.linkLabel}>{label}</span>
                 </a>
               );
