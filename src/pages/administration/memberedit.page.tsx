@@ -6,7 +6,7 @@ import { PageContent } from "src/component/PageContent";
 import { Trash, Edit } from "tabler-icons-react";
 import { supabase } from "src/lib/supabase/supabase";
 import { CustomNextPage } from "next";
-import { useGetAllMembers } from "@hooks/useGetAllMembers";
+import { useGetAllMembers } from "@hooks/member/useGetAllMembers";
 import { Key } from "tabler-icons-react";
 import type { MemberModel } from "@type/index";
 
@@ -17,12 +17,10 @@ const MemberEdit: CustomNextPage = () => {
 
   const handleEdit = useCallback((member: MemberModel) => {
     setIsEditModal(true);
-    console.log(member);
   }, []);
 
   const handleDelete = useCallback((member: MemberModel) => {
     setIsDeleteModal(true);
-    console.log(member);
   }, []);
 
   const rows = AllMembers?.map((member) => (

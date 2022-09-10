@@ -4,19 +4,17 @@ import { useRouter } from "next/router";
 import {
   Avatar,
   Box,
-  Divider,
   Group,
   Indicator,
   Autocomplete,
   ActionIcon,
 } from "@mantine/core";
-import { Logout, Bell, Search, Settings } from "tabler-icons-react";
+import { Logout, Bell, Search } from "tabler-icons-react";
 import { getPath } from "src/lib/const";
-import { Menu, Button, Text } from "@mantine/core";
+import { Menu, Text } from "@mantine/core";
 import {
   IconSettings,
   IconSearch,
-  IconPhoto,
   IconMessageCircle,
   IconTrash,
   IconArrowsLeftRight,

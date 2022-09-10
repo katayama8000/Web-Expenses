@@ -2,6 +2,8 @@ import { Button } from "@mantine/core";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { supabase } from "src/lib/supabase/supabase";
+import { Breadcrumbs, Anchor } from "@mantine/core";
+
 const Profile = () => {
   const [image, setImage] = useState<File | undefined>();
   const [website, setWebsite] = useState("");
@@ -15,8 +17,6 @@ const Profile = () => {
       const { data, error } = await supabase.storage
         .from("application")
         .upload(`receipt/${Date.now()}`, image);
-
-      console.log(data);
 
       if (error) {
         console.log(error);
@@ -41,55 +41,19 @@ const Profile = () => {
     setPath(publicURL!);
   };
 
+  const items = [
+    { title: "Mantine", href: "test/aaa" },
+    { title: "Mantine hooks", href: "test/lll" },
+    { title: "use-id", href: "aaa/yyy" },
+  ].map((item, index) => (
+    <Anchor href={item.href} key={index}>
+      {item.title}
+    </Anchor>
+  ));
   return (
     <div>
-      {path && <Image src={path} width={200} height={200} alt="aaa" />}
-      <div>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="avatar">Choose Avatar:</label>
-            <input
-              type="file"
-              accept={"image/jpeg image/png"}
-              onChange={(e) => {
-                console.log(e.target.files?.[0]);
-                setImage(e.target.files?.[0]);
-              }}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="website">Website:</label>
-            <input
-              type="text"
-              onChange={(e) => setWebsite(e.target.value)}
-              value={website}
-            />
-          </div>
-
-          <Button
-            onClick={() => {
-              handleSubmit();
-            }}
-          >
-            storage
-          </Button>
-          <Button
-            onClick={() => {
-              handleDownLoad();
-            }}
-          >
-            DownLoad
-          </Button>
-          <Button
-            onClick={() => {
-              handleGetPath();
-            }}
-          >
-            getPath
-          </Button>
-        </form>
-      </div>
+      <Breadcrumbs>{items}</Breadcrumbs>
+      <Breadcrumbs separator="→">{items}</Breadcrumbs>
     </div>
   );
 };

@@ -2,11 +2,10 @@ import { DashboardLayout } from "@pages/_layout";
 import { Button, Grid, Modal } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { PageContainer } from "src/component/PageContainer";
-import { showNotification } from "@mantine/notifications";
-import { IconCheck } from "@tabler/icons";
 import { supabase } from "src/lib/supabase/supabase";
 import { CommonApplication } from "@component/application/application";
-import { useGetApprovedApplication } from "@hooks/administration/useGetApprovedApplication";
+import { useGetApprovedApplication } from "@hooks/application/useGetApprovedApplication";
+import { toast } from "@lib/function/toast";
 
 const Approved = () => {
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
@@ -27,13 +26,7 @@ const Approved = () => {
 
       if (data) {
         setOpenedApplication(false);
-        showNotification({
-          disallowClose: true,
-          title: "経費申請",
-          message: "未承認に戻しました",
-          color: "teal",
-          icon: <IconCheck size={18} />,
-        });
+        toast("経費申請", "承認を取り消しました", "teal");
       }
     } catch (e) {
       console.error(e);

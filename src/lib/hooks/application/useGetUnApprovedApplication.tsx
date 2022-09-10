@@ -1,19 +1,18 @@
-import { useGetApplicationStoragePath } from "@hooks/administration/useGetApplicationStoragePath";
+import { useGetStoragePath } from "@hooks/useGetStoragePath";
 import { ApplicationModel } from "@type/application.model";
 import { useEffect, useState } from "react";
 import { supabase } from "src/lib/supabase/supabase";
 import { UseApplicationModel } from "@type/index";
 
-export const useGetApprovedApplication = (): UseApplicationModel => {
+export const useGetUnApprovedApplication = (): UseApplicationModel => {
   const [application, setApplication] = useState<ApplicationModel[]>([]);
-  const ApplicationStoragePath = useGetApplicationStoragePath();
-
+  const ApplicationStoragePath = useGetStoragePath("application", "receipt");
   const getApprovedApplication = async (): Promise<void> => {
     try {
       const { data, error } = await supabase
         .from<ApplicationModel>("application")
         .select("*")
-        .filter("isApproved", "in", '("true")');
+        .filter("isApproved", "in", '("false")');
       console.log(data, error);
       if (!data || error) {
         return;
@@ -37,5 +36,6 @@ export const useGetApprovedApplication = (): UseApplicationModel => {
   useEffect(() => {
     getApprovedApplication();
   }, []);
+
   return { application, getApprovedApplication };
 };

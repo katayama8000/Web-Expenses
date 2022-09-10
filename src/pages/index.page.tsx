@@ -7,6 +7,7 @@ import {
   Grid,
   NumberInput,
   Select,
+  LoadingOverlay,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import type { CustomNextPage } from "next";
@@ -14,14 +15,13 @@ import { DashboardLayout } from "@pages/_layout";
 import { PageContent } from "src/component/PageContent";
 import { PageContainer } from "src/component/PageContainer";
 import { showNotification } from "@mantine/notifications";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { DatePicker } from "@mantine/dates";
-import { DropZone } from "./dropzone";
-import { IconX } from "@tabler/icons";
+import { DropZone } from "@component/dropzone/dropzone";
 import { supabase } from "src/lib/supabase/supabase";
-import { useGetUserId } from "@hooks/useGetUserId";
+import { useGetUserId } from "@hooks/member/useGetUserId";
 import { toast } from "src/lib/function/toast";
-import type { MemberModel, ApplicationModel } from "@type/index";
+import { useGetMember } from "@hooks/member/useGetMember";
 
 type ApplicationProps = {
   id?: number;
@@ -48,9 +48,9 @@ const categoryOfCost: { value: string; label: string }[] = [
 
 const Index: CustomNextPage = () => {
   const [receipt, setReceipt] = useState<File | undefined>();
-  const [member, setMember] = useState<MemberModel>();
-
   const userId = useGetUserId();
+  const { member } = useGetMember(userId!);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
@@ -65,19 +65,16 @@ const Index: CustomNextPage = () => {
     },
   });
 
-  const handleDelete = useCallback(() => {
+  const handleReset = useCallback(() => {
+    form.reset();
     setReceipt(undefined);
   }, []);
 
   const handleSubmit = useCallback(
     async (value: ApplicationProps) => {
+      setIsLoading(true);
       if (!receipt) {
-        showNotification({
-          title: "エラー",
-          message: "領収書をアップロードしてください",
-          color: "red",
-          icon: <IconX size={18} />,
-        });
+        toast("エラー", "領収書をアップロードしてください", "red");
         return;
       }
       try {
@@ -93,17 +90,11 @@ const Index: CustomNextPage = () => {
               outside: value.outside,
               paidDate: value.paidDate,
               cost: value.cost,
-              //name: member?.name,
               userID: member?.userID,
             },
           ]);
         if (!data || error) {
-          showNotification({
-            title: "エラー",
-            message: "申請書の登録に失敗しました",
-            color: "red",
-            icon: <IconX size={18} />,
-          });
+          toast("エラー", "申請書の登録に失敗しました", "red");
           return;
         }
         if (data) {
@@ -118,38 +109,22 @@ const Index: CustomNextPage = () => {
 
   const handleStoreReceipt = useCallback(
     async (id: number) => {
-      const { data, error } = await supabase.storage
-        .from("application")
-        .upload(`receipt/${id}`, receipt!);
+      try {
+        const { data, error } = await supabase.storage
+          .from("application")
+          .upload(`receipt/${id}`, receipt!);
 
-      console.log(data, error);
-      toast("成功", "申請書を登録しました", "teal");
+        console.log(data, error);
+        toast("成功", "申請書を登録しました", "teal");
+      } catch {
+        toast("エラー", "申請書の登録に失敗しました", "red");
+        return;
+      } finally {
+        setIsLoading(false);
+      }
     },
     [receipt]
   );
-
-  const getUser = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from<MemberModel>("member")
-        .select()
-        .match({ userID: userId });
-      console.log(data, error);
-      if (!data || error) {
-        console.error(error);
-        return;
-      }
-      if (data) {
-        setMember(data[0]);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
-
-  useEffect(() => {
-    getUser();
-  }, []);
 
   return (
     <PageContainer title="経費申請">
@@ -233,8 +208,8 @@ const Index: CustomNextPage = () => {
                 <Button color="violet" onClick={() => handleStoreReceipt(1)}>
                   領収書を保存(開発中のみ)
                 </Button>
-                <Button color="red" onClick={handleDelete}>
-                  領収書を削除
+                <Button color="red" onClick={handleReset}>
+                  リセット
                 </Button>
                 <Button type="submit">送信</Button>
               </Group>
@@ -247,10 +222,10 @@ const Index: CustomNextPage = () => {
           </Button>
         </PageContent>
       </Stack>
+      <LoadingOverlay visible={isLoading} overlayBlur={2} />
     </PageContainer>
   );
 };
 
 Index.getLayout = DashboardLayout;
-
 export default Index;

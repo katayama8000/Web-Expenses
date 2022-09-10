@@ -7,7 +7,12 @@ export const AppMantineProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   return (
-    <MantineProvider emotionCache={myCache} withGlobalStyles withNormalizeCSS>
+    <MantineProvider
+      emotionCache={myCache}
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{ loader: "bars" }}
+    >
       {children}
     </MantineProvider>
   );

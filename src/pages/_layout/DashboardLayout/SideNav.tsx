@@ -27,7 +27,7 @@ import {
 } from "tabler-icons-react";
 import { getPath } from "src/lib/const";
 import { ActiveLink } from "src/lib/next";
-import { useIsAdmin } from "src/lib/hooks/useIsAdmin";
+import { useIsAdmin } from "@hooks/member/useIsAdmin";
 
 const useStyles = createStyles<string, { collapsed?: boolean }>(
   (theme, params, getRef) => {
@@ -116,7 +116,7 @@ const ITEMS_ADMIN = [
   {
     href: getPath("UNAPPROVEDAPPLICATION"),
     label: "未承認の申請書",
-    Icon: UserPlus,
+    Icon: Folders,
   },
   {
     href: getPath("APPROVEDAPPLICATION"),
@@ -139,7 +139,7 @@ const ITEMS_ADMIN = [
     Icon: Book,
   },
   { href: getPath("MEMBEREDIT"), label: "メンバー編集", Icon: Edit },
-  { href: getPath("SETTINGS"), label: "設定", Icon: Settings },
+  { href: getPath("ACCOUNT"), label: "アカウント", Icon: UserPlus },
   {
     href: getPath("TEST"),
     label: "テスト(開発中のみ)",
@@ -160,7 +160,7 @@ const ITEMS_MEMBER = [
     label: "営業",
     Icon: ReportMoney,
   },
-  { href: getPath("SETTINGS"), label: "設定", Icon: Settings },
+  { href: getPath("ACCOUNT"), label: "アカウント", Icon: UserPlus },
   {
     href: getPath("TEST"),
     label: "テスト(開発中のみ)",
@@ -208,7 +208,7 @@ export const SideNav: FC<{ className?: string }> = ({ className }) => {
                     [classes.linkActive]: isActive,
                   })}
                 >
-                  <Icon className={classes.linkIcon} />
+                  <Icon />
                   <span className={classes.linkLabel}>{label}</span>
                 </a>
               );

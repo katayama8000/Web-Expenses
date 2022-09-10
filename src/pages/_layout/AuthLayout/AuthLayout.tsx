@@ -1,6 +1,6 @@
 import { Center, Container } from "@mantine/core";
 import type { CustomLayout } from "next";
-import { useIsLoggedIn } from "src/lib/hooks/useIsLoggedIn";
+import { useIsLoggedIn } from "@hooks/member/useIsLoggedIn";
 
 import { LayoutErrorBoundary } from "../LayoutErrorBoundary";
 

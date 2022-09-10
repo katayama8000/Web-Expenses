@@ -1,4 +1,4 @@
-import { Button, Card, Grid, Group, Modal } from "@mantine/core";
+import { Button, Card, Grid, Group, Image, Modal } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { DashboardLayout } from "@pages/_layout";
@@ -8,10 +8,10 @@ import { Text } from "@mantine/core";
 import dayjs from "dayjs";
 import { CommonApplication } from "@component/application/application";
 import { supabase } from "src/lib/supabase/supabase";
-import { useGetUnApprovedApplication } from "@hooks/administration/useGetUnApprovedApplication";
+import { useGetUnApprovedApplication } from "@hooks/application/useGetUnApprovedApplication";
+import { toast } from "@lib/function/toast";
 
 const UnApproved = () => {
-  let today = new Date();
   const [id, setId] = useState<number>(0);
   const [modalId, setModalId] = useState<number>(0);
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
@@ -31,18 +31,14 @@ const UnApproved = () => {
       }
 
       if (data) {
-        showNotification({
-          disallowClose: true,
-          title: "経費申請",
-          message: "承認しました",
-          color: "teal",
-          icon: <IconCheck size={18} />,
-        });
+        console.log("katayama", data);
+        toast("経費申請", "承認しました", "teal");
       }
     } catch (e) {
       console.error(e);
+    } finally {
+      setOpenedApplication(false);
     }
-    setOpenedApplication(false);
   }, [id]);
 
   const handleDenial = useCallback(() => {
@@ -105,27 +101,51 @@ const UnApproved = () => {
         opened={openedApplication}
         onClose={() => setOpenedApplication(false)}
         title="慎重に確認してください"
+        size="lg"
       >
         <div>
-          <Card p="lg" radius="md" withBorder>
+          <Card p="lg" radius="md" withBorder className="h-[470px] w-[550px]">
             <Text mt="sm" color="dimmed" size="sm">
-              <Grid className="px-6 py-3">
-                <Grid.Col span={6}>
-                  <div>{application[modalId]?.payfor}</div>
-                  <div>{application[modalId]?.purpose}</div>
-                  <div>{application[modalId]?.detail}</div>
-                  <div>{application[modalId]?.categoryOfCost}</div>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <div>{application[modalId]?.inside}</div>
-                  <div>{application[modalId]?.outside}</div>
-                  <div>
-                    {dayjs(application[modalId]?.paidDate).format("YYYY/MM/DD")}
-                  </div>
-                  <div>{application[modalId]?.cost}円</div>
-                </Grid.Col>
-              </Grid>
-              <Text component="span" inherit color="blue"></Text>
+              <div>
+                <Grid className="px-6 py-3 font-bold text-xl text-black">
+                  <Grid.Col span={6}>
+                    <div className="truncate">
+                      {application[modalId]?.payfor}
+                    </div>
+                    <div className="truncate">
+                      {application[modalId]?.purpose}
+                    </div>
+                    <div className="truncate">
+                      {application[modalId]?.detail}
+                    </div>
+                    <div className="truncate">
+                      {application[modalId]?.categoryOfCost}
+                    </div>
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <div className="truncate">
+                      {application[modalId]?.inside}
+                    </div>
+                    <div className="truncate">
+                      {application[modalId]?.outside}
+                    </div>
+                    <div className="truncate">
+                      {dayjs(application[modalId]?.paidDate).format(
+                        "YYYY/MM/DD"
+                      )}
+                    </div>
+                    <div className="truncate">
+                      {application[modalId]?.cost}円
+                    </div>
+                  </Grid.Col>
+                </Grid>
+                <Image
+                  src={application[modalId]?.receipt}
+                  alt="receipt"
+                  fit="contain"
+                  radius="md"
+                />
+              </div>
             </Text>
           </Card>
           <Group position="center" className="mt-3">
