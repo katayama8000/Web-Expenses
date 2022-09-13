@@ -1,4 +1,12 @@
-import { Button, Card, Grid, Group, Image, Modal } from "@mantine/core";
+import {
+  Button,
+  Card,
+  Grid,
+  Group,
+  Image,
+  LoadingOverlay,
+  Modal,
+} from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { DashboardLayout } from "@pages/_layout";
@@ -16,7 +24,7 @@ const UnApproved = () => {
   const [modalId, setModalId] = useState<number>(0);
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
   const [openedDenialReason, setOpenedDenialReason] = useState<boolean>(false);
-  const { application } = useGetUnApprovedApplication();
+  const { application, isLoading } = useGetUnApprovedApplication();
 
   const handelApprove = useCallback(async () => {
     try {
@@ -165,6 +173,7 @@ const UnApproved = () => {
       >
         否認した理由を、Teams等で連絡してください。
       </Modal>
+      <LoadingOverlay visible={isLoading} overlayBlur={2} />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { supabase } from "src/lib/supabase/supabase";
 
 export const useGetApplication = (): UseApplicationModel => {
   const [application, setApplication] = useState<ApplicationModel[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const ApplicationStoragePath = useGetStoragePath("application", "receipt");
   const userID = useGetUserId();
   const getApplication = async (): Promise<void> => {
@@ -32,6 +33,8 @@ export const useGetApplication = (): UseApplicationModel => {
       }
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -39,5 +42,5 @@ export const useGetApplication = (): UseApplicationModel => {
     getApplication();
   }, []);
 
-  return { application, getApplication };
+  return { application, getApplication, isLoading };
 };

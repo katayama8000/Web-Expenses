@@ -17,6 +17,7 @@ import { supabase } from "src/lib/supabase/supabase";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
+import { toast } from "@lib/function/toast";
 
 const SignUp: CustomNextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -36,39 +37,54 @@ const SignUp: CustomNextPage = () => {
   const handleSignUp = useCallback(
     async (values: { name: string; email: string; password: string }) => {
       setIsLoading(true);
-      const { user, session, error } = await supabase.auth.signUp({
-        email: values.email,
-        password: values.password,
-      });
+      try {
+        const { user, session, error } = await supabase.auth.signUp({
+          email: values.email,
+          password: values.password,
+        });
 
-      if (user) {
-        handleRegisterMember(values.name, user.id, values.email);
-        alert("メールを送信しました");
-        router.push("sign-up/authentication");
+        if (user) {
+          handleRegisterMember(values.name, user.id, values.email);
+          alert("メールを送信しました");
+          router.push("sign-up/authentication");
+        }
+        if (session) {
+          console.log("session", session);
+        }
+        if (error) {
+          console.log(error);
+          alert(error.message);
+        }
+      } catch {
+        toast("error", "エラーが発生しました。", "red");
+      } finally {
+        setIsLoading(false);
       }
-      if (session) {
-        console.log("session", session);
-      }
-      if (error) {
-        console.log(error);
-        alert(error.message);
-      }
-      setIsLoading(false);
     },
     [router]
   );
 
   const handleRegisterMember = useCallback(
     async (userName: string, userId: string, userEmail: string) => {
-      const { data, error } = await supabase.from("member").insert([
-        {
-          name: userName,
-          userID: userId,
-          email: userEmail,
-        },
-      ]);
+      try {
+        const { data, error } = await supabase.from("member").insert([
+          {
+            name: userName,
+            userID: userId,
+            email: userEmail,
+          },
+        ]);
 
-      console.log(data, error);
+        if (data) {
+          console.log("data", data);
+        }
+
+        if (error || !data) {
+          alert(error.message);
+        }
+      } catch {
+        toast("error", "エラーが発生しました。", "red");
+      }
     },
     []
   );

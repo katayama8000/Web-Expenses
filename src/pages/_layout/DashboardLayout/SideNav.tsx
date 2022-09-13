@@ -24,6 +24,7 @@ import {
   Key,
   ReportMoney,
   Book,
+  Calculator,
 } from "tabler-icons-react";
 import { getPath } from "src/lib/const";
 import { ActiveLink } from "src/lib/next";
@@ -122,6 +123,11 @@ const ITEMS_ADMIN = [
     href: getPath("APPROVEDAPPLICATION"),
     label: "承認済みの申請書",
     Icon: Folders,
+  },
+  {
+    href: getPath("CALCULATION"),
+    label: "経費合計",
+    Icon: Calculator,
   },
   {
     href: getPath("KEY"),
