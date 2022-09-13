@@ -1,5 +1,5 @@
 import { DashboardLayout } from "@pages/_layout";
-import { Button, Grid, Modal } from "@mantine/core";
+import { Button, Grid, LoadingOverlay, Modal } from "@mantine/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { supabase } from "src/lib/supabase/supabase";
@@ -10,7 +10,7 @@ import { toast } from "@lib/function/toast";
 const Approved = () => {
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
   const [id, setId] = useState<number>(0);
-  const { application } = useGetApprovedApplication();
+  const { application, isLoading } = useGetApprovedApplication();
 
   const handleIsApprovedFalse = async () => {
     try {
@@ -60,27 +60,28 @@ const Approved = () => {
     <div>
       <PageContainer title="過去の申請書">
         <Grid>
-          {application.map((item) => {
-            return (
-              <Grid.Col span={4} key={item.id}>
-                <CommonApplication
-                  id={item.id}
-                  payfor={item.payfor}
-                  purpose={item.purpose}
-                  detail={item.detail}
-                  categoryOfCost={item.categoryOfCost}
-                  inside={item.inside}
-                  outside={item.outside}
-                  paidDate={item.paidDate}
-                  cost={item.cost}
-                  isApproved={item.isApproved}
-                  receipt={item.receipt}
-                  userID={item.userID}
-                  handleSetBeforeApproved={handleSetBeforeApproved}
-                />
-              </Grid.Col>
-            );
-          })}
+          {application &&
+            application.map((item) => {
+              return (
+                <Grid.Col span={4} key={item.id}>
+                  <CommonApplication
+                    id={item.id}
+                    payfor={item.payfor}
+                    purpose={item.purpose}
+                    detail={item.detail}
+                    categoryOfCost={item.categoryOfCost}
+                    inside={item.inside}
+                    outside={item.outside}
+                    paidDate={item.paidDate}
+                    cost={item.cost}
+                    isApproved={item.isApproved}
+                    receipt={item.receipt}
+                    userID={item.userID}
+                    handleSetBeforeApproved={handleSetBeforeApproved}
+                  />
+                </Grid.Col>
+              );
+            })}
         </Grid>
       </PageContainer>
       <Modal
@@ -103,6 +104,7 @@ const Approved = () => {
           </Button>
         </div>
       </Modal>
+      <LoadingOverlay visible={isLoading} overlayBlur={2} />
     </div>
   );
 };

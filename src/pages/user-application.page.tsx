@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Grid } from "@mantine/core";
+import { Grid, LoadingOverlay } from "@mantine/core";
 import React, { useCallback } from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { DashboardLayout } from "@pages/_layout";
 import { CommonApplication } from "@component/application/application";
 import { useGetApplication } from "@hooks/application/useGetApplication";
 const Application = () => {
-  const { application, getApplication } = useGetApplication();
+  const { application, getApplication, isLoading } = useGetApplication();
 
   // const handleDelete = useCallback(async (id: number) => {
   //   try {
@@ -72,6 +72,7 @@ const Application = () => {
             })}
         </Grid>
       </PageContainer>
+      <LoadingOverlay visible={isLoading} overlayBlur={2} />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { UseApplicationModel } from "@type/index";
 export const useGetApprovedApplication = (): UseApplicationModel => {
   const [application, setApplication] = useState<ApplicationModel[]>([]);
   const ApplicationStoragePath = useGetStoragePath("application", "receipt");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const getApprovedApplication = async (): Promise<void> => {
     try {
@@ -31,11 +32,13 @@ export const useGetApprovedApplication = (): UseApplicationModel => {
       }
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     getApprovedApplication();
   }, []);
-  return { application, getApprovedApplication };
+  return { application, getApprovedApplication, isLoading };
 };
