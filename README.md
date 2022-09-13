@@ -6,7 +6,7 @@
 - [Mantine](https://mantine.dev/)
 - [ESLint](https://eslint.org/)
 - [Prettier](https://prettier.io/)
-- [Supabase](https://supabase.com/)
+- [Supabase](https://supabase.com/)([document](https://supabase.com/docs/))
 
 ## レンダリング
 - memo
