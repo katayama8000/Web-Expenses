@@ -4,13 +4,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import { PageContainer } from "src/component/PageContainer";
 import { supabase } from "src/lib/supabase/supabase";
 import { CommonApplication } from "@component/application/application";
-import { useGetApprovedApplication } from "@hooks/application/useGetApprovedApplication";
+import { useGetIsApprovedApplication } from "@hooks/application/useGetIsApprovedApplication";
 import { toast } from "@lib/function/toast";
 
 const Approved = () => {
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
   const [id, setId] = useState<number>(0);
-  const { application, isLoading } = useGetApprovedApplication();
+  const { application, isLoading } = useGetIsApprovedApplication(true);
 
   const handleIsApprovedFalse = async () => {
     try {

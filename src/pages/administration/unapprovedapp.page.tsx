@@ -16,15 +16,15 @@ import { Text } from "@mantine/core";
 import dayjs from "dayjs";
 import { CommonApplication } from "@component/application/application";
 import { supabase } from "src/lib/supabase/supabase";
-import { useGetUnApprovedApplication } from "@hooks/application/useGetUnApprovedApplication";
 import { toast } from "@lib/function/toast";
+import { useGetIsApprovedApplication } from "@hooks/application/useGetIsApprovedApplication";
 
 const UnApproved = () => {
   const [id, setId] = useState<number>(0);
   const [modalId, setModalId] = useState<number>(0);
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
   const [openedDenialReason, setOpenedDenialReason] = useState<boolean>(false);
-  const { application, isLoading } = useGetUnApprovedApplication();
+  const { application, isLoading } = useGetIsApprovedApplication(false);
 
   const handelApprove = useCallback(async () => {
     try {
