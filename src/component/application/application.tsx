@@ -28,7 +28,7 @@ type Props = {
   receipt: string;
   userID: string;
   handleSetBeforeApproved?: (id: number) => void;
-  handleDecideApprove?: (id: number, index: number) => void;
+  handleWatchDetail?: (id: number, index: number) => void;
 };
 
 export const CommonApplication: FC<Props> = memo(
@@ -47,10 +47,9 @@ export const CommonApplication: FC<Props> = memo(
     receipt,
     userID,
     handleSetBeforeApproved,
-    handleDecideApprove,
+    handleWatchDetail,
   }) => {
     const [style, setStyle] = useState<string>("");
-    const [approvedStyle, setApprovedStyle] = useState<string>("");
     const { pathname, isReady } = useRouter();
     const { member, getMember } = useGetMember(userID);
 
@@ -160,10 +159,6 @@ export const CommonApplication: FC<Props> = memo(
       if (pathname === "/administration/unapprovedapp" && isReady) {
         setStyle("hover:opacity-70 cursor-pointer");
       }
-
-      // if (pathname === "/administration/approvedapp" && isReady && isApproved) {
-      //   setApprovedStyle("hover:opacity-70 cursor-pointer");
-      // }
     }, [pathname, isReady, isApproved]);
 
     return (
@@ -175,9 +170,7 @@ export const CommonApplication: FC<Props> = memo(
 
           <div
             onClick={() => {
-              pathname === "/administration/unapprovedapp"
-                ? handleDecideApprove!(id, index!)
-                : alert("hey");
+              handleWatchDetail!(id, index!);
             }}
             className={style}
           >
@@ -202,7 +195,13 @@ export const CommonApplication: FC<Props> = memo(
                     <div className="truncate">{cost}円</div>
                   </Grid.Col>
                 </Grid>
-                <Image src={receipt} alt="receipt" radius="md" height={150} />
+                <Image
+                  src={receipt}
+                  alt="receipt"
+                  radius="md"
+                  height={150}
+                  className="border-2 border-gray-300 rounded-md"
+                />
               </Text>
             ) : (
               <Text mt="sm" color="dimmed" size="sm">
@@ -222,7 +221,13 @@ export const CommonApplication: FC<Props> = memo(
                     <div className="truncate">{cost}円</div>
                   </Grid.Col>
                 </Grid>
-                <Image src={receipt} alt="receipt" radius="md" height={150} />
+                <Image
+                  src={receipt}
+                  alt="receipt"
+                  radius="md"
+                  height={150}
+                  className="border-2 border-gray-300 rounded-md"
+                />
               </Text>
             )}
           </div>

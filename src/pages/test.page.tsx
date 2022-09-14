@@ -3,11 +3,13 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { supabase } from "src/lib/supabase/supabase";
 import { Breadcrumbs, Anchor } from "@mantine/core";
+import { DetailModal } from "@component/modal/detailModal";
 
 const Profile = () => {
   const [image, setImage] = useState<File | undefined>();
   const [website, setWebsite] = useState("");
   const [path, setPath] = useState("");
+  const [opened, setOpened] = useState<boolean>(false);
 
   const handleSubmit = async (e?: any) => {
     //e.preventDefault();
@@ -54,6 +56,10 @@ const Profile = () => {
     <div>
       <Breadcrumbs>{items}</Breadcrumbs>
       <Breadcrumbs separator="→">{items}</Breadcrumbs>
+      {/* <DetailModal
+        isDetailModalOpened={opened}
+        setIsDetailModalOpened={setOpened}
+      ></DetailModal> */}
     </div>
   );
 };

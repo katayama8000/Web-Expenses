@@ -6,5 +6,4 @@ const Notification: CustomNextPage = () => {
 };
 
 Notification.getLayout = DashboardLayout;
-
 export default Notification;

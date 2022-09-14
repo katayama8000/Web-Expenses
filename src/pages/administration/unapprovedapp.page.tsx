@@ -18,6 +18,7 @@ import { CommonApplication } from "@component/application/application";
 import { supabase } from "src/lib/supabase/supabase";
 import { toast } from "@lib/function/toast";
 import { useGetIsApprovedApplication } from "@hooks/application/useGetIsApprovedApplication";
+import { DetailModal } from "@component/modal/detailModal";
 
 const UnApproved = () => {
   const [id, setId] = useState<number>(0);
@@ -26,7 +27,7 @@ const UnApproved = () => {
   const [openedDenialReason, setOpenedDenialReason] = useState<boolean>(false);
   const { application, isLoading } = useGetIsApprovedApplication(false);
 
-  const handelApprove = useCallback(async () => {
+  const handleApprove = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from("application")
@@ -39,7 +40,6 @@ const UnApproved = () => {
       }
 
       if (data) {
-        console.log("katayama", data);
         toast("経費申請", "承認しました", "teal");
       }
     } catch (e) {
@@ -54,7 +54,7 @@ const UnApproved = () => {
     setOpenedDenialReason(true);
   }, []);
 
-  const handleDecideApprove = useCallback(async (id: number, index: number) => {
+  const handleWatchDetail = useCallback(async (id: number, index: number) => {
     setId(id);
     setModalId(index);
     setOpenedApplication(true);
@@ -79,93 +79,43 @@ const UnApproved = () => {
     <div>
       <PageContainer title="未承認の申請書類">
         <Grid>
-          {application.map((item, index) => {
-            return (
-              <Grid.Col span={4} key={item.id}>
-                <CommonApplication
-                  id={item.id}
-                  payfor={item.payfor}
-                  purpose={item.purpose}
-                  detail={item.detail}
-                  categoryOfCost={item.categoryOfCost}
-                  inside={item.inside}
-                  outside={item.outside}
-                  paidDate={item.paidDate}
-                  cost={item.cost}
-                  isApproved={item.isApproved}
-                  receipt={item.receipt}
-                  userID={item.userID}
-                  handleDecideApprove={() =>
-                    handleDecideApprove(item.id, index)
-                  }
-                />
-              </Grid.Col>
-            );
-          })}
+          {application.length === 0 ? (
+            <div className="p-3 text-bold text-3xl m-auto mt-10">
+              未承認の申請書はありません
+            </div>
+          ) : (
+            application.map((item, index) => {
+              return (
+                <Grid.Col span={4} key={item.id}>
+                  <CommonApplication
+                    id={item.id}
+                    payfor={item.payfor}
+                    purpose={item.purpose}
+                    detail={item.detail}
+                    categoryOfCost={item.categoryOfCost}
+                    inside={item.inside}
+                    outside={item.outside}
+                    paidDate={item.paidDate}
+                    cost={item.cost}
+                    isApproved={item.isApproved}
+                    receipt={item.receipt}
+                    userID={item.userID}
+                    handleWatchDetail={() => handleWatchDetail(item.id, index)}
+                  />
+                </Grid.Col>
+              );
+            })
+          )}
         </Grid>
       </PageContainer>
-
-      <Modal
-        opened={openedApplication}
-        onClose={() => setOpenedApplication(false)}
-        title="慎重に確認してください"
-        size="lg"
-      >
-        <div>
-          <Card p="lg" radius="md" withBorder className="h-[470px] w-[550px]">
-            <Text mt="sm" color="dimmed" size="sm">
-              <div>
-                <Grid className="px-6 py-3 font-bold text-xl text-black">
-                  <Grid.Col span={6}>
-                    <div className="truncate">
-                      {application[modalId]?.payfor}
-                    </div>
-                    <div className="truncate">
-                      {application[modalId]?.purpose}
-                    </div>
-                    <div className="truncate">
-                      {application[modalId]?.detail}
-                    </div>
-                    <div className="truncate">
-                      {application[modalId]?.categoryOfCost}
-                    </div>
-                  </Grid.Col>
-                  <Grid.Col span={6}>
-                    <div className="truncate">
-                      {application[modalId]?.inside}
-                    </div>
-                    <div className="truncate">
-                      {application[modalId]?.outside}
-                    </div>
-                    <div className="truncate">
-                      {dayjs(application[modalId]?.paidDate).format(
-                        "YYYY/MM/DD"
-                      )}
-                    </div>
-                    <div className="truncate">
-                      {application[modalId]?.cost}円
-                    </div>
-                  </Grid.Col>
-                </Grid>
-                <Image
-                  src={application[modalId]?.receipt}
-                  alt="receipt"
-                  fit="contain"
-                  radius="md"
-                />
-              </div>
-            </Text>
-          </Card>
-          <Group position="center" className="mt-3">
-            <Button onClick={handelApprove} color="blue" size="lg">
-              承認
-            </Button>
-            <Button onClick={handleDenial} color="red" size="lg">
-              否認
-            </Button>
-          </Group>
-        </div>
-      </Modal>
+      <DetailModal
+        openedDetail={openedApplication}
+        setOpenedDetail={setOpenedApplication}
+        application={application}
+        modalId={modalId}
+        handleApprove={handleApprove}
+        handleDenial={handleDenial}
+      />
       <Modal
         opened={openedDenialReason}
         onClose={() => setOpenedDenialReason(false)}

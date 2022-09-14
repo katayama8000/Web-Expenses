@@ -6,11 +6,21 @@ import { supabase } from "src/lib/supabase/supabase";
 import { CommonApplication } from "@component/application/application";
 import { useGetIsApprovedApplication } from "@hooks/application/useGetIsApprovedApplication";
 import { toast } from "@lib/function/toast";
+import { DetailModal } from "@component/modal/detailModal";
 
 const Approved = () => {
   const [openedApplication, setOpenedApplication] = useState<boolean>(false);
+  const [openedBeforeApproved, setOpenBeforeApproved] =
+    useState<boolean>(false);
   const [id, setId] = useState<number>(0);
+  const [modalId, setModalId] = useState<number>(0);
   const { application, isLoading } = useGetIsApprovedApplication(true);
+
+  const handleWatchDetail = useCallback(async (id: number, index: number) => {
+    setId(id);
+    setModalId(index);
+    setOpenedApplication(true);
+  }, []);
 
   const handleIsApprovedFalse = async () => {
     try {
@@ -36,9 +46,9 @@ const Approved = () => {
   const handleSetBeforeApproved = useCallback(
     (id: number) => {
       setId(id);
-      setOpenedApplication(true);
+      setOpenBeforeApproved(true);
     },
-    [setId, setOpenedApplication]
+    [setId, setOpenBeforeApproved]
   );
 
   useEffect(() => {
@@ -60,8 +70,12 @@ const Approved = () => {
     <div>
       <PageContainer title="過去の申請書">
         <Grid>
-          {application &&
-            application.map((item) => {
+          {application.length === 0 ? (
+            <div className="p-3 text-bold text-3xl m-auto mt-10">
+              過去の申請書はありません
+            </div>
+          ) : (
+            application.map((item, index) => {
               return (
                 <Grid.Col span={4} key={item.id}>
                   <CommonApplication
@@ -78,15 +92,23 @@ const Approved = () => {
                     receipt={item.receipt}
                     userID={item.userID}
                     handleSetBeforeApproved={handleSetBeforeApproved}
+                    handleWatchDetail={() => handleWatchDetail(item.id, index)}
                   />
                 </Grid.Col>
               );
-            })}
+            })
+          )}
         </Grid>
       </PageContainer>
+      <DetailModal
+        openedDetail={openedApplication}
+        setOpenedDetail={setOpenedApplication}
+        application={application}
+        modalId={modalId}
+      />
       <Modal
-        opened={openedApplication}
-        onClose={() => setOpenedApplication(false)}
+        opened={openedBeforeApproved}
+        onClose={() => setOpenBeforeApproved(false)}
         centered
         title="慎重に確認してください"
         classNames={{
