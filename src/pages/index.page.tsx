@@ -22,6 +22,7 @@ import { supabase } from "src/lib/supabase/supabase";
 import { useGetUserId } from "@hooks/member/useGetUserId";
 import { toast } from "src/lib/function/toast";
 import { useGetMember } from "@hooks/member/useGetMember";
+import { useRouter } from "next/router";
 
 type ApplicationProps = {
   id?: number;
@@ -51,6 +52,7 @@ const Index: CustomNextPage = () => {
   const userId = useGetUserId();
   const { member } = useGetMember(userId!);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { query } = useRouter();
 
   const form = useForm({
     initialValues: {
@@ -78,10 +80,11 @@ const Index: CustomNextPage = () => {
         return;
       }
       try {
-        const { data, error } = await supabase
-          .from<ApplicationProps>("application")
-          .insert([
-            {
+        if (query.isEdit) {
+          console.log("edit", value, member?.userID, query.id);
+          const { data, error } = await supabase
+            .from("application")
+            .update({
               payfor: value.payfor,
               purpose: value.purpose,
               detail: value.detail,
@@ -91,17 +94,44 @@ const Index: CustomNextPage = () => {
               paidDate: value.paidDate,
               cost: value.cost,
               userID: member?.userID,
-            },
-          ]);
-        if (!data || error) {
-          toast("エラー", "申請書の登録に失敗しました", "red");
-          return;
-        }
-        if (data) {
-          handleStoreReceipt(data[0].id!);
+            })
+            .match({ id: query.id, userID: member?.userID });
+          console.log(data, error, "katayama");
+          if (!data || error) {
+            toast("エラー", "申請書の登録に失敗しました", "red");
+            return;
+          }
+          if (data) {
+            handleStoreReceipt(data[0].id!);
+          }
+        } else {
+          const { data, error } = await supabase
+            .from<ApplicationProps>("application")
+            .insert([
+              {
+                payfor: value.payfor,
+                purpose: value.purpose,
+                detail: value.detail,
+                categoryOfCost: value.categoryOfCost,
+                inside: value.inside,
+                outside: value.outside,
+                paidDate: value.paidDate,
+                cost: value.cost,
+                userID: member?.userID,
+              },
+            ]);
+          if (!data || error) {
+            toast("エラー", "申請書の登録に失敗しました", "red");
+            return;
+          }
+          if (data) {
+            handleStoreReceipt(data[0].id!);
+          }
         }
       } catch (e) {
         console.error(e);
+      } finally {
+        setIsLoading(false);
       }
     },
     [receipt, member]
@@ -130,10 +160,17 @@ const Index: CustomNextPage = () => {
     <PageContainer title="経費申請">
       <Stack spacing="xl">
         <PageContent className="w-[600px] m-auto">
-          <Group position="right" className="px-6">
-            名前:
-            <span className="underline underline-offset-2">{member?.name}</span>
-          </Group>
+          <div className="flex justify-between px-6">
+            <Group>
+              {query.isEdit && <Button color="teal">編集中</Button>}
+            </Group>
+            <Group>
+              名前:
+              <span className="underline underline-offset-2">
+                {member?.name}
+              </span>
+            </Group>
+          </div>
           <div className="px-6">
             <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
               <Grid>

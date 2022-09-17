@@ -12,6 +12,7 @@ import {
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { useGetMember } from "@hooks/member/useGetMember";
+import Link from "next/link";
 
 type Props = {
   id: number;
@@ -137,7 +138,24 @@ export const CommonApplication: FC<Props> = memo(
                       </Menu.Item>
                     ) : (
                       <div>
-                        <Menu.Item icon={<IconEye size={14} />}>編集</Menu.Item>
+                        <Menu.Item
+                          icon={<IconEye size={14} />}
+                          onClick={() => {
+                            console.log("katayama", id);
+                          }}
+                        >
+                          <Link
+                            href={{
+                              pathname: "/",
+                              query: {
+                                id: id,
+                                isEdit: false,
+                              },
+                            }}
+                          >
+                            編集
+                          </Link>
+                        </Menu.Item>
                         <Menu.Item icon={<IconTrash size={14} />} color="red">
                           削除
                         </Menu.Item>
