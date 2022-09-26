@@ -102,7 +102,7 @@ const Index: CustomNextPage = () => {
             return;
           }
           if (data) {
-            handleStoreReceipt(data[0].id!);
+            handleStoreReceiptUpdate(data[0].id!);
           }
         } else {
           const { data, error } = await supabase
@@ -145,9 +145,28 @@ const Index: CustomNextPage = () => {
           .upload(`receipt/${id}`, receipt!);
 
         console.log(data, error);
-        toast("成功", "申請書を登録しました", "teal");
+        toast("成功", "領収書を登録しました", "teal");
       } catch {
-        toast("エラー", "申請書の登録に失敗しました", "red");
+        toast("エラー", "領収書の登録に失敗しました", "red");
+        return;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [receipt]
+  );
+
+  const handleStoreReceiptUpdate = useCallback(
+    async (id: number) => {
+      try {
+        const { data, error } = await supabase.storage
+          .from("application")
+          .update(`receipt/${id}`, receipt!);
+
+        console.log(data, error);
+        toast("成功", "領収書を登録しました", "teal");
+      } catch {
+        toast("エラー", "領収書の登録に失敗しました", "red");
         return;
       } finally {
         setIsLoading(false);

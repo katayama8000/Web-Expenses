@@ -111,7 +111,7 @@ const useStyles = createStyles<string, { collapsed?: boolean }>(
   }
 );
 
-const ITEMS_ADMIN = [
+const SIDENAV_ITEMS_ADMIN = [
   { href: getPath("INDEX"), label: "ホーム", Icon: Home },
   { href: getPath("USERAPPLICATION"), label: "申請書一覧", Icon: Notes },
   {
@@ -151,9 +151,9 @@ const ITEMS_ADMIN = [
     label: "テスト(開発中のみ)",
     Icon: TestPipe,
   },
-];
+] as const;
 
-const ITEMS_MEMBER = [
+const SIDENAV_ITEMS_MEMBER = [
   { href: getPath("INDEX"), label: "ホーム", Icon: Home },
   { href: getPath("USERAPPLICATION"), label: "申請書一覧", Icon: Notes },
   {
@@ -172,19 +172,14 @@ const ITEMS_MEMBER = [
     label: "テスト(開発中のみ)",
     Icon: TestPipe,
   },
-];
-
-type Item = {
-  href: string;
-  label: string;
-  Icon: FC;
-};
+] as const;
 
 export const SideNav: FC<{ className?: string }> = ({ className }) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [collapsed, handlers] = useDisclosure(false);
   const { classes, cx } = useStyles({ collapsed });
-  let ITEMS: Item[] = useIsAdmin(isAdmin) === true ? ITEMS_MEMBER : ITEMS_ADMIN;
+  const SIDENAV_ITEMS =
+    useIsAdmin(isAdmin) === true ? SIDENAV_ITEMS_MEMBER : SIDENAV_ITEMS_ADMIN;
 
   return (
     <Navbar p="md" className={cx(classes.navbar, className)}>
@@ -197,7 +192,7 @@ export const SideNav: FC<{ className?: string }> = ({ className }) => {
             </a>
           </Link>
         </Group>
-        {ITEMS.map(({ label, href, Icon }) => (
+        {SIDENAV_ITEMS.map(({ label, href, Icon }) => (
           // <Tooltip
           //   label={label}
           //   key={label}
