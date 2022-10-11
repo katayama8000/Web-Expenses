@@ -145,7 +145,7 @@ const Index: CustomNextPage = () => {
           .upload(`receipt/${id}`, receipt!);
 
         console.log(data, error);
-        toast("成功", "領収書を登録しました", "teal");
+        toast("成功", "領収書を登録しました");
       } catch {
         toast("エラー", "領収書の登録に失敗しました", "red");
         return;

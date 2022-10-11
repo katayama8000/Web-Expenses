@@ -4,7 +4,7 @@ import { IconCheck, IconDots, IconArrowBackUp } from "@tabler/icons";
 export const toast = (
   title: string,
   message: string,
-  color: "red" | "teal"
+  color: "red" | "teal" = "teal"
 ): void => {
   showNotification({
     disallowClose: true,
